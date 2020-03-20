@@ -632,7 +632,7 @@
 			baseConfigurationReference = 51EFAA7CB6A1DF72CFA030C1 /* Pods-ShareClub.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = K2BHZQ37K3;
 				INFOPLIST_FILE = ShareClub/Info.plist;
@@ -653,7 +653,7 @@
 			baseConfigurationReference = 4236DBF05666977444FC3202 /* Pods-ShareClub.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = K2BHZQ37K3;
 				INFOPLIST_FILE = ShareClub/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -5,6 +5,12 @@
 ```zsh
     npm install -g ios-deploy
 ```
+- Installed fastlane 2.143.0 with homebrew to help deploy to the app store quicker
+```zsh
+    brew install fastlane
+    cd ios
+    fastlane init
+```
 ## Commands
 ### Development environment
 - Run native iOS simulator: 
