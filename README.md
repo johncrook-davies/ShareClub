@@ -21,3 +21,11 @@
 ```zsh
     npx react-native run-ios --device "Johnathan’s iPhone"
 ```
+- Publish to testflight:
+```zsh
+    cd ios
+    fastlane beta
+    cd ..
+```
+#### Notes
+- It's best to use the Mac Os app 'Icon Set Creator' to automatically create all of the different icons needed. This just requires a 1024x1024 png of icon, choose to save in top level directory.
