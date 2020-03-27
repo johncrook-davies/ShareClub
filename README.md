@@ -10,7 +10,18 @@
     brew install fastlane
     cd ios
     fastlane init
+    cd ..
 ```
+- Installed an SQLite react native plugin to manage device persistant storage
+```zsh
+    npx yarn add react-native-sqlite-storage
+    cd ios
+    pod install
+    cd ..
+```
+- Built and installed a proprietary library to keep server database and internal storage in sync
+## Memory
+- Clubs, proposals and invitations are stored in a redux store for the duration of each session.
 ## Commands
 ### Development environment
 - Run native iOS simulator: 
@@ -26,6 +37,10 @@
     cd ios
     fastlane beta
     cd ..
+```
+- Add libraries with yarn by accessing through npx:
+```zsh
+    npx yarn add <library-name>
 ```
 #### Notes
 - It's best to use the Mac Os app 'Icon Set Creator' to automatically create all of the different icons needed. This just requires a 1024x1024 png of icon, choose to save in top level directory.
