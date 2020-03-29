@@ -44,6 +44,7 @@ export default class syncroniser {
                     }
                 })
                 //---------- TEST ---------------
+                this.deleteAll('invitations')
                 this.create({invitations: [
                     {
                         user: 'Tess Yellanda',
@@ -116,4 +117,19 @@ export default class syncroniser {
             })
         }
     };
+    deleteAll(things) {
+        /*
+            Deleted all items of a specific kind.
+            Input: String name of type of item
+            to be deleted.
+            Output: Void
+        */
+        this.dg && console.log(`Deleting all ${things}`);
+        // Execute the delete SQL
+        db.executeSql(`DELETE FROM ${things};`).then(([results]) => {
+            this.dg && console.log(`Deleted ${results.rowsAffected} ${things}`);
+        }).catch(error => {
+            handleError(error)
+        })
+    }
 }
