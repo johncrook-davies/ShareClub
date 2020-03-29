@@ -42,11 +42,18 @@ export default class syncroniser {
                     } else {
                         this.dg && console.log(`No migration required`)
                     }
-                    
-                    
                 })
+                //---------- TEST ---------------
+                this.create({invitations: [
+                    {
+                        user: 'Tess Yellanda',
+                        club: 'Original Pirate Investors'
+                    }
+                ]})
+                //-----------------------------
             }).catch(error => handleError(error));
         }).catch(error => handleError(error));
+        
     };
     close() {
         /*
@@ -62,6 +69,51 @@ export default class syncroniser {
             });
         } else {
             this.dg && console.log("Database was not OPENED");
+        }
+    };
+    create(obj) {
+        /*
+            For each object in the object, gets
+            array of objects, gets the keys and
+            and values from each of those objects,
+            adding speach marks to strings and 
+            executes sql statement.
+            Input: {
+                <first type of thing>: [
+                    {
+                        first_attr: value1,
+                        second_attr: value2
+                    }
+                ],
+                <second type of thing>: [
+                    {
+                        first_attr: value1,
+                        second_attr: value2
+                    }
+                ]
+            }
+            Output: Void
+        */
+        for(const things in obj) {
+            this.dg && console.log(`Creating new ${things}`);
+            obj[things].map((thing) => {
+                const keys = Object.keys(thing).join(',');
+                var values = Object.values(thing);
+                // Ensure string values are enclosed by speach marks
+                values.forEach((v,i) => {
+                    if(typeof v === 'string'){
+                        values[i] = "'"+v+"'"
+                    }
+                })
+                // Create a comma delimited string of values
+                values = values.join(',');
+                // Execute the insert SQL
+                db.executeSql(`INSERT INTO ${things}(${keys}) VALUES (${values});`).then(([results]) => {
+                    this.dg && console.log(`Created ${results.rowsAffected} new ${things}`);
+                }).catch(error => {
+                    handleError(error)
+                })
+            })
         }
     };
 }

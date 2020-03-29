@@ -29,7 +29,7 @@ const App: () => React$Node = () => {
             schema: schema
         },
         true);
-        syncdb.initDb();
+        syncdb.initDb()
         /* 
         On unmount cleanup actions
             - Cleanup database
