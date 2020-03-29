@@ -1,20 +1,11 @@
 import SQLite from "react-native-sqlite-storage";
 
+import { migrate } from './migrate';
+import { handleError } from './errors';
+
 SQLite.enablePromise(true);
 
 let db;
-
-function databaseInitialisation(db, schema) {
-    db.transaction((tx) => {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS Product (prodId, prodName, prodDesc, prodImage, prodPrice)');
-    })
-        .then(() => {})
-        .catch(error => handleError(error));
-}
-
-function handleError(error) {
-    console.log(error)
-}
 
 export default class syncroniser {
     constructor(props, debug){
@@ -34,6 +25,18 @@ export default class syncroniser {
             ).then((DB) => {
                 db = DB
                 this.dg && console.log("Database OPENED");
+                // Check database version and if diff migrate
+                db.executeSql('SELECT version FROM version WHERE version_id=1;').then(([v]) =>{
+                    this.dg && console.log(`Current database version is`,v.rows.item(0).version)
+                    this.dg && console.log(`Schema version is`,version)
+                    if(v.rows.item(0).version !== version){
+                        migrate(db, schema, this.dg)
+                    } else {
+                        this.dg && console.log(`No migration required`)
+                    }
+                    
+                    
+                })
             }).catch(error => handleError(error));
         }).catch(error => handleError(error));
     };

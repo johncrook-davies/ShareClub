@@ -22,7 +22,6 @@
 - Built and installed a proprietary library to keep server database and internal storage in sync
 ## Memory
 - Clubs, proposals and invitations are stored in a redux store for the duration of each session.
-## Commands
 ### Development environment
 - Run native iOS simulator: 
 ```zsh

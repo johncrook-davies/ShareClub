@@ -13,13 +13,10 @@ import {
   StyleSheet
 } from 'react-native';
 import syncroniser from './synchroniser';
+import { schema } from './schema';
 
 import Dashboard from './views/dashboard';
 import store from './redux/store';
-
-const schema = {
-    version: "1.0"
-};
 
 const App: () => React$Node = () => {
     const [db, setDb] = useState(null);
