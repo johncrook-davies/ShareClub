@@ -11,7 +11,7 @@ export default class syncroniser {
         this.dg = debug;
         //SQLite.DEBUG(debug); // Uncomment to allow sqlite debug info
     }
-    initDb() {
+    initDb(callback) {
         /*
             Performs an echotest to ensure that 
             the SQLite library is present. If so
@@ -20,6 +20,9 @@ export default class syncroniser {
             current version of the schema. If the
             versions are different then it performs
             a migration.
+            Input: callback function to be called 
+            once database has been created
+            Output: Void
         */
         const { database, size, schema } = this.props;
         const { version } = schema;
@@ -42,16 +45,7 @@ export default class syncroniser {
                     } else {
                         this.dg && console.log(`No migration required`)
                     }
-                })
-                //---------- TEST ---------------
-                this.deleteAll('invitations')
-                this.create({invitations: [
-                    {
-                        user: 'Tess Yellanda',
-                        club: 'Original Pirate Investors'
-                    }
-                ]})
-                //-----------------------------
+                }).then(callback)
             }).catch(error => handleError(error));
         }).catch(error => handleError(error));
         

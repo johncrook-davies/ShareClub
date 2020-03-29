@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import syncroniser from './synchroniser';
 import { schema } from './schema';
+import seedDatabase from './seeds';
 
 import Dashboard from './views/dashboard';
 import store from './redux/store';
@@ -29,7 +30,9 @@ const App: () => React$Node = () => {
             schema: schema
         },
         true);
-        syncdb.initDb()
+        syncdb.initDb(() => {
+            __DEV__ ? seedDatabase(syncdb) : null;
+        })
         /* 
         On unmount cleanup actions
             - Cleanup database
