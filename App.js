@@ -3,11 +3,13 @@ import { Provider } from 'react-redux';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import syncroniser from './synchroniser';
 import { schema } from './schema';
 import seedDatabase from './seeds';
 import Dashboard from './views/dashboard';
+import Investments from './views/investments';
 import store from './redux/store';
 
 const Tab = createBottomTabNavigator();
@@ -41,6 +43,10 @@ const App: () => React$Node = () => {
                 <Tab.Screen
                     name="Dashboard"
                     component={Dashboard}
+                    />
+                <Tab.Screen
+                    name="Investments"
+                    component={Investments}
                     />
             </Tab.Navigator>
         }</NavigationContainer>
