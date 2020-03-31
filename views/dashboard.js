@@ -16,7 +16,8 @@ import {
     View,
     Image,
     ScrollView,
-    StyleSheet
+    StyleSheet,
+    SafeAreaView
 } from 'react-native';
 
 const mapStateToProps = state => {
@@ -38,7 +39,7 @@ const mapStateToProps = state => {
 
 const Dashboard = ({ clubs, proposals, invitations }) => {
     return (
-        <View>
+        <SafeAreaView>
             <Section>
                 <H1>Welcome back</H1>
             </Section>
@@ -84,7 +85,7 @@ const Dashboard = ({ clubs, proposals, invitations }) => {
                     })}
                 </View>}
             </Section>
-        </View>
+        </SafeAreaView>
     )
 }
 

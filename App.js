@@ -1,29 +1,16 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import {
-  SafeAreaView,
-  StyleSheet
-} from 'react-native';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import syncroniser from './synchroniser';
 import { schema } from './schema';
 import seedDatabase from './seeds';
-
 import Dashboard from './views/dashboard';
 import store from './redux/store';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const App: () => React$Node = () => {
     const [db, setDb] = useState(null);
@@ -42,34 +29,22 @@ const App: () => React$Node = () => {
                 {all: 'invitations', where: {club: {isEqualto: "Original Pirate Investors"}, invitation_id: {isEqualto: 0}}}
             ).then((r) => console.log(r) )
         })
-        /* 
-        On unmount cleanup actions
-            - Cleanup database
-        */
+        // On unmount cleanup database
         return () => {
             syncdb.close()
         }
     });
     
-    return (
-        <Provider store={store}>
-            <NavigationContainer>{
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="Dashboard"
-                        component={Dashboard}
-                        />
-                </Stack.Navigator>
-            }</NavigationContainer>
-        </Provider>
-    );
+    return <Provider store={store}>
+        <NavigationContainer>{
+            <Tab.Navigator>
+                <Tab.Screen
+                    name="Dashboard"
+                    component={Dashboard}
+                    />
+            </Tab.Navigator>
+        }</NavigationContainer>
+    </Provider>
 };
-
-const styles = StyleSheet.create({
-  engine: {
-    position: 'absolute',
-    right: 0,
-  }
-});
 
 export default App;
