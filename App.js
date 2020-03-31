@@ -12,12 +12,18 @@ import {
   SafeAreaView,
   StyleSheet
 } from 'react-native';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import syncroniser from './synchroniser';
 import { schema } from './schema';
 import seedDatabase from './seeds';
 
 import Dashboard from './views/dashboard';
 import store from './redux/store';
+
+const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
     const [db, setDb] = useState(null);
@@ -47,9 +53,14 @@ const App: () => React$Node = () => {
     
     return (
         <Provider store={store}>
-            <SafeAreaView>
-                <Dashboard/>
-            </SafeAreaView>
+            <NavigationContainer>{
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="Dashboard"
+                        component={Dashboard}
+                        />
+                </Stack.Navigator>
+            }</NavigationContainer>
         </Provider>
     );
 };

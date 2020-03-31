@@ -1,0 +1,12 @@
+{
+  "name": "synchroniser",
+  "version": "0.01",
+  "description": "Manages offline database and synchronises with server.",
+  "main": "index.js",
+  "author": "Johnathan Crook-Davies",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "react-native-sqlite-storage": "^5.0.0"
+  }
+}
