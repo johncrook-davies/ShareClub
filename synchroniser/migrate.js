@@ -1,4 +1,4 @@
-import { handleError } from './errors';
+import { handleError } from '../errors';
 
 function createTable(tx, tableName, attributes, dg) {
     dg && console.log(`Creating table ${tableName}`)
@@ -66,7 +66,6 @@ export function migrate(tx, targetSchema, dg) {
     targetSchemaWithVersion['version'] = ['version_id INTEGER PRIMARY KEY NOT NULL', `version INTEGER`];
     // Remove line breaks from target schema
     for(const table in targetSchemaWithVersion) {
-        console.log(table);
         targetSchemaWithVersion[table].forEach((s,i) => {
             targetSchemaWithVersion[table][i] = s.replace(/^\s+|\s+$/g, '');
         })
@@ -105,9 +104,9 @@ export function migrate(tx, targetSchema, dg) {
         })
     }).then(() => {
         tx.executeSql(`UPDATE version SET version=${version} WHERE version_id=1;`).then(([results]) => {
-            dg && console.log('Version of database update to ${version}')
+            dg && console.log(`Version of database update to ${version} `)
         }).catch((error) => {
-            tx.executeSql(`INSERT INTO version (version) VALUES (0);`).then(() => console.log("Version changed to 0"))
+            handleError(error);
         })
     }).then(() => {
         dg && tx.executeSql("SELECT name, sql FROM sqlite_master;").then(([results]) => {console.log(`Changed schema to`, formatSchema(results))})

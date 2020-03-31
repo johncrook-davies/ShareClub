@@ -32,6 +32,9 @@ const App: () => React$Node = () => {
         true);
         syncdb.initDb(() => {
             __DEV__ ? seedDatabase(syncdb) : null;
+            syncdb.get(
+                {all: 'invitations', where: {club: {isEqualto: "Original Pirate Investors"}, invitation_id: {isEqualto: 0}}}
+            ).then((r) => console.log(r) )
         })
         /* 
         On unmount cleanup actions

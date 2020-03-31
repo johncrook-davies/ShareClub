@@ -1,6 +1,6 @@
 import SQLite from "react-native-sqlite-storage";
 import { migrate } from './migrate';
-import { handleError } from './errors';
+import { handleError } from '../errors';
 
 SQLite.enablePromise(true);
 let db;
@@ -9,6 +9,7 @@ export default class syncroniser {
     constructor(props, debug){
         this.props = props;
         this.dg = debug;
+        this.version = props.schema.version;
         //SQLite.DEBUG(debug); // Uncomment to allow sqlite debug info
     }
     initDb(callback) {
@@ -22,15 +23,16 @@ export default class syncroniser {
             a migration.
             Input: callback function to be called 
             once database has been created
-            Output: Void
+            Input: Function callback to be executed
+            once database is open.
+            Output: undefined
         */
         const { database, size, schema } = this.props;
-        const { version } = schema;
         SQLite.echoTest().then(() => {
             // Open database
             SQLite.openDatabase(
                 database,
-                version,
+                this.version,
                 "Offline database",
                 size
             ).then((DB) => {
@@ -39,13 +41,16 @@ export default class syncroniser {
                 // Check database version and if different migrate
                 db.executeSql('SELECT version FROM version WHERE version_id=1;').then(([v]) =>{
                     this.dg && console.log(`Current database version is`,v.rows.item(0).version)
-                    this.dg && console.log(`Schema version is`,version)
-                    if(v.rows.item(0).version !== version){
+                    this.dg && console.log(`Schema version is`,this.version)
+                    if(v.rows.item(0).version !== this.version){
                         migrate(db, schema, this.dg)
                     } else {
                         this.dg && console.log(`No migration required`)
                     }
-                }).then(callback)
+                }).then(callback).catch(error => {
+                    this.dg && console.log(`No database tected, migrating...`)
+                    migrate(db, schema, this.dg)
+                });
             }).catch(error => handleError(error));
         }).catch(error => handleError(error));
         
@@ -55,6 +60,8 @@ export default class syncroniser {
             Checks if the database is non-null
             If it is then close it otherwise 
             log a message
+            Input: None
+            Output: undefined
         */
         if (db) {
             db.close().then(() => {
@@ -87,7 +94,7 @@ export default class syncroniser {
                     }
                 ]
             }
-            Output: Void
+            Output: undefined
         */
         for(const things in obj) {
             this.dg && console.log(`Creating new ${things}`);
@@ -116,6 +123,7 @@ export default class syncroniser {
             Deleted all items of a specific kind.
             Input: String name of type of item
             to be deleted.
+            Input: String name of things
             Output: Void
         */
         this.dg && console.log(`Deleting all ${things}`);
@@ -125,5 +133,64 @@ export default class syncroniser {
         }).catch(error => {
             handleError(error)
         })
+    }
+    get(things) {
+        /*
+            Queries database and returns all
+            records of the specified type that match
+            the specified criteria.
+            Input: {
+                all: <type of thing>,
+                where: {
+                    first_attr: {
+                        isEqualTo: <value>
+                    },
+                    second_attr: {
+                        isGreaterThan: <value>
+                    },
+                    third_attr: {
+                        isLessThan: <value>
+                    }
+                }
+            }
+            Output: Promise
+        */
+        this.dg && console.log(`Getting things`);
+        const { all, where } = things;
+        var result = [];
+        var queryString;
+        // Construct query string
+        queryString = `SELECT * FROM ${all};`
+        if(where !== undefined) {
+            queryString += ` WHERE`
+            Object.keys(where).forEach((c,i) => {
+                if(where[c].isEqualto !== undefined) {
+                    const criteria = (typeof where[c].isEqualto === 'string') ? ("'"+where[c].isEqualto+"'") : where[c].isEqualto;
+                    (i > 0) && (queryString += ' AND')
+                    queryString += ` ${c}=${criteria}`   
+                } else if(where[c].isGreaterThan !== undefined) {
+                    const criteria = (typeof where[c].isGreaterThan === 'string') ? ("'"+where[c].isGreaterThan+"'") : where[c].isGreaterThan;
+                    (i > 0) && (queryString += ' AND')
+                    queryString += ` ${c}>${criteria}`
+                } else if(where[c].isLessThan !== undefined) {
+                    const criteria = (typeof where[c].isLessThan === 'string') ? ("'"+where[c].isLessThan+"'") : where[c].isLessThan;
+                    (i > 0) && (queryString += ' AND')
+                    queryString += ` ${c}<${criteria}`
+                }
+            })
+        }
+        queryString += ';';
+        // Execute the SQL
+        return new Promise((resolve, reject) =>
+            db.executeSql(queryString).then(([results]) => {
+                this.dg && console.log("Executing query: ", queryString);
+                for(let i=0; i<results.rows.length; i++) {
+                    result.push(results.rows.item(i))
+                }
+                resolve(result)
+            }).catch(error => {
+                handleError(error)
+            })
+        )
     }
 }
