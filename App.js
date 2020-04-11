@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+
+// Redux
+import store from './redux/store';
 
 import syncroniser from './synchroniser';
 import { schema } from './schema';
 import seedDatabase from './seeds';
-import Dashboard from './views/dashboard';
-import Investments from './views/investments';
-import store from './redux/store';
-
-const Tab = createBottomTabNavigator();
+import ShareClub from './ShareClub';
 
 const App: () => React$Node = () => {
-    const [db, setDb] = useState(null);
     
+    // Initialisation and cleanup actions
     useEffect(() => {
         // Initialise database
         const syncdb = new syncroniser({
@@ -33,23 +29,13 @@ const App: () => React$Node = () => {
         })
         // On unmount cleanup database
         return () => {
+            // Close database connection
             syncdb.close()
         }
     });
     
     return <Provider store={store}>
-        <NavigationContainer>{
-            <Tab.Navigator>
-                <Tab.Screen
-                    name="Dashboard"
-                    component={Dashboard}
-                    />
-                <Tab.Screen
-                    name="Investments"
-                    component={Investments}
-                    />
-            </Tab.Navigator>
-        }</NavigationContainer>
+        <ShareClub/>
     </Provider>
 };
 

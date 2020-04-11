@@ -1,2 +1,4 @@
 export const ADD_CLUB = "ADD_CLUB";
 export const UPDATE_CLUB = "UPDATE_CLUB";
+export const CREATE_CONNECTION = "CREATE_CONNECTION";
+export const DESTROY_CONNECTION = "DESTROY_CONNECTION";

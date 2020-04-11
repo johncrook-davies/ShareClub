@@ -1,6 +1,11 @@
 export const getClubsState = store => store.clubs;
 export const getProposalsState = store => store.proposals;
 export const getInvitationsState = store => store.invitations;
+export const getConnectionState = store => store.connections;
+
+// Connection
+export const getConnection = store =>
+    getConnectionState(store) ? getConnectionState(store) : null;
 
 // Clubs
 export const getClubList = store =>
