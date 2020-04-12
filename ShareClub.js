@@ -7,9 +7,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Redux
 import store from './redux/store';
 import { 
-    getConnection
-} from "./redux/selectors";
-import { 
     createConnection,
     destroyConnection
 } from "./redux/actions";
@@ -18,11 +15,6 @@ import Dashboard from './views/dashboard';
 import Investments from './views/investments/investments';
 
 const Tab = createBottomTabNavigator();
-
-const mapStateToProps = state => {
-    const connection = getConnection(state);
-    return { connection }
-}
 
 const ShareClub = ({ createConnection, destroyConnection }) => {
     // Initialisation
