@@ -15,7 +15,7 @@ import {
 } from "./redux/actions";
 
 import Dashboard from './views/dashboard';
-import Investments from './views/investments';
+import Investments from './views/investments/investments';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,12 +25,16 @@ const mapStateToProps = state => {
 }
 
 const ShareClub = ({ createConnection, destroyConnection }) => {
-    // Initialisation and cleanup actions
+    // Initialisation
+    // Create websocket connection
     useEffect(() => {
-        // Create websocket connection
+        
         createConnection()
+    })
+    // Cleanup actions
+    // Close websocket connection
+    useEffect(() => {
         return () => {
-            // Close websocket connection
             destroyConnection()
         }
     })

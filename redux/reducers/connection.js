@@ -5,15 +5,22 @@ const initialState = null;
 export default function(state = initialState, action) {
     switch (action.type) {
         case CREATE_CONNECTION: {
-            console.log("Created new ws");
-            return null
+            /* 
+                Create a new websocket connection
+                and store in state
+            */
+            return {
+                ws: new WebSocket("ws://warm-mesa-02274.herokuapp.com/cable")
+            }
         }
         case DESTROY_CONNECTION: {
-            console.log("Destroyed ws");
-            return null
+            // Destroy websocket connection
+            return {
+                ws: state.ws.close()
+            }
         }
         default:
-            return state;
+            return state
     }
     return state
 }
