@@ -100,7 +100,8 @@ export default class syncroniser {
             this.dg && console.log(`Creating new ${things}`);
             obj[things].map((thing) => {
                 const keys = Object.keys(thing).join(',');
-                var values = Object.values(thing);
+                var values = Object.values(thing),
+                    sql
                 // Ensure string values are enclosed by speach marks
                 values.forEach((v,i) => {
                     if(typeof v === 'string'){
@@ -110,10 +111,71 @@ export default class syncroniser {
                 // Create a comma delimited string of values
                 values = values.join(',');
                 // Execute the insert SQL
-                db.executeSql(`INSERT INTO ${things}(${keys}) VALUES (${values});`).then(([results]) => {
+                sql = `INSERT INTO ${things}(${keys}) VALUES (${values});`;
+                this.dg && console.log(sql);
+                db.executeSql(sql).then(([results]) => {
                     this.dg && console.log(`Created ${results.rowsAffected} new ${things}`);
                 }).catch(error => {
                     handleError(error)
+                })
+            })
+        }
+    };
+    update(obj) {
+        /*
+            For each set of things in the obj, cycle through
+            each thing, get the item using the id, construct
+            an update sql string and execute.
+            eg syncdb.update({invitations: [{id: 1, user: 'Dave', club: 'Clubs of stuff and things'}]})
+            Input: {
+                <first type of thing>: [
+                    {
+                        first_attr: value1,
+                        second_attr: value2
+                    }
+                ],
+                <second type of thing>: [
+                    {
+                        first_attr: value1,
+                        second_attr: value2
+                    }
+                ]
+            }
+            Output: undefined
+        */
+        for(const things in obj) {
+            /* If object doesn't exist then update */
+            this.dg && console.log(`Updating ${things}`);
+            obj[things].map((thing) => {
+                // Find thing
+                this.get({all: things, where: {id: {isEqualTo: thing.id}}}).then(([t]) => {
+                    // Get an array of attributes
+                    const keys = Object.keys(thing);
+                    // Get an array of values
+                    var values = Object.values(thing),
+                        sql='';
+                    // Ensure string values are enclosed by speach marks
+                    values.forEach((v,i) => {
+                        if(typeof v === 'string'){
+                            values[i] = "'"+v+"'"
+                        }
+                    })
+                    // Create a string of attribute1=value1, attribute2=value2...
+                    keys.forEach((k,i) => {
+                        const v = values[i];
+                        sql += `${k}=${v}`;
+                        if(i < keys.length - 1) {
+                            sql += ', '
+                        }
+                    })
+                    // Execute the insert SQL
+                    sql = `UPDATE ${things} SET ${sql} WHERE id=${t.id};`;
+                    console.log(sql)
+                    db.executeSql(sql).then(([results]) => {
+                        this.dg && console.log(`Updated ${results.rowsAffected} ${things}`);
+                    }).catch(error => {
+                        handleError(error)
+                    })
                 })
             })
         }
@@ -126,9 +188,10 @@ export default class syncroniser {
             Input: String name of things
             Output: Void
         */
-        this.dg && console.log(`Deleting all ${things}`);
+        const sql = `DELETE FROM ${things};`;
+        this.dg && console.log(`Deleting all ${things}\n`,sql);
         // Execute the delete SQL
-        db.executeSql(`DELETE FROM ${things};`).then(([results]) => {
+        db.executeSql(sql).then(([results]) => {
             this.dg && console.log(`Deleted ${results.rowsAffected} ${things}`);
         }).catch(error => {
             handleError(error)
@@ -183,10 +246,11 @@ export default class syncroniser {
         // Execute the SQL
         return new Promise((resolve, reject) =>
             db.executeSql(queryString).then(([results]) => {
-                this.dg && console.log("Executing query: ", queryString);
                 for(let i=0; i<results.rows.length; i++) {
                     result.push(results.rows.item(i))
                 }
+                this.dg && console.log(queryString);
+                this.dg && console.log(`Found ${results.rows.length} objects`);
                 resolve(result)
             }).catch(error => {
                 handleError(error)

@@ -1,7 +1,7 @@
 export const schema = {
-    version: 3,
+    version: 1,
     invitations: [
-        'invitation_id INTEGER PRIMARY KEY NOT NULL',
+        'id INTEGER PRIMARY KEY NOT NULL',
         'user VARCHAR(55)',
         'club VARCHAR(55)'
     ]

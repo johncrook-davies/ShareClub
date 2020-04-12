@@ -23,6 +23,7 @@ const App: () => React$Node = () => {
         true);
         syncdb.initDb(() => {
             __DEV__ ? seedDatabase(syncdb) : null;
+            syncdb.update({invitations: [{id: 1, user: 'Dave', club: 'Clubs of stuff and things'}]});
         })
         // On unmount cleanup database
         return () => {
