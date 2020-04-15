@@ -39,7 +39,7 @@ export default class syncroniser {
                 db = DB
                 this.dg && console.log("Database OPENED");
                 // Check database version and if different migrate
-                db.executeSql('SELECT version FROM version WHERE version_id=1;').then(([v]) =>{
+                this.__executeSql__('SELECT version FROM version WHERE version_id=1;').then(([v]) =>{
                     this.dg && console.log(`Current database version is`,v.rows.item(0).version)
                     this.dg && console.log(`Schema version is`,this.version)
                     if(v.rows.item(0).version !== this.version){
@@ -72,6 +72,9 @@ export default class syncroniser {
         } else {
             this.dg && console.log("Database was not OPENED");
         }
+    };
+    __executeSql__(sql) {
+        return db.executeSql(sql)
     };
     create(obj) {
         /*
@@ -245,15 +248,13 @@ export default class syncroniser {
         queryString += ';';
         // Execute the SQL
         return new Promise((resolve, reject) =>
-            db.executeSql(queryString).then(([results]) => {
+            this.__executeSql__(queryString).then(([results]) => {
                 for(let i=0; i<results.rows.length; i++) {
                     result.push(results.rows.item(i))
                 }
                 this.dg && console.log(queryString);
                 this.dg && console.log(`Found ${results.rows.length} objects`);
                 resolve(result)
-            }).catch(error => {
-                handleError(error)
             })
         )
     }

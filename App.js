@@ -23,7 +23,7 @@ const App: () => React$Node = () => {
         true);
         syncdb.initDb(() => {
             __DEV__ ? seedDatabase(syncdb) : null;
-            syncdb.update({invitations: [{id: 1, user: 'Dave', club: 'Clubs of stuff and things'}]});
+            updateDatabase(syncdb)
         })
         // On unmount cleanup database
         return () => {
@@ -36,5 +36,15 @@ const App: () => React$Node = () => {
         <ShareClub/>
     </Provider>
 };
+
+const updateDatabase = (syncdb) => {
+    console.log('executed')
+    syncdb.get({all: 'invitations', where: {user: {isEqualTo: 'Tess Yellanda'}}}).then((t) => {
+        console.log(t)
+    }).catch(() => {
+        console.log("doesn't exist")
+    })
+    //syncdb.update({invitations: [{id: 1, user: 'Dave', club: 'Clubs of stuff and things'}]})
+}
 
 export default App;
