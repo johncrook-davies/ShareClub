@@ -103,7 +103,7 @@ export default class syncroniser {
             this.dg && console.log(`Creating new ${things}`);
             obj[things].map((thing) => {
                 const keys = Object.keys(thing).join(',');
-                var values = Object.values(thing),
+                let values = Object.values(thing),
                     sql
                 // Ensure string values are enclosed by speach marks
                 values.forEach((v,i) => {
@@ -132,13 +132,15 @@ export default class syncroniser {
             eg syncdb.update({invitations: [{id: 1, user: 'Dave', club: 'Clubs of stuff and things'}]})
             Input: {
                 <first type of thing>: [
-                    {
+                    {   
+                        id: id1,
                         first_attr: value1,
                         second_attr: value2
                     }
                 ],
                 <second type of thing>: [
                     {
+                        id: id2,
                         first_attr: value1,
                         second_attr: value2
                     }
@@ -149,36 +151,35 @@ export default class syncroniser {
         for(const things in obj) {
             /* If object doesn't exist then update */
             this.dg && console.log(`Updating ${things}`);
-            obj[things].map((thing) => {
-                // Find thing
-                this.get({all: things, where: {id: {isEqualTo: thing.id}}}).then(([t]) => {
-                    // Get an array of attributes
-                    const keys = Object.keys(thing);
-                    // Get an array of values
-                    var values = Object.values(thing),
-                        sql='';
-                    // Ensure string values are enclosed by speach marks
-                    values.forEach((v,i) => {
-                        if(typeof v === 'string'){
-                            values[i] = "'"+v+"'"
-                        }
-                    })
-                    // Create a string of attribute1=value1, attribute2=value2...
-                    keys.forEach((k,i) => {
+            obj[things].map(async (thing) => {
+                const id = thing.id;
+                // Get an array of attributes
+                const keys = Object.keys(thing);
+                // Get an array of values
+                let values = Object.values(thing),
+                    sql='';
+                // Ensure string values are enclosed by speach marks
+                values.forEach((v,i) => {
+                    if(typeof v === 'string'){
+                        values[i] = "'"+v+"'"
+                    }
+                })
+                // Create a string of attribute1=value1, attribute2=value2...
+                keys.forEach((k,i) => {
+                    if(k !== 'id'){
                         const v = values[i];
                         sql += `${k}=${v}`;
                         if(i < keys.length - 1) {
                             sql += ', '
                         }
-                    })
-                    // Execute the insert SQL
-                    sql = `UPDATE ${things} SET ${sql} WHERE id=${t.id};`;
-                    console.log(sql)
-                    db.executeSql(sql).then(([results]) => {
-                        this.dg && console.log(`Updated ${results.rowsAffected} ${things}`);
-                    }).catch(error => {
-                        handleError(error)
-                    })
+                    }
+                })
+                // Execute the insert SQL
+                sql = `UPDATE ${things} SET ${sql} WHERE id=${id};`;
+                this.__executeSql__(sql).then(([results]) => {
+                    this.dg && console.log(`Updated ${results.rowsAffected} ${things}`);
+                }).catch(error => {
+                    handleError(error)
                 })
             })
         }
@@ -223,8 +224,8 @@ export default class syncroniser {
         */
         this.dg && console.log(`Getting things`);
         const { all, where } = things;
-        var result = [];
-        var sql;
+        let result = [];
+        let sql;
         // Construct query string
         sql = `SELECT * FROM ${all}`
         if(where !== undefined) {

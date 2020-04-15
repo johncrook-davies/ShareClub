@@ -86,4 +86,12 @@ describe('synchroniser', () => {
             expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO animals(name,type) VALUES ('Steve','zebra');")
         })
     })
+    
+    describe('update', () => {
+        it('calls update for single record', async () => {
+            synchdb.update({records: [{id: 1, name: 'Dave', type: 'person'}]})
+            //expect(spy).toHaveBeenNthCalledWith(1, "SELECT * FROM records WHERE id=1;")
+            expect(spy).toHaveBeenNthCalledWith(1, "UPDATE records SET name='Dave', type='person' WHERE id=1;")
+        })
+    })
 })
