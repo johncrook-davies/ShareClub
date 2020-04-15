@@ -39,13 +39,31 @@ describe('synchroniser', () => {
     describe('get', () => {
         it('calls select all', async () => {
             await synchdb.get({all: 'things'})
-            expect(spy).toHaveBeenCalledWith("SELECT * FROM things;;")
+            expect(spy).toHaveBeenCalledWith("SELECT * FROM things;")
         })
-        it('calls select all', async () => {
+        it('calls select where x=y', async () => {
             await synchdb.get(
                 {all: 'things', where: {type: {isEqualTo: 1}}}
             )
             expect(spy).toHaveBeenCalledWith("SELECT * FROM things WHERE type=1;")
+        })
+        it('calls select where x<y', async () => {
+            await synchdb.get(
+                {all: 'things', where: {type: {isLessThan: 1}}}
+            )
+            expect(spy).toHaveBeenCalledWith("SELECT * FROM things WHERE type<1;")
+        })
+        it('calls select where x>y', async () => {
+            await synchdb.get(
+                {all: 'things', where: {type: {isGreaterThan: 1}}}
+            )
+            expect(spy).toHaveBeenCalledWith("SELECT * FROM things WHERE type>1;")
+        })
+        it('calls select where multiple conditions', async () => {
+            await synchdb.get(
+                {all: 'things', where: {type: {isGreaterThan: 1}, name: {isEqualTo: 'Joe'}}}
+            )
+            expect(spy).toHaveBeenCalledWith("SELECT * FROM things WHERE type>1 AND name='Joe';")
         })
     })
 })

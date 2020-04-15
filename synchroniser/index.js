@@ -224,35 +224,33 @@ export default class syncroniser {
         this.dg && console.log(`Getting things`);
         const { all, where } = things;
         var result = [];
-        var queryString;
+        var sql;
         // Construct query string
-        queryString = `SELECT * FROM ${all};`
+        sql = `SELECT * FROM ${all}`
         if(where !== undefined) {
-            queryString += ` WHERE`
+            sql += ` WHERE`
             Object.keys(where).forEach((c,i) => {
-                if(where[c].isEqualto !== undefined) {
-                    const criteria = (typeof where[c].isEqualto === 'string') ? ("'"+where[c].isEqualto+"'") : where[c].isEqualto;
-                    (i > 0) && (queryString += ' AND')
-                    queryString += ` ${c}=${criteria}`   
+                i > 0 ? sql += ' AND' : false
+                if(where[c].isEqualTo !== undefined) {
+                    const criteria = (typeof where[c].isEqualTo === 'string') ? ("'"+where[c].isEqualTo+"'") : where[c].isEqualTo;
+                    sql += ` ${c}=${criteria}`   
                 } else if(where[c].isGreaterThan !== undefined) {
                     const criteria = (typeof where[c].isGreaterThan === 'string') ? ("'"+where[c].isGreaterThan+"'") : where[c].isGreaterThan;
-                    (i > 0) && (queryString += ' AND')
-                    queryString += ` ${c}>${criteria}`
+                    sql += ` ${c}>${criteria}`
                 } else if(where[c].isLessThan !== undefined) {
                     const criteria = (typeof where[c].isLessThan === 'string') ? ("'"+where[c].isLessThan+"'") : where[c].isLessThan;
-                    (i > 0) && (queryString += ' AND')
-                    queryString += ` ${c}<${criteria}`
+                    sql += ` ${c}<${criteria}`
                 }
             })
         }
-        queryString += ';';
+        sql += ';';
         // Execute the SQL
         return new Promise((resolve, reject) =>
-            this.__executeSql__(queryString).then(([results]) => {
+            this.__executeSql__(sql).then(([results]) => {
                 for(let i=0; i<results.rows.length; i++) {
                     result.push(results.rows.item(i))
                 }
-                this.dg && console.log(queryString);
+                this.dg && console.log(sql);
                 this.dg && console.log(`Found ${results.rows.length} objects`);
                 resolve(result)
             })
