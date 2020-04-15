@@ -23,11 +23,13 @@ describe('synchroniser', () => {
     afterEach(() => {
         jest.clearAllMocks()
     });
+    
     describe('basic functionality', () => {
         it('tests work ok', () => {
             expect(1+1).toBe(2)
         })
     })
+    
     describe('initDb', () => {
         beforeAll(async () => {
             await synchdb.initDb()
@@ -36,6 +38,7 @@ describe('synchroniser', () => {
             expect(mockEchoTest).toHaveBeenCalled()
         })
     })
+    
     describe('get', () => {
         it('calls select all', async () => {
             await synchdb.get({all: 'things'})
@@ -64,6 +67,23 @@ describe('synchroniser', () => {
                 {all: 'things', where: {type: {isGreaterThan: 1}, name: {isEqualTo: 'Joe'}}}
             )
             expect(spy).toHaveBeenCalledWith("SELECT * FROM things WHERE type>1 AND name='Joe';")
+        })
+    })
+    
+    describe('create', () => {
+        it('calls insert for single record', async () => {
+            await synchdb.create({records: [{name: 'Dave', type: 'person'}]})
+            expect(spy).toHaveBeenCalledWith("INSERT INTO records(name,type) VALUES ('Dave','person');")
+        })
+        it('calls insert for multiple records', async () => {
+            await synchdb.create({records: [{name: 'Dave', type: 'person'}, {name: 'Steve', type: 'zebra'}]})
+            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO records(name,type) VALUES ('Dave','person');")
+            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO records(name,type) VALUES ('Steve','zebra');")
+        })
+        it('calls insert for multi record types', async () => {
+            await synchdb.create({people: [{name: 'Dave', type: 'person'}], animals: [{name: 'Steve', type: 'zebra'}]})
+            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO people(name,type) VALUES ('Dave','person');")
+            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO animals(name,type) VALUES ('Steve','zebra');")
         })
     })
 })

@@ -116,7 +116,7 @@ export default class syncroniser {
                 // Execute the insert SQL
                 sql = `INSERT INTO ${things}(${keys}) VALUES (${values});`;
                 this.dg && console.log(sql);
-                db.executeSql(sql).then(([results]) => {
+                this.__executeSql__(sql).then(([results]) => {
                     this.dg && console.log(`Created ${results.rowsAffected} new ${things}`);
                 }).catch(error => {
                     handleError(error)
