@@ -5,75 +5,82 @@ import { handleError } from '../errors';
 SQLite.enablePromise(true);
 let db;
 
-export default class syncroniser {
+export default class Synchroniser {
     constructor(props, debug){
         this.props = props;
         this.dg = debug;
-        this.version = props.schema.version;
         //SQLite.DEBUG(debug); // Uncomment to allow sqlite debug info
     }
-    initDb(callback) {
+    log = (arg) => (this.dg && console.log(arg))
+    async initDb() {
         /*
-            Performs an echotest to ensure that 
-            the SQLite library is present. If so
-            it opens the database. It checks the 
-            version of the database against the 
-            current version of the schema. If the
-            versions are different then it performs
-            a migration.
-            Input: callback function to be called 
-            once database has been created
-            Input: Function callback to be executed
-            once database is open.
+            Initialises database
+            Output: Promise => resolve({executeSql}) : reject(null)
+        */
+        // Echo test to check that SQLite installed
+        await SQLite.echoTest().then(() => {
+            this.log(`echoTest: passed`);
+            // Open database
+            this.openDb()
+        }).catch(() => {
+            this.log(`echoTest: failed`);
+        });
+        return new Promise((resolve,reject) => {
+            resolve(db);
+            reject(null);
+        })
+    }
+    openDb() {
+        /*
+            Opens database
             Output: undefined
         */
-        const { database, size, schema } = this.props;
-        SQLite.echoTest().then(() => {
-            // Open database
-            SQLite.openDatabase(
-                database,
-                this.version,
-                "Offline database",
-                size
-            ).then((DB) => {
-                db = DB
-                this.dg && console.log("Database OPENED");
-                // Check database version and if different migrate
-                this.__executeSql__('SELECT version FROM version WHERE version_id=1;').then(([v]) =>{
-                    this.dg && console.log(`Current database version is`,v.rows.item(0).version)
-                    this.dg && console.log(`Schema version is`,this.version)
-                    if(v.rows.item(0).version !== this.version){
-                        migrate(db, schema, this.dg)
-                    } else {
-                        this.dg && console.log(`No migration required`)
-                    }
-                }).then(callback).catch(error => {
-                    this.dg && console.log(`No database tected, migrating...`)
+        const { database, size, schema } = this.props,
+              schemaV = schema.version;
+        SQLite.openDatabase(
+            database,
+            this.version,
+            "Offline database",
+            size
+        ).then((DB) => {
+            db = DB
+            // Check database version and if different migrate
+            this.exists({version: {id: 1}}).then((v) => {
+                const dbV = v.version;
+                this.log(`openDb: database version is ${dbV}`)
+                this.log(`openDb: schema version is ${schemaV}`)
+                if(dbV !== schemaV) {
                     migrate(db, schema, this.dg)
-                });
-            }).catch(error => handleError(error));
+                } else {
+                    this.log(`openDb: no migration required`);
+                }
+            }).catch(() => {
+                this.log(`openDb: no database detected, migrating`)
+                migrate(db, schema, this.dg)
+            })
         }).catch(error => handleError(error));
-        
-    };
+    }
     close() {
         /*
-            Checks if the database is non-null
-            If it is then close it otherwise 
-            log a message
-            Input: None
+            Closes database
             Output: undefined
         */
         if (db) {
             db.close().then(() => {
-                this.dg && console.log("Database CLOSED");
+                this.log("close: database closed");
             }).catch(error => {
                 handleError(error)
             });
         } else {
-            this.dg && console.log("Database was not OPENED");
+            this.log("close: database was not open");
         }
     };
     __executeSql__(sql) {
+        /*
+            Executes sql statement
+            Output: Promise => resolve({}) : reject({})
+        */
+        this.log(`executeSql: ${sql}`)
         return db.executeSql(sql)
     };
     async exists(thing) {
@@ -98,8 +105,10 @@ export default class syncroniser {
         })
         return new Promise((resolve,reject) => {
             if(recordDb.rows.length > 0) {
+                this.log(`exists: ${table} with id=${id} exists`);
                 resolve(recordDb.rows.item(0))
             } else {
+                this.log(`exists: ${table} with id=${id} does not exist`);
                 reject(record)
             }
         })
@@ -125,7 +134,6 @@ export default class syncroniser {
             }
             Output: Promise
         */
-        this.dg && console.log(`Getting things`);
         const { all, where } = things;
         let result = [];
         let sql;
@@ -154,8 +162,7 @@ export default class syncroniser {
                 for(let i=0; i<results.rows.length; i++) {
                     result.push(results.rows.item(i))
                 }
-                this.dg && console.log(sql);
-                this.dg && console.log(`Found ${results.rows.length} objects`);
+                this.log(`get: found ${results.rows.length} objects`);
                 resolve(result)
             })
         )

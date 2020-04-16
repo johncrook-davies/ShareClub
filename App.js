@@ -5,7 +5,7 @@ import 'react-native-gesture-handler';
 // Redux
 import store from './redux/store';
 
-import syncroniser from './synchroniser';
+import Synchroniser from './synchroniser';
 import { schema } from './schema';
 import seedDatabase from './seeds';
 import ShareClub from './ShareClub';
@@ -15,16 +15,20 @@ const App: () => React$Node = () => {
     // Initialisation and cleanup actions
     useEffect(() => {
         // Initialise database
-        const syncdb = new syncroniser({
+        const syncdb = new Synchroniser({
             database: "offlineDatabase.db",
             size: 200000,
             schema: schema
         },
         true);
-        syncdb.initDb(() => {
-            __DEV__ ? seedDatabase(syncdb) : null;
-            updateDatabase(syncdb)
-        })
+        syncdb.initDb()
+            .then(() => {
+                //__DEV__ ? seedDatabase(syncdb) : null;
+                //updateDatabase(syncdb)
+            })
+            .catch(() => {
+                throw new Error('Could not initialise database')
+            })
         // On unmount cleanup database
         return () => {
             // Close database connection

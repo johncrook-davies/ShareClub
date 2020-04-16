@@ -63,7 +63,7 @@ function formatSchema(thing) {
 export function migrate(tx, targetSchema, dg) {
     const version = targetSchema.version,
           targetSchemaWithVersion = targetSchema;
-    targetSchemaWithVersion['version'] = ['version_id INTEGER PRIMARY KEY NOT NULL', `version INTEGER`];
+    targetSchemaWithVersion['version'] = ['id INTEGER PRIMARY KEY NOT NULL', `version INTEGER`];
     // Remove line breaks from target schema
     for(const table in targetSchemaWithVersion) {
         targetSchemaWithVersion[table].forEach((s,i) => {
@@ -103,7 +103,7 @@ export function migrate(tx, targetSchema, dg) {
             }
         })
     }).then(() => {
-        tx.executeSql(`UPDATE version SET version=${version} WHERE version_id=1;`).then(([results]) => {
+        tx.executeSql(`UPDATE version SET version=${version} WHERE id=1;`).then(([results]) => {
             dg && console.log(`Version of database update to ${version} `)
         }).catch((error) => {
             handleError(error);

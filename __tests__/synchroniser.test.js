@@ -1,7 +1,7 @@
 import {
     mockEchoTest
 } from "../__mocks__/react-native-sqlite-storage";
-import synchroniser from '../synchroniser';
+import Synchroniser from '../synchroniser';
 import seedDatabase from '../seeds';
 jest.mock('react-native-sqlite-storage');
 
@@ -40,7 +40,7 @@ const mock__executeSql__ = jest.fn((sql) => {
 
 describe('synchroniser', () => {
     beforeEach(async () => {
-        synchdb = await new synchroniser({
+        synchdb = await new Synchroniser({
                 database: "offlineDatabase.db",
                 size: 200000,
                 schema: {version: 1}
@@ -64,6 +64,9 @@ describe('synchroniser', () => {
         it('Performs an echotest', async () => {
             await synchdb.initDb()
             expect(mockEchoTest).toHaveBeenCalled()
+        })
+        it('Returns a database object', async () => {
+            expect(await synchdb.initDb()).toHaveProperty('executeSql')
         })
     })
     
