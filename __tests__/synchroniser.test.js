@@ -8,6 +8,36 @@ jest.mock('react-native-sqlite-storage');
 var synchdb,
     spy;
 
+// Create a mock sql execution function
+const mock__executeSql__ = jest.fn((sql) => {
+    const exists = sql.search('exists') === -1 ? false : true;
+    const prom = new Promise( (resolve,reject) => {
+        const row = {a: 'v'},
+              returnFound = [{
+                  "insertId": 1, 
+                  "rows": {
+                      "item": () => row,
+                      "length": 1,
+                      "raw": () => {}
+                  }
+              }],
+              returnNotFound = [{
+                  "insertId": 1, 
+                  "rows": {
+                      "item": () => [],
+                      "length": 0,
+                      "raw": () => {}
+                  }
+              }];
+        if(exists) {
+            resolve(returnFound)
+        } else {
+            reject(returnNotFound)
+        }
+    })
+    return prom
+});
+
 describe('synchroniser', () => {
     beforeAll(async () => {
         synchdb = await new synchroniser({
@@ -90,8 +120,32 @@ describe('synchroniser', () => {
     describe('update', () => {
         it('calls update for single record', async () => {
             synchdb.update({records: [{id: 1, name: 'Dave', type: 'person'}]})
-            //expect(spy).toHaveBeenNthCalledWith(1, "SELECT * FROM records WHERE id=1;")
             expect(spy).toHaveBeenNthCalledWith(1, "UPDATE records SET name='Dave', type='person' WHERE id=1;")
+        })
+    })
+    
+    describe('exists sql call', () => {
+        it('calls get', async () => {
+            synchdb.exists({records: {id: 1}})
+            expect(spy).toHaveBeenNthCalledWith(1, "SELECT * FROM records WHERE id=1;")
+        })
+    })
+    
+    describe('exists return value', () => {
+        beforeAll(async () => {
+            // Overide sql execution function
+            synchdb.__executeSql__ = mock__executeSql__;
+        })
+        it('handles record exists by returning recurd', async () => {
+            const t = await synchdb.exists({records: {id: 'exists'}});
+            expect(t).toEqual({"a": "v"});
+        });
+        it('handles invalid records by rejecting input', async () => {
+            await synchdb.exists({records: {id: 'nope'}}).then((result) => {
+                throw new Error('Resolved when it should not have.')
+            }).catch((error) => {
+                expect(error).toEqual({id: 'nope'})
+            })
         })
     })
 })

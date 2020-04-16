@@ -184,6 +184,34 @@ export default class syncroniser {
             })
         }
     };
+    async exists(thing) {
+        /*
+            Checks whether a record exists
+            Input: {
+                first_attr: {
+                    isEqualTo: <value>
+                }
+            }    
+            Output: Promise => bool
+        */
+        const table = Object.keys(thing)[0],
+              record = thing[table],
+              id = record.id,
+              sql = `SELECT * FROM ${table} WHERE id=${id};`;
+        let recordDb;
+        await this.__executeSql__(sql).then(([result]) => {
+            recordDb = result;
+        }).catch(([result]) => {
+            recordDb = result;
+        })
+        return new Promise((resolve,reject) => {
+            if(recordDb.rows.length > 0) {
+                resolve(recordDb.rows.item(0))
+            } else {
+                reject(record)
+            }
+        })
+    }
     deleteAll(things) {
         /*
             Deleted all items of a specific kind.
