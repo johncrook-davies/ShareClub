@@ -11,7 +11,7 @@ export default class Synchroniser {
         this.dg = debug;
         //SQLite.DEBUG(debug); // Uncomment to allow sqlite debug info
     }
-    log = (arg) => (this.dg && console.log(arg))
+    log = (arg) => (this.dg && console.log(`Synchroniser -> ${arg}`))
     async initDb() {
         /*
             Initialises database
@@ -191,7 +191,6 @@ export default class Synchroniser {
             Output: undefined
         */
         for(const things in obj) {
-            this.dg && console.log(`Creating new ${things}`);
             obj[things].map((thing) => {
                 const keys = Object.keys(thing).join(',');
                 let values = Object.values(thing),
@@ -206,9 +205,8 @@ export default class Synchroniser {
                 values = values.join(',');
                 // Execute the insert SQL
                 sql = `INSERT INTO ${things}(${keys}) VALUES (${values});`;
-                this.dg && console.log(sql);
                 this.__executeSql__(sql).then(([results]) => {
-                    this.dg && console.log(`Created ${results.rowsAffected} new ${things}`);
+                    this.log(`create: created ${results.rowsAffected} new ${things}`);
                 }).catch(error => {
                     handleError(error)
                 })
@@ -287,7 +285,7 @@ export default class Synchroniser {
         // Execute the delete SQL
         return new Promise((resolve,reject) => {
             this.__executeSql__(sql).then(([results]) => {
-                this.dg && console.log(`Deleted ${results.rowsAffected} ${things}`);
+                this.dg && console.log(`delete: deleted ${results.rowsAffected} ${things}`);
                 resolve(results.rows.item(0))
             }).catch(error => {
                 reject(error)
@@ -303,10 +301,9 @@ export default class Synchroniser {
             Output: Void
         */
         const sql = `DELETE FROM ${things};`;
-        this.dg && console.log(`Deleting all ${things}\n`,sql);
         // Execute the delete SQL
-        db.executeSql(sql).then(([results]) => {
-            this.dg && console.log(`Deleted ${results.rowsAffected} ${things}`);
+        this.__executeSql__(sql).then(([results]) => {
+            this.log(`deleteAll: deleted ${results.rowsAffected} ${things}`);
         }).catch(error => {
             handleError(error)
         })

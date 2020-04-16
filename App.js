@@ -23,7 +23,7 @@ const App: () => React$Node = () => {
         true);
         syncdb.initDb()
             .then(() => {
-                //__DEV__ ? seedDatabase(syncdb) : null;
+                __DEV__ ? seedDatabase(syncdb) : null;
                 //updateDatabase(syncdb)
             })
             .catch(() => {
