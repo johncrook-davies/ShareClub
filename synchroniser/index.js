@@ -76,6 +76,90 @@ export default class syncroniser {
     __executeSql__(sql) {
         return db.executeSql(sql)
     };
+    async exists(thing) {
+        /*
+            Checks whether a record exists
+            Input: {
+                first_attr: {
+                    isEqualTo: <value>
+                }
+            }    
+            Output: Promise => resolve(record) : reject(input)
+        */
+        const table = Object.keys(thing)[0],
+              record = thing[table],
+              id = record.id,
+              sql = `SELECT * FROM ${table} WHERE id=${id};`;
+        let recordDb;
+        await this.__executeSql__(sql).then(([result]) => {
+            recordDb = result;
+        }).catch(([result]) => {
+            recordDb = result;
+        })
+        return new Promise((resolve,reject) => {
+            if(recordDb.rows.length > 0) {
+                resolve(recordDb.rows.item(0))
+            } else {
+                reject(record)
+            }
+        })
+    }
+    get(things) {
+        /*
+            Queries database and returns all
+            records of the specified type that match
+            the specified criteria.
+            Input: {
+                all: <type of thing>,
+                where: {
+                    first_attr: {
+                        isEqualTo: <value>
+                    },
+                    second_attr: {
+                        isGreaterThan: <value>
+                    },
+                    third_attr: {
+                        isLessThan: <value>
+                    }
+                }
+            }
+            Output: Promise
+        */
+        this.dg && console.log(`Getting things`);
+        const { all, where } = things;
+        let result = [];
+        let sql;
+        // Construct query string
+        sql = `SELECT * FROM ${all}`
+        if(where !== undefined) {
+            sql += ` WHERE`
+            Object.keys(where).forEach((c,i) => {
+                i > 0 ? sql += ' AND' : false
+                if(where[c].isEqualTo !== undefined) {
+                    const criteria = (typeof where[c].isEqualTo === 'string') ? ("'"+where[c].isEqualTo+"'") : where[c].isEqualTo;
+                    sql += ` ${c}=${criteria}`   
+                } else if(where[c].isGreaterThan !== undefined) {
+                    const criteria = (typeof where[c].isGreaterThan === 'string') ? ("'"+where[c].isGreaterThan+"'") : where[c].isGreaterThan;
+                    sql += ` ${c}>${criteria}`
+                } else if(where[c].isLessThan !== undefined) {
+                    const criteria = (typeof where[c].isLessThan === 'string') ? ("'"+where[c].isLessThan+"'") : where[c].isLessThan;
+                    sql += ` ${c}<${criteria}`
+                }
+            })
+        }
+        sql += ';';
+        // Execute the SQL
+        return new Promise((resolve, reject) =>
+            this.__executeSql__(sql).then(([results]) => {
+                for(let i=0; i<results.rows.length; i++) {
+                    result.push(results.rows.item(i))
+                }
+                this.dg && console.log(sql);
+                this.dg && console.log(`Found ${results.rows.length} objects`);
+                resolve(result)
+            })
+        )
+    }
     create(obj) {
         /*
             For each object in the object, gets
@@ -184,32 +268,23 @@ export default class syncroniser {
             })
         }
     };
-    async exists(thing) {
+    delete(thing,id) {
         /*
-            Checks whether a record exists
-            Input: {
-                first_attr: {
-                    isEqualTo: <value>
-                }
-            }    
-            Output: Promise => bool
+            Deleted item with id.
+            Inputs: 
+                thing: string name of type of thing
+                id: integer id
+            Output: Void
         */
-        const table = Object.keys(thing)[0],
-              record = thing[table],
-              id = record.id,
-              sql = `SELECT * FROM ${table} WHERE id=${id};`;
-        let recordDb;
-        await this.__executeSql__(sql).then(([result]) => {
-            recordDb = result;
-        }).catch(([result]) => {
-            recordDb = result;
-        })
+        let sql = `DELETE FROM ${thing} WHERE id=${id};`;
+        // Execute the delete SQL
         return new Promise((resolve,reject) => {
-            if(recordDb.rows.length > 0) {
-                resolve(recordDb.rows.item(0))
-            } else {
-                reject(record)
-            }
+            this.__executeSql__(sql).then(([results]) => {
+                this.dg && console.log(`Deleted ${results.rowsAffected} ${things}`);
+                resolve(results.rows.item(0))
+            }).catch(error => {
+                reject(error)
+            })
         })
     }
     deleteAll(things) {
@@ -228,61 +303,5 @@ export default class syncroniser {
         }).catch(error => {
             handleError(error)
         })
-    }
-    get(things) {
-        /*
-            Queries database and returns all
-            records of the specified type that match
-            the specified criteria.
-            Input: {
-                all: <type of thing>,
-                where: {
-                    first_attr: {
-                        isEqualTo: <value>
-                    },
-                    second_attr: {
-                        isGreaterThan: <value>
-                    },
-                    third_attr: {
-                        isLessThan: <value>
-                    }
-                }
-            }
-            Output: Promise
-        */
-        this.dg && console.log(`Getting things`);
-        const { all, where } = things;
-        let result = [];
-        let sql;
-        // Construct query string
-        sql = `SELECT * FROM ${all}`
-        if(where !== undefined) {
-            sql += ` WHERE`
-            Object.keys(where).forEach((c,i) => {
-                i > 0 ? sql += ' AND' : false
-                if(where[c].isEqualTo !== undefined) {
-                    const criteria = (typeof where[c].isEqualTo === 'string') ? ("'"+where[c].isEqualTo+"'") : where[c].isEqualTo;
-                    sql += ` ${c}=${criteria}`   
-                } else if(where[c].isGreaterThan !== undefined) {
-                    const criteria = (typeof where[c].isGreaterThan === 'string') ? ("'"+where[c].isGreaterThan+"'") : where[c].isGreaterThan;
-                    sql += ` ${c}>${criteria}`
-                } else if(where[c].isLessThan !== undefined) {
-                    const criteria = (typeof where[c].isLessThan === 'string') ? ("'"+where[c].isLessThan+"'") : where[c].isLessThan;
-                    sql += ` ${c}<${criteria}`
-                }
-            })
-        }
-        sql += ';';
-        // Execute the SQL
-        return new Promise((resolve, reject) =>
-            this.__executeSql__(sql).then(([results]) => {
-                for(let i=0; i<results.rows.length; i++) {
-                    result.push(results.rows.item(i))
-                }
-                this.dg && console.log(sql);
-                this.dg && console.log(`Found ${results.rows.length} objects`);
-                resolve(result)
-            })
-        )
     }
 }

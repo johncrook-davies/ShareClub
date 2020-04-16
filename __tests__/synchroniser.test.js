@@ -39,7 +39,7 @@ const mock__executeSql__ = jest.fn((sql) => {
 });
 
 describe('synchroniser', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         synchdb = await new synchroniser({
                 database: "offlineDatabase.db",
                 size: 200000,
@@ -54,17 +54,15 @@ describe('synchroniser', () => {
         jest.clearAllMocks()
     });
     
-    describe('basic functionality', () => {
-        it('tests work ok', () => {
+    describe('testing', () => {
+        it('tests are working ok', () => {
             expect(1+1).toBe(2)
         })
     })
     
     describe('initDb', () => {
-        beforeAll(async () => {
-            await synchdb.initDb()
-        })
         it('Performs an echotest', async () => {
+            await synchdb.initDb()
             expect(mockEchoTest).toHaveBeenCalled()
         })
     })
@@ -132,11 +130,11 @@ describe('synchroniser', () => {
     })
     
     describe('exists return value', () => {
-        beforeAll(async () => {
+        beforeEach(async () => {
             // Overide sql execution function
             synchdb.__executeSql__ = mock__executeSql__;
         })
-        it('handles record exists by returning recurd', async () => {
+        it('handles record exists by returning record', async () => {
             const t = await synchdb.exists({records: {id: 'exists'}});
             expect(t).toEqual({"a": "v"});
         });
@@ -146,6 +144,13 @@ describe('synchroniser', () => {
             }).catch((error) => {
                 expect(error).toEqual({id: 'nope'})
             })
+        })
+    })
+    
+    describe('delete sql call', () => {
+        it('calls delete record where id is...', async () => {
+            await synchdb.delete('records', 1)
+            expect(spy).toHaveBeenNthCalledWith(1, "DELETE FROM records WHERE id=1;")
         })
     })
 })
