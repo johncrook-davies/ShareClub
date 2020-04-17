@@ -24,7 +24,6 @@ const App: () => React$Node = () => {
         syncdb.initDb()
             .then(() => {
                 __DEV__ ? seedDatabase(syncdb) : null;
-                //updateDatabase(syncdb)
             })
             .catch(() => {
                 throw new Error('Could not initialise database')
@@ -40,15 +39,5 @@ const App: () => React$Node = () => {
         <ShareClub/>
     </Provider>
 };
-
-const updateDatabase = (syncdb) => {
-    console.log('executed')
-    syncdb.get({all: 'invitations', where: {user: {isEqualTo: 'Tess Yellanda'}}}).then((t) => {
-        console.log(t)
-    }).catch(() => {
-        console.log("doesn't exist")
-    })
-    //syncdb.update({invitations: [{id: 1, user: 'Dave', club: 'Clubs of stuff and things'}]})
-}
 
 export default App;
