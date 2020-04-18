@@ -1,5 +1,7 @@
 import { getExchanges } from '../sync_with_server';
-//jest.mock('axios');
+import apiReturns from '../__mocks__/api_returns';
+//jest.mock('axios'); // Uncomment to disable api calls
+jest.unmock('axios'); // Uncomment to enable api calls
 
 describe('Sync with server', () => {
     describe('testing', () => {
@@ -9,7 +11,8 @@ describe('Sync with server', () => {
     })
     describe('getExchanges', () => {
         it('...', async () => {
-            expect(await getExchanges()).toEqual([])
+            let r = apiReturns.exchange.data;
+            expect(await getExchanges()).toEqual(r)
         })
     })
 })
