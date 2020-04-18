@@ -1,7 +1,8 @@
 import { 
     getExchanges,
     getStocks,
-    getExchange
+    getExchange,
+    getStock
 } from '../sync_with_server';
 import apiReturns from '../__mocks__/api_returns';
 jest.mock('axios'); // Uncomment to disable api calls
@@ -29,6 +30,20 @@ describe('Sync with server', () => {
         it('returns details of exchange', async () => {
             let r = apiReturns.exchange.data;
             expect(await getExchange('LON')).toEqual(r)
+        })
+        it.skip('returns null for invalid exchange', async () => {
+            // Doesn't work with mock
+            await expect(getExchange('NOTANEXCHANGE')).rejects.toEqual(null)
+        })
+    })
+    describe('getStock', () => {
+        it('returns details of stock', async () => {
+            let r = apiReturns.stock.data;
+            expect(await getStock('APQ-LN')).toEqual(r)
+        })
+        it.skip('returns null for invalid stock', async () => {
+            // Doesn't work with mock
+            await expect(getStock('NOTASTOCK')).rejects.toEqual(null)
         })
     })
 })

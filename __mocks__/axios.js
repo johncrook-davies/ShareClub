@@ -3,12 +3,20 @@ const axios = jest.genMockFromModule('axios');
 
 const mockGet = jest.fn((str) => {
     let returnVal;
-    if(str.search('exchanges/') !== -1) {
+    if(str.search('exchanges/LON') !== -1) {
         returnVal = apiReturns.exchange;
+    } else if(
+        (str.search('stocks/APQ-LN') !== -1)
+    ) {
+        returnVal = apiReturns.stock;
+    } else if(
+        (str.search('exchanges/') !== -1)
+    ) {
+        returnVal = 'error'
     } else if(
         (str.search('stocks/') !== -1)
     ) {
-        returnVal = apiReturns.stock;
+        returnVal = 'error'
     } else if(
         (str.search('exchanges') !== -1)
     ) {
@@ -18,8 +26,12 @@ const mockGet = jest.fn((str) => {
     ) {
         returnVal = apiReturns.stocks;
     }
-    return new Promise( resolve => {
-        resolve(returnVal)         
+    return new Promise( (resolve,reject) => {
+        if(returnVal === 'error'){
+            reject(new Error('message'))
+        } else {
+            resolve(returnVal) 
+        }        
     })
 })
 
