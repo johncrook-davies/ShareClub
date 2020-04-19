@@ -202,6 +202,9 @@ export default class Synchroniser {
                     if(typeof v === 'string'){
                         values[i] = "'"+v+"'"
                     }
+                    if(v === null){
+                        values[i] = "'"+0+"'"
+                    }
                 })
                 // Create a comma delimited string of values
                 values = values.join(',');
@@ -253,6 +256,9 @@ export default class Synchroniser {
                 values.forEach((v,i) => {
                     if(typeof v === 'string'){
                         values[i] = "'"+v+"'"
+                    }
+                    if(v === null){
+                        values[i] = "'"+0+"'"
                     }
                 })
                 // Create a string of attribute1=value1, attribute2=value2...

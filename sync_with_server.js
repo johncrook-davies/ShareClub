@@ -1,15 +1,29 @@
 const axios = require('axios');
 const url = 'https://warm-mesa-02274.herokuapp.com';
-  
-const log = (arg) => (__DEV__ && console.log(`sync_with_server -> ${arg}`))
 
-const handleApiError = (error) => {
-    switch(error.response.status) {
-        case 404:
-            return null
-            break;
-        default:
-            return 'Unknown error'
+export const syncWithDatabase = async (syncdb) => {
+    log(`syncWithDatabase: started database syncronisation`)
+    const stocksInDb = await syncdb.get({all: 'stocks'})
+        .catch(error => {
+            throw new Error(`\n\nsync_with_server -> syncWithDatabase -> synchroniser: ${error}\n`)
+        }),
+        stocksOnServer = await getStocks(),
+        differences = compareTwoThings(stocksInDb,stocksOnServer);
+    // Create new stocks
+    if(differences.create.length > 0){
+        syncdb.create({stocks: differences.create})
+    }
+    // Delete old stocks
+    if(differences.destroy.length > 0){
+        differences.destroy.map((record) => {
+            syncdb.delete('stocks', record.id)
+        })
+    }
+    // Update existing stocks
+    if(differences.update.length > 0){
+        differences.update.map((record) => {
+            syncdb.update({stocks: {id: record.id, ...record.update}})
+        })
     }
 }
 
@@ -61,22 +75,11 @@ export const getStock = (stock) => {
     })
 }
 
-export const syncWithDatabase = async (syncdb) => {
-    log(`syncWithDatabase: started database syncronisation`)
-    let stocksInDb = await syncdb.get({all: 'stocks'})
-        .catch(error => {
-            throw new Error(`\n\nsync_with_server -> syncWithDatabase -> synchroniser: ${error}\n`)
-        })
-    let stocksOnServer = await getStocks();
-    console.log(stocksInDb)
-    console.log(stocksOnServer)
-}
-
 function compareTwoThings(a,b) {
     if(Array.isArray(a) && Array.isArray(b)) {
-        
+        return diffBetweenTwoArraysOfObjects(a,b)
     } else if((typeof a === 'object') && (typeof b === 'object') ) {
-        
+        return diffBetweenTwoObjects(a,b)
     } else {
         throw new Error('compareTwoThings: error with arguments, they are not the same type or not objects or arrays.')
     }
@@ -140,10 +143,14 @@ export function diffBetweenTwoObjects(a,b) {
     for(prop in a) {
         if(a.hasOwnProperty(prop) && b.hasOwnProperty(prop)) {
             // In both a and b
-            if(a[prop] !== b[prop]) {
-                let chng = {};
-                chng[prop] = b[prop];
-                result.update = chng;
+            if(a[prop] === '0' && b[prop] === null) {
+                // Make sure zero and null are classified as equal
+            } else {
+                if(a[prop] !== b[prop]) {
+                    let chng = {};
+                    chng[prop] = b[prop];
+                    result.update = chng;
+                }  
             }
         } else if(a.hasOwnProperty(prop)) {
             // Just in a
@@ -161,4 +168,16 @@ export function diffBetweenTwoObjects(a,b) {
         }
     }
     return result;
+}
+
+const log = (arg) => (__DEV__ && console.log(`sync_with_server -> ${arg}`))
+
+const handleApiError = (error) => {
+    switch(error.response.status) {
+        case 404:
+            return null
+            break;
+        default:
+            return 'Unknown error'
+    }
 }
