@@ -164,6 +164,8 @@ export default class Synchroniser {
                 }
                 this.log(`get: found ${results.rows.length} objects`);
                 resolve(result)
+            }).catch(error => {
+                reject(error.message)
             })
         )
     }

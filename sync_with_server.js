@@ -60,3 +60,105 @@ export const getStock = (stock) => {
             })
     })
 }
+
+export const syncWithDatabase = async (syncdb) => {
+    log(`syncWithDatabase: started database syncronisation`)
+    let stocksInDb = await syncdb.get({all: 'stocks'})
+        .catch(error => {
+            throw new Error(`\n\nsync_with_server -> syncWithDatabase -> synchroniser: ${error}\n`)
+        })
+    let stocksOnServer = await getStocks();
+    console.log(stocksInDb)
+    console.log(stocksOnServer)
+}
+
+function compareTwoThings(a,b) {
+    if(Array.isArray(a) && Array.isArray(b)) {
+        
+    } else if((typeof a === 'object') && (typeof b === 'object') ) {
+        
+    } else {
+        throw new Error('compareTwoThings: error with arguments, they are not the same type or not objects or arrays.')
+    }
+}
+export function diffBetweenTwoArraysOfObjects(a,b) {
+    /*
+        Returns additions, updates and deletions neccesary for a to equal b
+        Input:
+            a: Array[Object]
+            b: Array[Object]
+        Output:
+            {
+                create: Array[Object],
+                destroy: Array[Object],
+                update: Array[Object]
+            }
+    */
+    let result = {},
+        inBothArrays,
+        update;
+    // In a but not b
+    result.destroy = a.filter((obj) => {
+        let id = obj.id;
+        return b.every((b_element) => {return b_element.id !== obj.id})
+    })
+    // In b but not a
+    result.create = b.filter((obj) => {
+        let id = obj.id;
+        return a.every((a_element) => {return a_element.id !== id})
+    })
+    // In both a and b
+    inBothArrays = b.filter((obj) => {
+        let id = obj.id;
+        return a.some((a_element) => {return a_element.id === id})
+    })
+    update = inBothArrays.map((obj) => {
+        let oldElement = a.filter((a_element) => {return a_element.id === obj.id})[0];
+        let changes = diffBetweenTwoObjects(oldElement,obj);
+        changes.id = obj.id;
+        return changes
+    })
+    result.update = update.filter((el) => {
+        return Object.keys(el).length > 1
+    })
+    return result;
+}
+export function diffBetweenTwoObjects(a,b) {
+    /*
+        Returns additions, updates and deletions neccesary for a to equal b
+        Input:
+            a: Object
+            b: Object
+        Output:
+            {
+                create: Object,
+                destroy: Object,
+                update: Object
+            }
+    */
+    let result = {};
+    for(prop in a) {
+        if(a.hasOwnProperty(prop) && b.hasOwnProperty(prop)) {
+            // In both a and b
+            if(a[prop] !== b[prop]) {
+                let chng = {};
+                chng[prop] = b[prop];
+                result.update = chng;
+            }
+        } else if(a.hasOwnProperty(prop)) {
+            // Just in a
+            let chng = {};
+            chng[prop] = a[prop];
+            result.destroy = chng;
+        }
+    }
+    for(prop in b) {
+        if(b.hasOwnProperty(prop) && !a.hasOwnProperty(prop)) {
+            // Just in b
+            let chng = {};
+            chng[prop] = b[prop];
+            result.create = chng;
+        }
+    }
+    return result;
+}

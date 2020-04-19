@@ -5,9 +5,13 @@ import 'react-native-gesture-handler';
 // Redux
 import store from './redux/store';
 
+// Database and synchronisation
 import Synchroniser from './synchroniser';
 import { schema } from './schema';
 import seedDatabase from './seeds';
+import { syncWithDatabase } from './sync_with_server';
+
+// Components
 import ShareClub from './ShareClub';
 
 const App: () => React$Node = () => {
@@ -22,8 +26,9 @@ const App: () => React$Node = () => {
         },
         true);
         syncdb.initDb()
-            .then(() => {
-                __DEV__ ? seedDatabase(syncdb) : null;
+            .then(async () => {
+                await __DEV__ ? seedDatabase(syncdb) : null;
+                syncWithDatabase(syncdb)
             })
             .catch(() => {
                 throw new Error('Could not initialise database')

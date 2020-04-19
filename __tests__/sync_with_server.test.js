@@ -2,7 +2,9 @@ import {
     getExchanges,
     getStocks,
     getExchange,
-    getStock
+    getStock,
+    diffBetweenTwoObjects,
+    diffBetweenTwoArraysOfObjects
 } from '../sync_with_server';
 import apiReturns from '../__mocks__/api_returns';
 jest.mock('axios'); // Uncomment to disable api calls
@@ -44,6 +46,98 @@ describe('Sync with server', () => {
         it.skip('returns null for invalid stock', async () => {
             // Doesn't work with mock
             await expect(getStock('NOTASTOCK')).rejects.toEqual(null)
+        })
+    })
+    describe('diffBetweenTwoObjects', () => {
+        it('returns changes, additions and deletions', () => {
+            const a = {
+                property1: 'thing',
+                property2: 'another',
+                property3: 3
+            };
+            const b = {
+                property1: 'thing',
+                property2: 'different',
+                property4: 'stuff'
+            };
+            expect(diffBetweenTwoObjects(a,b))
+                .toEqual({
+                    create: {property4: 'stuff'},
+                    update: {property2: 'different'},
+                    destroy: {property3: 3}
+                })
+        })
+    })
+    describe('diffBetweenTwoArraysOfObjects', () => {
+        it('returns changes, additions and deletions', () => {
+            const a = [
+                {
+                    id: 1,
+                    property1: 'thing',
+                    property2: 'another',
+                    property3: 3
+                },
+                {
+                    id: 2,
+                    property1: 'stuff',
+                    property2: 'another stuff',
+                    property3: 4
+                },
+                {
+                    id: 3,
+                    property1: 'old thing',
+                    property2: 'old thing deets',
+                    property3: 3
+                }
+            ];
+            const b = [
+                {
+                    id: 1,
+                    property1: 'thing',
+                    property2: 'different',
+                    property4: 'stuff'
+                },
+                {
+                    id: 2,
+                    property1: 'stuff',
+                    property2: 'another stuff',
+                    property3: 4
+                },
+                {
+                    id: 4,
+                    property1: 'new thing',
+                    property2: 'new thing deets',
+                    property3: 564
+                }
+            ];
+            expect(diffBetweenTwoArraysOfObjects(a,b))
+                .toEqual({
+                    create: [
+                        {
+                            id: 4,
+                            property1: 'new thing',
+                            property2: 'new thing deets',
+                            property3: 564
+                        }
+                    ],
+                    update: [
+                        {
+                            id: 1,
+                            create: {property4: 'stuff'},
+                            update: {property2: 'different'},
+                            destroy: {property3: 3}
+                        }
+                    ],
+                    destroy: [
+                        {
+                            id: 3,
+                            property1: 'old thing',
+                            property2: 'old thing deets',
+                            property3: 3
+                        }
+                        
+                    ]
+                })
         })
     })
 })
