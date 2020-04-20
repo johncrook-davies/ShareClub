@@ -23,5 +23,21 @@ export const schema = {
         'symbol VARCHAR(10)',
         'updated_at VARCHAR(24)',
         'created_at VARCHAR(24)'
+    ],
+    invitations: [
+        'id INTEGER PRIMARY KEY NOT NULL',
+        'name VARCHAR(55)',
+        'club VARCHAR(55)'
+    ],
+    clubs: [
+        'id INTEGER PRIMARY KEY NOT NULL',
+        'name VARCHAR(55)',
+        'value VARCHAR(55)'
+    ],
+    proposals: [
+        'id INTEGER PRIMARY KEY NOT NULL',
+        'name VARCHAR(55)',
+        'symbol VARCHAR(10)',
+        'trades VARCHAR(255)'
     ]
 };
