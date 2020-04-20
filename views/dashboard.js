@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from "react-redux";
 
-import { 
-    getClubList, 
-    getProposalsList, 
-    getProposalShortText,
-    getInvitationsList, 
-    getInvitationText 
-} from "../redux/selectors";
+//import { 
+//    getClubList, 
+//    getProposalsList, 
+//    getProposalShortText,
+//    getInvitationsList, 
+//    getInvitationText 
+//} from "../redux/selectors";
 
 import colours from '../shared/colours';
 
@@ -20,24 +20,32 @@ import {
     SafeAreaView
 } from 'react-native';
 
-const mapStateToProps = state => {
-    const clubs = getClubList(state),
-          unformattedProposals = getProposalsList(state),
-          unformattedInvitations = getInvitationsList(state),
-          proposals = [],
-          invitations = [];
-    unformattedProposals.map((p) => proposals.push({
-        id: p.id,
-        text: getProposalShortText(state, p.id)
-    }))
-    unformattedInvitations.map((i) => invitations.push({
-        id: i.id,
-        text: getInvitationText(state, i.id)
-    }))
-    return { clubs, proposals, invitations }
+//const mapStateToProps = state => {
+//    const clubs = getClubList(state),
+//          unformattedProposals = getProposalsList(state),
+//          unformattedInvitations = getInvitationsList(state),
+//          proposals = [],
+//          invitations = [];
+//    unformattedProposals.map((p) => proposals.push({
+//        id: p.id,
+//        text: getProposalShortText(state, p.id)
+//    }))
+//    unformattedInvitations.map((i) => invitations.push({
+//        id: i.id,
+//        text: getInvitationText(state, i.id)
+//    }))
+//    return { clubs, proposals, invitations }
+//}
+
+const mapDbToProps = async db => {
+//    const stocks = await db.get({all: 'stocks'});
+//    return stocks
+    console.log(db)
 }
 
-const Dashboard = ({ clubs, proposals, invitations }) => {
+const Dashboard = ({ clubs, proposals, invitations, connection }) => {
+    const db = connection.ws;
+    mapDbToProps(db).then((result) => console.log(result))
     return (
         <SafeAreaView>
             <Section>
@@ -64,7 +72,7 @@ const Dashboard = ({ clubs, proposals, invitations }) => {
                 {(proposals.length === 0) && <Text style={styles.placeholder}>You don't have any proposals pending.</Text>}
                 {(proposals.length !== 0) && 
                 <View style={ styles.proposals }>
-                    { proposals.map((p) =>{
+                    { [].map((p) =>{
                         return <ImageAndText 
                                    key={ p.id }
                                    text={ p.text }
@@ -77,7 +85,7 @@ const Dashboard = ({ clubs, proposals, invitations }) => {
                 {(invitations.length === 0) && <Text style={styles.placeholder}>You don't have any invitations pending.</Text>}
                 {(invitations.length !== 0) && 
                 <View>
-                    { invitations.map((i) =>{
+                    { [].map((i) =>{
                         return <ImageAndText 
                                    key={ i.id }
                                    text={ i.text }
@@ -239,4 +247,4 @@ const Section = (props) => {
     )
 }
 
-export default connect(mapStateToProps)(Dashboard)
+export default connect((state) => state)(Dashboard)
