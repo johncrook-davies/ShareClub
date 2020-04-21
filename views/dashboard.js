@@ -1,14 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
 
-//import { 
-//    getClubList, 
-//    getProposalsList, 
-//    getProposalShortText,
-//    getInvitationsList, 
-//    getInvitationText 
-//} from "../redux/selectors";
-
 import colours from '../shared/colours';
 
 import {

@@ -17,8 +17,7 @@ export default function(state = initialState, action) {
         }
         case DESTROY_DB_CONNECTION: {
             // Close database connection in store
-            const { db } = state.db;
-            console.log('destroyDbConnection',state)
+            const { db } = state;
             return {
                 ...state,
                 db: db.close()

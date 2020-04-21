@@ -56,7 +56,7 @@ export const createDbConnection = db => {
     return {
         type: CREATE_DB_CONNECTION,
         payload: {
-            db: { db }
+            db
         }
     }
 };
