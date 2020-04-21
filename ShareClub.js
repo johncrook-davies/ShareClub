@@ -7,8 +7,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Redux
 import store from './redux/store';
 import { 
+    initDbConnection,
     createConnection,
-    destroyConnection
+    createDbConnection,
+    destroyConnection,
+    destroyDbConnection
 } from "./redux/actions";
 
 import Dashboard from './views/dashboard';
@@ -16,17 +19,24 @@ import Investments from './views/investments/investments';
 
 const Tab = createBottomTabNavigator();
 
-const ShareClub = ({ createConnection, destroyConnection }) => {
-    // Initialisation
-    // Create websocket connection
+const ShareClub = ({ createConnection, destroyConnection, initDbConnection, destroyDbConnection  }) => {
+    /*
+        Initialisation
+        - Create database connection
+        - Create websocket connection
+    */
     useEffect(() => {
-        
+        initDbConnection()
         createConnection()
     })
-    // Cleanup actions
-    // Close websocket connection
+    /*
+        Cleanup actions
+        - Destroy database connection
+        - Close websocket connection
+    */
     useEffect(() => {
         return () => {
+            destroyDbConnection()
             destroyConnection()
         }
     })
@@ -48,6 +58,8 @@ export default connect(
     null,
     { 
         createConnection,
-        destroyConnection
+        initDbConnection,
+        destroyConnection,
+        destroyDbConnection
     }
 )(ShareClub)

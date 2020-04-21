@@ -43,9 +43,8 @@ const mapDbToProps = async db => {
     console.log(db)
 }
 
-const Dashboard = ({ clubs, proposals, invitations, connection }) => {
-    const db = connection.ws;
-    mapDbToProps(db).then((result) => console.log(result))
+const Dashboard = ({ clubs, proposals, invitations, connection, db }) => {
+    console.log(db)
     return (
         <SafeAreaView>
             <Section>
