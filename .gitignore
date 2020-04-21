@@ -2,6 +2,9 @@
 #
 .DS_Store
 
+# Editors
+.brackets.json
+
 # Xcode
 #
 build/

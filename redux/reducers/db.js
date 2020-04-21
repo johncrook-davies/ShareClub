@@ -3,7 +3,10 @@ import {
     DESTROY_DB_CONNECTION 
 } from "../actionTypes";
 
-const initialState = { db: null };
+const initialState = {
+    readyState: 'initialising',
+    call: null
+}
 
 export default function(state = initialState, action) {
     switch (action.type) {
@@ -11,16 +14,20 @@ export default function(state = initialState, action) {
             // Add database connection to store
             const { db } = action.payload;
             return {
-                ...state,
-                db: db
+                readyState: 'ready',
+                call: db
             }
         }
         case DESTROY_DB_CONNECTION: {
             // Close database connection in store
-            const { db } = state;
+            const { 
+                readyState,
+                call
+            } = state;
+            (readyState === 'ready') && call.close();
             return {
-                ...state,
-                db: db.close()
+                readyState: 'closed',
+                call: null
             }
         }
         default:

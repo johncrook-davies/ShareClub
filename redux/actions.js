@@ -39,12 +39,12 @@ export const initDbConnection = () => {
             schema: schema
         },
         true);
-        return function (dispatch) {
+        return dispatch => {
             return syncdb.initDb()
                 .then(() => {
                     __DEV__ ? seedDatabase(syncdb) : null;
                     syncWithDatabase(syncdb)
-                    dispatch(createDbConnection(syncdb))
+                dispatch(createDbConnection(syncdb))
                 })
                 .catch(() => {
                     throw new Error('Could not initialise database')

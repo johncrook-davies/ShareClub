@@ -13,6 +13,6 @@ const middlewares = [thunk],
       mockStore = configureMockStore([]);
 
 it('renders correctly', () => {
-    const store = mockStore({proposals: [], invitations: [], clubs: [], connection: 'thing'});
+    const store = mockStore({proposals: [], invitations: [], clubs: [], db: 'thing', connection: 'thing'});
     renderer.create(<Provider store={store}><Dashboard /></Provider>);
 });

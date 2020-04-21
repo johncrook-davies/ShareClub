@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 
 import colours from '../shared/colours';
@@ -12,31 +12,27 @@ import {
     SafeAreaView
 } from 'react-native';
 
-//const mapStateToProps = state => {
-//    const clubs = getClubList(state),
-//          unformattedProposals = getProposalsList(state),
-//          unformattedInvitations = getInvitationsList(state),
-//          proposals = [],
-//          invitations = [];
-//    unformattedProposals.map((p) => proposals.push({
-//        id: p.id,
-//        text: getProposalShortText(state, p.id)
-//    }))
-//    unformattedInvitations.map((i) => invitations.push({
-//        id: i.id,
-//        text: getInvitationText(state, i.id)
-//    }))
-//    return { clubs, proposals, invitations }
-//}
-
-const mapDbToProps = async db => {
-//    const stocks = await db.get({all: 'stocks'});
-//    return stocks
-    console.log(db)
-}
-
-const Dashboard = ({ clubs, proposals, invitations, connection, db }) => {
-    console.log(db)
+const Dashboard = (state) => {
+    // Handle database readiness
+    const [dbState, setDbState] = useState('initialising');
+    useEffect(() => setDbState(state.db.readyState))
+    
+    const [clubs, setClubs] = useState([]),
+          [invitations, setInvitations] = useState([]),
+          [proposals, setProposals] = useState([]);
+    
+    // Load data from database on initialisation
+    useEffect(() => {
+        if(dbState === 'ready') {
+            state.db.call.get({all: 'clubs'})
+                .then((r)=>setClubs(r))
+            state.db.call.get({all: 'invitations'})
+                .then((r)=>setInvitations(r))
+            state.db.call.get({all: 'proposals'})
+                .then((r)=>setProposals(r))
+        }
+    },[])
+    
     return (
         <SafeAreaView>
             <Section>
@@ -63,10 +59,10 @@ const Dashboard = ({ clubs, proposals, invitations, connection, db }) => {
                 {(proposals.length === 0) && <Text style={styles.placeholder}>You don't have any proposals pending.</Text>}
                 {(proposals.length !== 0) && 
                 <View style={ styles.proposals }>
-                    { [].map((p) =>{
+                    { proposals.map((p) =>{
                         return <ImageAndText 
                                    key={ p.id }
-                                   text={ p.text }
+                                   text={proposalShortText(p)}
                                    />
                     })}
                 </View>}
@@ -76,10 +72,10 @@ const Dashboard = ({ clubs, proposals, invitations, connection, db }) => {
                 {(invitations.length === 0) && <Text style={styles.placeholder}>You don't have any invitations pending.</Text>}
                 {(invitations.length !== 0) && 
                 <View>
-                    { [].map((i) =>{
+                    { invitations.map((i) =>{
                         return <ImageAndText 
                                    key={ i.id }
-                                   text={ i.text }
+                                   text={ `${i.name} has invited you to join the ${i.club}` }
                                    />
                     })}
                 </View>}
@@ -104,6 +100,37 @@ const Club = (props) => {
         </Text>
     </View>
 }
+
+const proposalShortText = (p) => {
+    const trades = JSON.parse(p.trades),
+          l = trades.length,
+          n = trades[l - 1].symbol === 'CASH' ? l - 2 : l - 1;
+    var actions = '';
+    trades.map(t => {
+        i = trades.indexOf(t);
+        switch(i) {
+            case 0: {
+                null
+                break;
+            }
+            case n: {
+                actions += ' and '
+                break;
+            }
+            default:
+                actions += ', '
+                break;
+        }
+        if(t.symbol === 'CASH' && t.type === 'sell') {
+            return actions += 'funded from cash'
+        } else if (t.symbol === 'CASH' && t.type === 'buy') {
+            return actions += 'and then keep as cash'
+        }
+        return actions += `${t.type} ${Math.abs(t.value)} of ${t.symbol}`
+    })
+    return `${p.name} proposes to ${actions}`
+}
+
 
 const ImageAndText = props => {
     const { image, text } = props;

@@ -28,7 +28,7 @@ const ShareClub = ({ createConnection, destroyConnection, initDbConnection, dest
     useEffect(() => {
         initDbConnection()
         createConnection()
-    })
+    },[])
     /*
         Cleanup actions
         - Destroy database connection
@@ -36,10 +36,10 @@ const ShareClub = ({ createConnection, destroyConnection, initDbConnection, dest
     */
     useEffect(() => {
         return () => {
-            destroyDbConnection()
+//            destroyDbConnection()
             destroyConnection()
         }
-    })
+    },[])
     return <NavigationContainer>{
         <Tab.Navigator>
             <Tab.Screen
