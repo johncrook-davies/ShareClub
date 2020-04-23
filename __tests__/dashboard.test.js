@@ -13,6 +13,11 @@ const middlewares = [thunk],
       mockStore = configureMockStore([]);
 
 it('renders correctly', () => {
-    const store = mockStore({proposals: [], invitations: [], clubs: [], db: 'thing', connection: 'thing'});
+    const syncdb = {get: jest.fn()}
+    const db = {readyState: 'initialising', call: syncdb},
+          conn = {ws: jest.fn(() => new Promise((r)=>r))}
+    const store = mockStore({db, conn});
+    const spy = jest.spyOn(syncdb, 'get');
+        jest.clearAllMocks()
     renderer.create(<Provider store={store}><Dashboard /></Provider>);
 });

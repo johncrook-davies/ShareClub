@@ -13,25 +13,21 @@ import {
 } from 'react-native';
 
 const Dashboard = (state) => {
-    // Handle database readiness
-    const [dbState, setDbState] = useState('initialising');
-    useEffect(() => setDbState(state.db.readyState))
-    
     const [clubs, setClubs] = useState([]),
           [invitations, setInvitations] = useState([]),
           [proposals, setProposals] = useState([]);
     
     // Load data from database on initialisation
     useEffect(() => {
-        if(dbState === 'ready') {
+        if(state.db.readyState === 'ready') {
             state.db.call.get({all: 'clubs'})
-                .then((r)=>setClubs(r))
+                .then((r)=> setClubs(r))
             state.db.call.get({all: 'invitations'})
-                .then((r)=>setInvitations(r))
+                .then((r)=> setInvitations(r))
             state.db.call.get({all: 'proposals'})
-                .then((r)=>setProposals(r))
+                .then((r)=> setProposals(r))
         }
-    },[])
+    },[state.db.readyState])
     
     return (
         <SafeAreaView>
@@ -265,4 +261,7 @@ const Section = (props) => {
     )
 }
 
-export default connect((state) => state)(Dashboard)
+export default connect(
+    (state) => state,
+    null
+)(Dashboard)

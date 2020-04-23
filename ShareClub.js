@@ -4,10 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 
+// DB
+import Synchroniser from './synchroniser';
+import { schema } from './schema';
+import seedDatabase from './seeds';
+import { syncWithDatabase } from './sync_with_server';
+
 // Redux
 import store from './redux/store';
 import { 
-    initDbConnection,
     createConnection,
     createDbConnection,
     destroyConnection,
@@ -19,15 +24,33 @@ import Investments from './views/investments/investments';
 
 const Tab = createBottomTabNavigator();
 
-const ShareClub = ({ createConnection, destroyConnection, initDbConnection, destroyDbConnection  }) => {
+const initDbConnection = async () => {
+    const syncdb = new Synchroniser({
+        database: "offlineDatabase.db",
+        size: 200000,
+        schema: schema
+    },
+    true);
+    await syncdb.initDb()
+        .catch(() => {
+            throw new Error('Could not initialise database')
+        })
+    return syncdb
+};
+
+const ShareClub = ({ createConnection, createDbConnection, destroyConnection, destroyDbConnection  }) => {
     /*
         Initialisation
         - Create database connection
         - Create websocket connection
     */
     useEffect(() => {
-        initDbConnection()
         createConnection()
+        initDbConnection().then(async (db) => {
+            await __DEV__ ? seedDatabase(db) : null;
+            await syncWithDatabase(db)
+            return db
+        }).then((db) => createDbConnection(db))
     },[])
     /*
         Cleanup actions
@@ -36,7 +59,7 @@ const ShareClub = ({ createConnection, destroyConnection, initDbConnection, dest
     */
     useEffect(() => {
         return () => {
-//            destroyDbConnection()
+            destroyDbConnection()
             destroyConnection()
         }
     },[])
@@ -55,10 +78,10 @@ const ShareClub = ({ createConnection, destroyConnection, initDbConnection, dest
 }
 
 export default connect(
-    null,
+    (state) => state,
     { 
         createConnection,
-        initDbConnection,
+        createDbConnection,
         destroyConnection,
         destroyDbConnection
     }
