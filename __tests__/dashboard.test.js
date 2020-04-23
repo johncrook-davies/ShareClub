@@ -1,23 +1,22 @@
 import 'react-native';
 import React from 'react';
-import thunk from 'redux-thunk';
-import configureMockStore from 'redux-mock-store';
+import { syncdb, store } from './setupTests';
 import { Provider } from 'react-redux';
+import renderer from 'react-test-renderer';
 
 import Dashboard from '../views/dashboard';
 
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
+var spy;
 
-const middlewares = [thunk],
-      mockStore = configureMockStore([]);
+beforeAll(() => spy = jest.spyOn(syncdb, 'get'))
+beforeEach(() => spy.mockClear())  
 
-it('renders correctly', () => {
-    const syncdb = {get: jest.fn()}
-    const db = {readyState: 'initialising', call: syncdb},
-          conn = {ws: jest.fn(() => new Promise((r)=>r))}
-    const store = mockStore({db, conn});
-    const spy = jest.spyOn(syncdb, 'get');
-        jest.clearAllMocks()
-    renderer.create(<Provider store={store}><Dashboard /></Provider>);
-});
+describe('General behaviour', () => {
+    let wrapper;
+    beforeEach(() => {
+        wrapper = renderer.create(<Provider store={store}><Dashboard/></Provider>);
+    })
+    it('renders correctly', () => {
+        expect(spy).toHaveBeenCalled()
+    });
+})

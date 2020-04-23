@@ -38,6 +38,9 @@
     "redux-mock-store": "^1.5.4"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "<rootDir>__tests__/setupTests.js"
+    ]
   }
 }
