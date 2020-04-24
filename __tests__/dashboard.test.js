@@ -4,7 +4,7 @@ import {
     Text
 } from 'react-native';
 import React from 'react';
-import { syncdb, store } from './setupTests';
+import { syncdb, store } from '../setupTests';
 import { Provider } from 'react-redux';
 import { 
     create,
