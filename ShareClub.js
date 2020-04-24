@@ -3,6 +3,7 @@ import { Provider, connect } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { AppearanceProvider } from 'react-native-appearance';
 
 // DB
 import Synchroniser from './synchroniser';
@@ -64,16 +65,18 @@ const ShareClub = ({ createConnection, createDbConnection, destroyConnection, de
         }
     },[])
     return <NavigationContainer>{
-        <Tab.Navigator>
-            <Tab.Screen
-                name="Dashboard"
-                component={Dashboard}
-                />
-            <Tab.Screen
-                name="Investments"
-                component={Investments}
-                />
-        </Tab.Navigator>
+        <AppearanceProvider>
+            <Tab.Navigator>
+                <Tab.Screen
+                    name="Dashboard"
+                    component={Dashboard}
+                    />
+                <Tab.Screen
+                    name="Investments"
+                    component={Investments}
+                    />
+            </Tab.Navigator>
+        </AppearanceProvider>
     }</NavigationContainer>
 }
 
