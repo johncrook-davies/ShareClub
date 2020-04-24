@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 
-import colours from '../shared/colours';
+import { 
+    colours,
+    H1,
+    H2,
+    Currency,
+    Section,
+    ImageAndText
+} from '../shared';
 
 import {
     Text,
@@ -87,13 +94,13 @@ const Club = (props) => {
                justifyContent='center'
                style={ styles.club }
                >
-        <Text 
+        <Currency 
             adjustsFontSizeToFit
             numberOfLines={1}
             style={ styles.clubValue }
             >
-            { formatAsCurrency(value) }
-        </Text>
+            { value }
+        </Currency>
     </View>
 }
 
@@ -125,49 +132,6 @@ const proposalShortText = (p) => {
         return actions += `${t.type} ${Math.abs(t.value)} of ${t.symbol}`
     })
     return `${p.name} proposes to ${actions}`
-}
-
-
-const ImageAndText = props => {
-    const { image, text } = props;
-    return <>
-        <View
-            style={{
-                flexDirection: 'row',
-                marginBottom: 16,
-                marginRight: 16,
-                marginLeft: 16
-            }}
-            >
-            <View 
-                style={{
-                    width: 48,
-                }}
-                source={ image }
-                >
-                <Image
-                    style={{ 
-                        width: 48, 
-                        height: 48,
-                        borderWidth: 1,
-                        borderRadius: 99
-                    }}
-                    source={ image }
-                    />
-            </View>
-            <View 
-                style={{
-                    paddingLeft: 16,
-                    flexShrink: 1,
-                    justifyContent: 'center'
-                }}
-                >
-                <Text>
-                    { text }
-                </Text>
-            </View>
-        </View>
-    </>
 }
 
 const styles = StyleSheet.create({
@@ -204,62 +168,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const H1 = (props) => {
-    const { children } = props,
-          styles = {
-              fontSize: 35
-          };
-    return(
-        <Text style={styles}>{ children }</Text>
-    )
-}
-const H2 = (props) => {
-    const { children } = props,
-          styles = {
-              fontSize: 19,
-              marginBottom: 16
-          };
-    return(
-        <Text style={styles}>{ children }</Text>
-    )
-}
 
-const formatAsCurrency = (n) => {
-    const roundedN = Math.round(n*100)/100;
-    var stringN = String(roundedN),
-        splitStringN,
-        stringLength,
-        i = 0;
-    // Add decimal points for integers
-    Number.isInteger(n) ? stringN += '.00' : null;
-    splitStringN = stringN.split('');
-    stringLength = splitStringN.length - 1;
-    // Add commas for thousand separators
-    stringN = '';
-    splitStringN.reverse().map((s)=>{
-        if( i <= 3 ){
-            stringN += s;
-        } else if( i % 3 === 0 ) {
-            stringN += `,${s}`;
-        } else {
-            stringN += s;
-        }
-        i ++;
-    })
-    return `£${stringN.split('').reverse().join('')}`
-}
-
-const Section = (props) => {
-    const { children } = props,
-          styles = {
-              marginLeft: 16,
-              marginRight: 16,
-              marginBottom: 32
-          };
-    return(
-        <View style={ styles }>{ children }</View>
-    )
-}
 
 export default connect(
     (state) => state,
