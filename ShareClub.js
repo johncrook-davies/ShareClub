@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Provider, connect } from 'react-redux';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AppearanceProvider } from 'react-native-appearance';
+import { AppearanceProvider, Appearance, useColorScheme } from 'react-native-appearance';
 
 // DB
 import Synchroniser from './synchroniser';
@@ -39,7 +39,11 @@ const initDbConnection = async () => {
     return syncdb
 };
 
+// Get the current color scheme
+Appearance.getColorScheme();
+
 const ShareClub = ({ createConnection, createDbConnection, destroyConnection, destroyDbConnection  }) => {
+    const cs = useColorScheme(); //'dark';//'light';
     /*
         Initialisation
         - Create database connection
@@ -64,7 +68,7 @@ const ShareClub = ({ createConnection, createDbConnection, destroyConnection, de
             destroyConnection()
         }
     },[])
-    return <NavigationContainer>{
+    return <NavigationContainer theme={cs === 'dark' ? DarkTheme : DefaultTheme}>{
         <AppearanceProvider>
             <Tab.Navigator>
                 <Tab.Screen
