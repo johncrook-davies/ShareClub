@@ -5,7 +5,7 @@ import {
     getStock,
     diffBetweenTwoObjects,
     diffBetweenTwoArraysOfObjects
-} from '../sync_with_server';
+} from '../db/sync_with_server';
 import apiReturns from '../__mocks__/api_returns';
 jest.mock('axios'); // Uncomment to disable api calls
 //jest.unmock('axios'); // Uncomment to enable api calls

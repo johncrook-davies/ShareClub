@@ -1,8 +1,8 @@
 import {
     mockEchoTest
 } from "../__mocks__/react-native-sqlite-storage";
-import Synchroniser from '../synchroniser';
-import seedDatabase from '../seeds';
+import Synchroniser from '../db/synchroniser';
+import seedDatabase from '../db/seeds';
 jest.mock('react-native-sqlite-storage');
 
 var synchdb,

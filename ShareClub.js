@@ -6,10 +6,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AppearanceProvider, Appearance, useColorScheme } from 'react-native-appearance';
 
 // DB
-import Synchroniser from './synchroniser';
-import { schema } from './schema';
-import seedDatabase from './seeds';
-import { syncWithDatabase } from './sync_with_server';
+import Synchroniser from './db/synchroniser';
+import { schema } from './db/schema';
+import seedDatabase from './db/seeds';
+import { syncWithDatabase } from './db/sync_with_server';
 
 // Redux
 import store from './redux/store';
