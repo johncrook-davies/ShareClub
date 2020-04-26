@@ -16,7 +16,9 @@ import Dashboard from '../views/dashboard';
 
 var spy;
 
-beforeAll(() => spy = jest.spyOn(syncdb, 'get'))
+beforeAll(() => {
+    spy = jest.spyOn(syncdb, 'get')
+})
 beforeEach(() => spy.mockClear())  
 
 describe('General behaviour', () => {

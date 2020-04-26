@@ -2,8 +2,19 @@ import React from 'react';
 import {
     View,
     Text,
+    SafeAreaView,
+    setStyle,
     Image
-} from 'react-native';
+} from '.';
+
+export const Div = ({ children, cs, styles, ...other }) => {
+    return <SafeAreaView
+        style={ setStyle(cs,'div', styles)}
+        { ...other }
+        >
+        { children }
+    </SafeAreaView>
+}
 
 export const Section = ({ children, ...other }) => {
     const styles = {
@@ -18,8 +29,7 @@ export const Section = ({ children, ...other }) => {
     )
 }
 
-export const ImageAndText = (props) => {
-    const { image, text } = props;
+export const ImageAndText = ({ image, text, cs, ...other }) => {
     return <>
         <View
             style={{
@@ -36,12 +46,12 @@ export const ImageAndText = (props) => {
                 source={ image }
                 >
                 <Image
-                    style={{ 
+                    style={setStyle(cs,'outline',{ 
                         width: 48, 
                         height: 48,
                         borderWidth: 1,
                         borderRadius: 99
-                    }}
+                    })}
                     source={ image }
                     />
             </View>
@@ -52,7 +62,10 @@ export const ImageAndText = (props) => {
                     justifyContent: 'center'
                 }}
                 >
-                <Text>
+                <Text
+                    style={setStyle(cs,'p')}
+                    {...other}
+                    >
                     { text }
                 </Text>
             </View>
