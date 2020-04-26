@@ -16,9 +16,6 @@ import {
     proposalShortText
 } from '../shared';
 
-// Get the current color scheme
-Appearance.getColorScheme();
-
 const Dashboard = (state) => {
     const [clubs, setClubs] = useState([]),
           [invitations, setInvitations] = useState([]),
