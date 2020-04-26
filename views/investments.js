@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Stock from './stocks';
+import Stock from './investments/stocks';
+import Types from './investments/types';
 
 import {
     Text,
-    View,
     Image,
     Button,
-    ScrollView,
-    StyleSheet,
     SafeAreaView
 } from 'react-native';
 
@@ -23,16 +21,6 @@ const Investments = () => {
         <Stack.Screen name="Markets" component={Markets} />
         <Stack.Screen name="Stock" component={Stock} />
     </Stack.Navigator>
-}
-
-const Types = ({ navigation }) => {
-    return <SafeAreaView>
-        <Text>Types</Text>
-        <Button
-            title="Shares"
-            onPress={() => navigation.navigate('Markets')}
-            />
-    </SafeAreaView>
 }
 
 const Markets = ({ navigation }) => {

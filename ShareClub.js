@@ -21,7 +21,7 @@ import {
 } from "./redux/actions";
 
 import Dashboard from './views/dashboard';
-import Investments from './views/investments/investments';
+import Investments from './views/investments.js';
 
 const Tab = createBottomTabNavigator();
 

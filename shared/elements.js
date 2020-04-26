@@ -3,6 +3,7 @@ import {
     View,
     Text,
     SafeAreaView,
+    TouchableOpacity,
     setStyle,
     Image
 } from '.';
@@ -29,31 +30,26 @@ export const Section = ({ children, ...other }) => {
     )
 }
 
-export const ImageAndText = ({ image, text, cs, ...other }) => {
+export const ImageAndText = ({ image, text, cs, onPress, ...other }) => {
+    let Comp;
+    if(onPress !== undefined) {
+        Comp = TouchableOpacity
+    } else {
+        Comp = View
+    }
     return <>
-        <View
+        <Comp
             style={{
                 flexDirection: 'row',
                 marginBottom: 16,
                 marginRight: 16,
                 marginLeft: 16
             }}
+            onPress={onPress}
+            { ...other }
             >
-            <View 
-                style={{
-                    width: 48,
-                }}
-                source={ image }
-                >
-                <Image
-                    style={setStyle(cs,'outline',{ 
-                        width: 48, 
-                        height: 48,
-                        borderWidth: 1,
-                        borderRadius: 99
-                    })}
-                    source={ image }
-                    />
+            <View>
+                { image }
             </View>
             <View 
                 style={{
@@ -62,13 +58,8 @@ export const ImageAndText = ({ image, text, cs, ...other }) => {
                     justifyContent: 'center'
                 }}
                 >
-                <Text
-                    style={setStyle(cs,'p')}
-                    {...other}
-                    >
-                    { text }
-                </Text>
+                { text }
             </View>
-        </View>
+        </Comp>
     </>
 }

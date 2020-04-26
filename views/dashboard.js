@@ -5,6 +5,7 @@ import { Appearance, useColorScheme } from 'react-native-appearance';
 import {
     View,
     ScrollView,
+    Image,
     Section,
     P,
     H1,
@@ -47,12 +48,14 @@ const Dashboard = (state) => {
                     flexDirection='row'
                     >
                     { clubs.map((c) =>{
-                        return <Club 
-                                   cs = { cs }
-                                   key={ c.name }
-                                   name={ c.name } 
-                                   value={ c.value }
-                                   />
+                        return(
+                            <Club 
+                               cs = { cs }
+                               key={ c.name }
+                               name={ c.name } 
+                               value={ c.value }
+                               />
+                        )
                     })}
                 </View>
             </ScrollView>
@@ -62,11 +65,14 @@ const Dashboard = (state) => {
                 {(proposals.length !== 0) && 
                 <View style={ setStyle(cs, 'proposals') }>
                     { proposals.map((p) =>{
-                        return <ImageAndText 
-                                   key={ p.id }
-                                   text={proposalShortText(p)}
-                                   cs={cs}
-                                   />
+                        return( 
+                            <ImageAndText 
+                               key={ p.id }
+                               text={<P cs={cs}>{proposalShortText(p)}</P>}
+                               cs={cs}
+                               image={<Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />}
+                               />
+                        )
                     })}
                 </View>}
             </Section>
@@ -76,11 +82,14 @@ const Dashboard = (state) => {
                 {(invitations.length !== 0) && 
                 <View>
                     { invitations.map((i) =>{
-                        return <ImageAndText 
-                                   key={ i.id }
-                                   text={ `${i.name} has invited you to join the ${i.club}` }
-                                   cs={cs}
-                                   />
+                        return(
+                            <ImageAndText 
+                               key={ i.id }
+                                text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
+                               cs={cs}
+                               image={<Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />}
+                               />
+                        )
                     })}
                 </View>}
             </Section>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Text,
+    View,
     setStyle,
     colours
 } from '.';
@@ -18,22 +19,29 @@ export const H1 = ({ children, cs }) => {
     const styles = {
               fontSize: 35
           }; 
-    return <Text 
+    return <View style={{
+            marginBottom: 16
+        }}>
+        <Text 
             style={setStyle(cs,'h1', styles)}
             >
         { children }
-    </Text>
+        </Text>
+    </View>
 }
 export const H2 = ({ children, cs }) => {
     const styles = {
-              fontSize: 19,
-              marginBottom: 16
-          };
-    return <Text
+        fontSize: 19
+    };
+    return <View style={{
+            marginBottom: 16
+        }}>
+        <Text
             style={setStyle(cs,'h2', styles)}
             >
-        { children }
-    </Text>
+            { children }
+        </Text>
+    </View>
 }
 
 export const Currency = ({ children, cs, styles, ...other }) => {
