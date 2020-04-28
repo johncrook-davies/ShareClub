@@ -6,43 +6,37 @@ import {
     colours
 } from '.';
 
-export const P = ({ children, cs, styles, ...other }) => {
+export const P = ({ children, cs, style, ...other }) => {
     return <Text
-               style={setStyle(cs,'p', styles)}
+               style={setStyle(cs,'p', style)}
                {...other}
                >
         { children }
     </Text>
 }
 
-export const H1 = ({ children, cs }) => {
-    const styles = {
-              fontSize: 35
-          }; 
-    return <View style={{
-            marginBottom: 16
-        }}>
-        <Text 
-            style={setStyle(cs,'h1', styles)}
-            >
+export const H1 = ({ children, cs, style, ...other }) => (
+    <Text 
+        style={setStyle(cs,'h1', {
+            fontSize: 35,
+            ...style
+        })}
+        { ...other }
+        >
         { children }
-        </Text>
-    </View>
-}
-export const H2 = ({ children, cs }) => {
-    const styles = {
-        fontSize: 19
-    };
-    return <View style={{
-            marginBottom: 16
-        }}>
-        <Text
-            style={setStyle(cs,'h2', styles)}
-            >
-            { children }
-        </Text>
-    </View>
-}
+    </Text>
+)
+export const H2 = ({ children, cs, style, ...other  }) => (
+    <Text
+        style={setStyle(cs,'h2', {
+            fontSize: 19,
+            ...style
+        })}
+        { ...other }
+        >
+        { children }
+    </Text>
+)
 
 export const Currency = ({ children, cs, styles, ...other }) => {
     const roundedN = Math.round(children*100)/100;

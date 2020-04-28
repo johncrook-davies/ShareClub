@@ -27,10 +27,15 @@ describe('General behaviour', () => {
         })
         rendered = wrp.root.findByType(SafeAreaView);
     })
+    it('renders component of type RCTSafeAreaView', () => {
+        expect(
+            wrp.toJSON().type
+        ).toEqual('RCTSafeAreaView');
+    });
     it('renders with more than one children', () => {
         expect(
             rendered.props.children.length
-        ).toBeGreaterThan(1);
+        ).not.toEqual(undefined);
     });
     it('calls get', () => {
         expect(

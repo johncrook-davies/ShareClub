@@ -68,6 +68,7 @@ const Dashboard = (state) => {
                         return( 
                             <ImageAndText 
                                key={ p.id }
+                               style={{marginBottom: 16, marginRight: 8, marginLeft: 8}}
                                text={<P cs={cs}>{proposalShortText(p)}</P>}
                                cs={cs}
                                image={<Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />}
@@ -85,6 +86,7 @@ const Dashboard = (state) => {
                         return(
                             <ImageAndText 
                                key={ i.id }
+                               style={{marginBottom: 16}}
                                 text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
                                cs={cs}
                                image={<Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />}

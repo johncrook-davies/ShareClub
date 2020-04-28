@@ -30,7 +30,7 @@ export const Section = ({ children, ...other }) => {
     )
 }
 
-export const ImageAndText = ({ image, text, cs, onPress, ...other }) => {
+export const ImageAndText = ({ image, text, cs, onPress, style, ...other }) => {
     let Comp;
     if(onPress !== undefined) {
         Comp = TouchableOpacity
@@ -41,19 +41,23 @@ export const ImageAndText = ({ image, text, cs, onPress, ...other }) => {
         <Comp
             style={{
                 flexDirection: 'row',
-                marginBottom: 16,
-                marginRight: 16,
-                marginLeft: 16
+                ...style
             }}
             onPress={onPress}
             { ...other }
             >
-            <View>
+            <View
+                style={{
+                    flexDirection: 'column',
+                    justifyContent: 'center'
+                }}
+                >
                 { image }
             </View>
             <View 
                 style={{
                     paddingLeft: 16,
+                    flexDirection: 'column',
                     flexShrink: 1,
                     justifyContent: 'center'
                 }}

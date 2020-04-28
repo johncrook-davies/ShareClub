@@ -10,7 +10,6 @@ import {
     H1,
     H2,
     Div,
-    Button,
     Image,
     ImageAndText,
     setStyle
@@ -19,9 +18,6 @@ import {
 const Types = ({ navigation }) => {
     const cs = useColorScheme();
     return <Div cs={cs}>
-        <Section>
-            <H1 cs={cs}>Browse</H1>
-        </Section>
         <ImageAndText
             cs={cs}
             text={
@@ -35,7 +31,7 @@ const Types = ({ navigation }) => {
             image={
                 <Image style={setStyle(cs,'outline',{ width: 136, height: 136, borderWidth: 1, borderRadius: 3 })} />
             }
-            onPress={() => navigation.navigate('Markets')}
+            onPress={() => navigation.navigate('Exchanges')}
             />
     </Div>
 }
