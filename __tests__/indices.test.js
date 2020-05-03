@@ -32,7 +32,7 @@ describe('General behaviour', () => {
             wrp.toJSON().type
         ).toEqual('RCTSafeAreaView');
     });
-    it('renders with more than one children', () => {
+    it.skip('renders with more than one children', () => {
         expect(
             rendered.props.children.length
         ).not.toEqual(undefined);
