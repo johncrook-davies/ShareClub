@@ -104,24 +104,24 @@ describe('synchroniser', () => {
     describe('create', () => {
         it('calls insert for single record', async () => {
             await synchdb.create({records: [{name: 'Dave', type: 'person'}]})
-            expect(spy).toHaveBeenCalledWith("INSERT INTO records(name,type) VALUES ('Dave','person');")
+            expect(spy).toHaveBeenCalledWith("INSERT INTO records(name,type) VALUES (\"Dave\",\"person\");")
         })
         it('calls insert for multiple records', async () => {
             await synchdb.create({records: [{name: 'Dave', type: 'person'}, {name: 'Steve', type: 'zebra'}]})
-            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO records(name,type) VALUES ('Dave','person');")
-            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO records(name,type) VALUES ('Steve','zebra');")
+            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO records(name,type) VALUES (\"Dave\",\"person\");")
+            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO records(name,type) VALUES (\"Steve\",\"zebra\");")
         })
         it('calls insert for multi record types', async () => {
             await synchdb.create({people: [{name: 'Dave', type: 'person'}], animals: [{name: 'Steve', type: 'zebra'}]})
-            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO people(name,type) VALUES ('Dave','person');")
-            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO animals(name,type) VALUES ('Steve','zebra');")
+            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO people(name,type) VALUES (\"Dave\",\"person\");")
+            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO animals(name,type) VALUES (\"Steve\",\"zebra\");")
         })
     })
     
     describe('update', () => {
         it('calls update for single record', async () => {
             synchdb.update({records: [{id: 1, name: 'Dave', type: 'person'}]})
-            expect(spy).toHaveBeenNthCalledWith(1, "UPDATE records SET name='Dave', type='person' WHERE id=1;")
+            expect(spy).toHaveBeenNthCalledWith(1, "UPDATE records SET name=\"Dave\", type=\"person\" WHERE id=1;")
         })
     })
     
