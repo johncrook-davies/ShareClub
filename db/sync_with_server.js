@@ -2,27 +2,49 @@ const axios = require('axios');
 const url = 'https://warm-mesa-02274.herokuapp.com';
 
 export const syncWithDatabase = async (syncdb) => {
-    log(`syncWithDatabase: started database syncronisation`)
-    const stocksInDb = await syncdb.get({all: 'stocks'})
+    syncOneThingWithDatabase(
+        'exchanges', 
+        syncdb, 
+        getExchanges
+    )
+    syncOneThingWithDatabase(
+        'indices', 
+        syncdb, 
+        getIndices
+    )
+    syncOneThingWithDatabase(
+        'stocks', 
+        syncdb, 
+        getStocks
+    )
+}
+
+const syncOneThingWithDatabase = async (things, db, getFromServerMethod) => {
+    log(`syncWithDatabase: started database ${things} syncronisation`)
+    const inDb = await db.get({all: things})
         .catch(error => {
             throw new Error(`\n\nsync_with_server -> syncWithDatabase -> synchroniser: ${error}\n`)
         }),
-        stocksOnServer = await getStocks(),
-        differences = compareTwoThings(stocksInDb,stocksOnServer);
+        onServer = await getFromServerMethod(),
+        differences = compareTwoThings(inDb,onServer);
     // Create new stocks
     if(differences.create.length > 0){
-        syncdb.create({stocks: differences.create})
+        let obj = {};
+        obj[things] = differences.create;
+        db.create(obj)
     }
     // Delete old stocks
     if(differences.destroy.length > 0){
         differences.destroy.map((record) => {
-            syncdb.delete('stocks', record.id)
+            db.delete(things, record.id)
         })
     }
     // Update existing stocks
     if(differences.update.length > 0){
         differences.update.map((record) => {
-            syncdb.update({stocks: {id: record.id, ...record.update}})
+            let obj = {};
+            obj[things] = {id: record.id, ...record.update}
+            db.update(obj)
         })
     }
 }
@@ -32,6 +54,16 @@ export const getExchanges = () => {
         axios.get(`${url}/exchanges`)
             .then(result => {
                 log(`getStocks: got exchanges`)
+                resolve(result.data)
+            })
+    })
+}
+
+export const getIndices = () => {
+    return new Promise(resolve => {
+        axios.get(`${url}/indices`)
+            .then(result => {
+                log(`getIndices: got indices`)
                 resolve(result.data)
             })
     })

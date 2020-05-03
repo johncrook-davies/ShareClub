@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Stock from './investments/stocks';
 import Types from './investments/types';
-import Exchanges from './investments/exchanges';
+import Indices from './investments/indices';
 
 import {
     Text,
@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 const Investments = () => {
     return <Stack.Navigator>
         <Stack.Screen name="Browse" component={Types} />
-        <Stack.Screen name="Exchanges" component={Exchanges} />
+        <Stack.Screen name="Indices" component={Indices} />
         <Stack.Screen name="Stock" component={Stock} />
     </Stack.Navigator>
 }

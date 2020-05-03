@@ -14,8 +14,21 @@ import {
     setStyle
 } from '../../shared';
 
-const Exchanges = ({ navigation }) => {
-    const cs = useColorScheme();
+
+
+const Indices = (state, { navigation }) => {
+    const cs = useColorScheme(),
+          [indices, setIndices] = useState([]);
+    
+    // Load data from database on initialisation
+    useEffect(() => {
+        if(state.db.readyState === 'ready') {
+            state.db.call.get({all: 'indices'})
+                .then((r)=> setIndices(r))
+                .then(()=>console.log(indices))
+        }
+    },[state.db.readyState])
+    
     return <Div cs={cs}>
         <Section>
             <StockSummary
@@ -128,4 +141,4 @@ const ExText = (props) => {
     )
 }
 
-export default Exchanges
+export default connect( (state) => state, null )(Indices)

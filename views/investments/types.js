@@ -31,7 +31,7 @@ const Types = ({ navigation }) => {
             image={
                 <Image style={setStyle(cs,'outline',{ width: 136, height: 136, borderWidth: 1, borderRadius: 3 })} />
             }
-            onPress={() => navigation.navigate('Exchanges')}
+            onPress={() => navigation.navigate('Indices')}
             />
     </Div>
 }

@@ -200,10 +200,10 @@ export default class Synchroniser {
                 // Ensure string values are enclosed by speach marks
                 values.forEach((v,i) => {
                     if(typeof v === 'string'){
-                        values[i] = "'"+v+"'"
+                        values[i] = "\""+v+"\""
                     }
                     if(v === null){
-                        values[i] = "'"+0+"'"
+                        values[i] = "\""+0+"\""
                     }
                 })
                 // Create a comma delimited string of values
@@ -255,10 +255,10 @@ export default class Synchroniser {
                 // Ensure string values are enclosed by speach marks
                 values.forEach((v,i) => {
                     if(typeof v === 'string'){
-                        values[i] = "'"+v+"'"
+                        values[i] = "\""+v+"\""
                     }
                     if(v === null){
-                        values[i] = "'"+0+"'"
+                        values[i] = "\""+0+"\""
                     }
                 })
                 // Create a string of attribute1=value1, attribute2=value2...

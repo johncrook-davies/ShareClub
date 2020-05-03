@@ -9,7 +9,7 @@ import {
     findAllInRenderedTree
 } from 'react-test-renderer';
 
-import Exchanges from '../views/investments/exchanges';
+import Indices from '../views/investments/indices';
 
 var spy;
 
@@ -23,7 +23,7 @@ describe('General behaviour', () => {
         rendered;
     beforeEach(() => {
         act(() => {
-            wrp = create(<Provider store={store}><Exchanges/></Provider>);
+            wrp = create(<Provider store={store}><Indices/></Provider>);
         })
         rendered = wrp.root.findByType(Div);
     })

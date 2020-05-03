@@ -14,6 +14,15 @@ export const schema = {
         'updated_at VARCHAR(24)',
         'created_at VARCHAR(24)'
     ],
+    indices: [
+        'id INTEGER PRIMARY KEY NOT NULL',
+        'exchange_id INTEGER',
+        'name VARCHAR(55)',
+        'symbol VARCHAR(10)',
+        'latest_price VARCHAR(14)',
+        'updated_at VARCHAR(24)',
+        'created_at VARCHAR(24)'
+    ],
     exchanges: [
         'id INTEGER PRIMARY KEY NOT NULL',
         'exchange_suffix VARCHAR(4)',
