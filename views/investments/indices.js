@@ -61,8 +61,10 @@ const Stat = ({children, style, cs}) =>
         { children }
     </P>
 
-const StockSummary = ({cs, name, price, ...other}) => 
-    <TouchableOpacity>
+const StockSummary = ({cs, name, price, ...other}, { navigation }) => 
+    <TouchableOpacity
+        onPress={() => navigation.navigate()}
+        >
         <View 
             style={{flexDirection: 'row'}}
             { ...other }
@@ -72,7 +74,7 @@ const StockSummary = ({cs, name, price, ...other}) =>
                     cs={cs}
                     text={<H2 cs={cs}>{name}</H2>}
                     image={ <Icon cs={cs}/> }
-                    onPress={() => navigation.navigate('...')}
+                    onPress={() => navigation.navigate('Stock')}
                     />
             </View>
             <View

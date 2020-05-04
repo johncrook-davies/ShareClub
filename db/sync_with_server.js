@@ -31,20 +31,32 @@ const syncOneThingWithDatabase = async (things, db, getFromServerMethod) => {
     if(differences.create.length > 0){
         let obj = {};
         obj[things] = differences.create;
-        db.create(obj)
+        try {
+            db.create(obj)
+        } catch(error) {
+            throw new Error(`syncOneThingWithDatabase -> ${error}`)
+        }
     }
-    // Delete old stocks
+    // Delete old
     if(differences.destroy.length > 0){
         differences.destroy.map((record) => {
-            db.delete(things, record.id)
+            try {
+                db.delete(things, record.id)
+            } catch(error) {
+                throw new Error(`syncOneThingWithDatabase -> ${error}`)
+            }
         })
     }
-    // Update existing stocks
+    // Update existing
     if(differences.update.length > 0){
         differences.update.map((record) => {
             let obj = {};
-            obj[things] = {id: record.id, ...record.update}
-            db.update(obj)
+            obj[things] = [{id: record.id, ...record.update}]
+            try {
+                db.update(obj)
+            } catch(error) {
+                throw new Error(`syncOneThingWithDatabase -> ${error}`)
+            }
         })
     }
 }

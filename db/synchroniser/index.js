@@ -245,6 +245,11 @@ export default class Synchroniser {
         for(const things in obj) {
             /* If object doesn't exist then update */
             this.dg && console.log(`Updating ${things}`);
+            if(!Array.isArray(obj[things])) {
+                throw new Error(
+                    `Cannot update ${things} because ${things} element of object ${JSON.stringify(obj)} is not an array`
+                )
+            } 
             obj[things].map(async (thing) => {
                 const id = thing.id;
                 // Get an array of attributes

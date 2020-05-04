@@ -25,7 +25,7 @@
 ### Development environment
 - Run native iOS simulator: 
 ```zsh
-    npx react-native run-ios
+    yarn react-native start
 ```
 - Run on own device:
 ```zsh
