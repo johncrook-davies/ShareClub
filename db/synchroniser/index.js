@@ -171,45 +171,33 @@ export default class Synchroniser {
     /*
       For each object in the object, gets array of objects, gets the keys and and values from each of those objects, adding speach marks to strings and executes sql statement.
       Input: {
-          <first type of thing>: [
-              {
-                  first_attr: value1,
-                  second_attr: value2
-              }
-          ],
-          <second type of thing>: [
-              {
-                  first_attr: value1,
-                  second_attr: value2
-              }
-          ]
+        <first type of thing>: [
+          {
+            first_attr: value1,
+            second_attr: value2
+          }
+        ],
+        <second type of thing>: [
+          {
+            first_attr: value1,
+            second_attr: value2
+          }
+        ]
       }
       Output: undefined
     */
     for(const things in obj) {
       obj[things].map((thing) => {
         const keys = Object.keys(thing).join(',');
-        let values = Object.values(thing),
-            sql
-        // Ensure string values are enclosed by speach marks
-        values.forEach((v,i) => {
-          if(typeof v === 'string'){
-            values[i] = `"${v}"`
-          } else if(Array.isArray(v)) {
-            let json = JSON.stringify(v),
-                escapedJSON = json.replace(/\"/g,String.raw`\"`);
-            values[i] = `json_array(${v})`
-          }
-          if(v === null){
-            values[i] = `"${0}"`
-          }
-        })
+        let values = this.formatValuesForSQL(Object.values(thing)),
+            sql;
         
-        // Create a comma delimited string of values. Cannot use join here as it unescapes escaped characters
+        // Create a comma delimited string of values.
         values = values.join(',');
         // Execute the insert SQL
-        sql = String.raw`INSERT INTO ${things}(${keys}) VALUES (${values});`;
-        this.__executeSql__(sql).then(([results]) => {
+        this.__executeSql__(
+          String.raw`INSERT INTO ${things}(${keys}) VALUES (${values});`
+        ).then(([results]) => {
           this.log(`create: created ${results.rowsAffected} new ${things}`);
         }).catch(error => {
           handleError(error)
@@ -217,6 +205,29 @@ export default class Synchroniser {
       })
     }
   };
+  formatValuesForSQL(values) {
+    // Check that values are submitted as an array
+    if(!Array.isArray(values)) {
+      throw new Error(`formatValuesForSQL -> expected agrument to be an array, insead recieved ${values}`)
+    }
+    let result = values;
+    result.forEach((v,i) => {
+      if(typeof v === 'string'){
+        result[i] = `"${v}"`
+      } else if(Array.isArray(v)) {
+        if(!v.some((el) => (typeof el === 'object'))) {
+          result[i] = `json_array(${v.map((i)=> String.raw`"${i}"`)})`
+        } else {
+          console.log(JSON.stringify(v))
+          result[i] = `json_array(${ String.raw`${[v.map((i)=> String.raw`json('${JSON.stringify(i)}')`)]}`})`
+        }
+      }
+      if(v === null){
+        result[i] = `"${0}"`
+      }
+    })
+    return result
+  }
   update(obj) {
     /*
       For each set of things in the obj, cycle through
@@ -254,32 +265,17 @@ export default class Synchroniser {
         // Get an array of attributes
         const keys = Object.keys(thing);
         // Get an array of values
-        let values = Object.values(thing),
+        let values = this.formatValuesForSQL(Object.values(thing)),
             sql='';
-        // Ensure string values are enclosed by speach marks
-        values.forEach((v,i) => {
-          if(typeof v === 'string'){
-            values[i] = `${v}`
-          } else if(Array.isArray(v)) {
-            values[i] = `json_array(${v.map((i)=> String.raw`"${i}"`)})`
-          }
-          if(v === null){
-            values[i] = `${0}`
-          }
-        })
         // Create a string of attribute1=value1, attribute2=value2...
         keys.forEach((k,i) => {
           if(k !== 'id'){
-            const v = values[i];
-            sql += String.raw`${k}=${v}`;
-            if(i < keys.length - 1) {
-                sql += ', '
-            }
+            sql += String.raw`${k}=${values[i]}`;
+            (i < keys.length - 1) ? sql += ', ' : null;
           }
         })
         // Execute the insert SQL
         sql = String.raw`UPDATE ${things} SET ${sql} WHERE id=${id};`;
-        console.log(sql)
         this.__executeSql__(sql).then(([results]) => {
           this.log(`Updated ${results.rowsAffected} ${things}`);
         }).catch(error => {
