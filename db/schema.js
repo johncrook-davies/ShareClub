@@ -19,6 +19,7 @@ export const schema = {
         'exchange_id INTEGER',
         'name VARCHAR(55)',
         'symbol VARCHAR(10)',
+        'stocks TEXT',
         'latest_price VARCHAR(14)',
         'updated_at VARCHAR(24)',
         'created_at VARCHAR(24)'

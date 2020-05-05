@@ -22,6 +22,7 @@ const Index = ({ db, route, navigation }) => {
   const cs = useColorScheme(),
         [ind, setInd] = useState([{name: 'Loading...'}]),
         [stocks, setStocks] = useState([]);
+  console.log(ind)
   // Load data from database on initialisation
   useEffect(() => {
     if(db.readyState === 'ready') {
