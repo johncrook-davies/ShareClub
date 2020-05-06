@@ -50,6 +50,7 @@ const Index = ({ db, route, navigation }) => {
         .catch((e)=> {console.log(`AssetSummary -> ${e}`)})
     }
   },[db.readyState])
+  console.log(stocks)
   return <Div cs={cs}>
     {stocks.map((s) => 
       <AssetSummary

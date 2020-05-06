@@ -10,10 +10,11 @@ import {
   SafeAreaView
 } from 'react-native';
 
-const Stock = ({ ws, route, navigation, dispatch }) => {
+const Stock = ({ connection, db, route, navigation, dispatch }) => {
   // Initialise state of stocks
-  const [stock, setStock] = useState({
-    symbol: '', 
+  const { symbol } = route.params,
+        [stock, setStock] = useState({
+    symbol: symbol, 
     id: 0, 
     name: '', 
     latest_price: "0", 
@@ -22,14 +23,22 @@ const Stock = ({ ws, route, navigation, dispatch }) => {
     "updated_at": ''
   });
 
-  // Initialisation actions
+  // Get object from database on load
   useEffect(() => {
-    ws.send(JSON.stringify({
+    db.call.get({all: 'stocks', where: {symbol: {isEqualTo: symbol}}})
+      .then(([r])=> {
+        setStock(r)
+      })
+  },[db.readyState])
+  
+  // Subscribe and handle server responses
+  useEffect(() => {
+    console.log("executed")
+    connection.ws.send(JSON.stringify({
       command: "subscribe",
-      identifier: JSON.stringify({channel:"StocksChannel", id:'FEX-LN'})
+      identifier: JSON.stringify({channel:"StocksChannel", id:symbol})
     }))
-    // Handle each message
-    ws.onmessage = function (event) {
+    connection.ws.onmessage = function (event) {
       let data= JSON.parse(event.data),
         type = data.type;
       if(type !== "ping") {
@@ -40,17 +49,14 @@ const Stock = ({ ws, route, navigation, dispatch }) => {
           }
       }
     }
-  })
-
-  // Cleanup actions
-  useEffect(() => {
+    // Cleanup by unsubscribing from connection
     return () => {
-      ws.send(JSON.stringify({
+      connection.ws.send(JSON.stringify({
         command: "unsubscribe",
-        identifier: JSON.stringify({channel:"StocksChannel", id:'FEX-LN'})
+        identifier: JSON.stringify({channel:"StocksChannel", id:symbol})
       }))
     };
-  }, []);
+  },[])
 
   return <SafeAreaView>
     <Text>{stock.symbol}</Text>
@@ -59,6 +65,4 @@ const Stock = ({ ws, route, navigation, dispatch }) => {
   </SafeAreaView>
 }
 
-export default connect(
-  ({ connection }) => connection
-)(Stock)
+export default connect( (state) => state, null )(Stock)

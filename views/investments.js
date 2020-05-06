@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Stock from './investments/stocks';
+import Stock from './investments/stock';
 import Types from './investments/types';
 import Indices from './investments/indices';
 import Index from './investments/index_view';
