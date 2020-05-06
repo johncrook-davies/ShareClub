@@ -22,7 +22,6 @@ const Index = ({ db, route, navigation }) => {
   const cs = useColorScheme(),
         [ind, setInd] = useState({name: 'Loading...'}),
         [stocks, setStocks] = useState([]);
-  //console.log(ind)
   // Load data from database on initialisation
   useEffect(() => {
     var stockList = [];
@@ -43,11 +42,11 @@ const Index = ({ db, route, navigation }) => {
                 }
               })
               .catch((e)=> {
-                console.log(`AssetSummary -> ${e}`)
+                console.log(`Index-> ${e}`)
               })
           })
         })
-        .catch((e)=> {console.log(`AssetSummary -> ${e}`)})
+        .catch((e)=> {console.log(`Index -> ${e}`)})
     }
   },[db.readyState])
   
@@ -56,7 +55,7 @@ const Index = ({ db, route, navigation }) => {
       <AssetSummary
         type={ 'Stock' }
         cs={ cs }
-        key={ s.name }
+        key={ s.symbol }
         name={ s.name }
         symbol={ s.symbol }
         latest_price={ s.latest_price }

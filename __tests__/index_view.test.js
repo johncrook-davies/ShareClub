@@ -11,6 +11,7 @@ import { Div } from '../shared';
 
 import Index from '../views/investments/index_view';
 
+const ind = 'FTSE';
 var spy;
 
 beforeAll(() => {
@@ -21,26 +22,32 @@ beforeEach(() => spy.mockClear())
 describe('General behaviour', () => {
   let wrp,
       rendered;
-  beforeEach(() => {
-    act(() => {
+  beforeEach(async () => {
+    await act(() => {
       wrp = create(
         <Provider store={store}>
           <Index
-            route={{params: {symbol: 'FTSE'}}}
+            route={{params: {symbol: ind}}}
             />
         </Provider>
       );
     })
     rendered = wrp.root.findByType(Div);
   })
+  
   it('renders component of type RCTSafeAreaView', () => {
     expect(
       wrp.toJSON().type
     ).toEqual('RCTSafeAreaView');
   });
-  it.skip('renders with more than one children', () => {
+  it('renders with more than zero children', () => {
     expect(
       rendered.props.children.length
-    ).not.toEqual(undefined);
+    ).toBeGreaterThan(0);
+  });
+  it('calls get', () => {
+    expect(
+      spy
+    ).toHaveBeenNthCalledWith(1, {"all": "indices", "where": {"symbol": {"isEqualTo": ind}}});
   });
 })
