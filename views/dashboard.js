@@ -37,26 +37,15 @@ const Dashboard = ({ db }) => {
 
   return (
     <Div cs={cs}>
-      <Section>
-        <H1 cs={cs}>Welcome back</H1>
-      </Section>
+      <Section><H1 cs={cs}>Welcome back</H1></Section>
       <ScrollView
         horizontal
         style={ setStyle(cs, 'clubs') }
         >
-        <View
-          flexDirection='row'
-          >
-          { clubs.map((c) =>{
-            return(
-              <Club 
-                 cs = { cs }
-                 key={ c.name }
-                 name={ c.name } 
-                 value={ c.value }
-                 />
-            )
-          })}
+        <View flexDirection='row'>
+          { clubs.map((c) =>
+              <Club cs = { cs } c={ c } />
+            )}
         </View>
       </ScrollView>
       <Section>
@@ -64,17 +53,9 @@ const Dashboard = ({ db }) => {
         {(proposals.length === 0) && <P style={ setStyle(cs, 'placeholder') } cs={cs}>You don't have any proposals pending.</P>}
         {(proposals.length !== 0) && 
         <View style={ setStyle(cs, 'proposals') }>
-          { proposals.map((p) =>{
-              return( 
-                <ImageAndText 
-                   key={ p.id }
-                   style={{marginBottom: 16, marginRight: 8, marginLeft: 8}}
-                   text={<P cs={cs}>{proposalShortText(p)}</P>}
-                   cs={cs}
-                   image={<Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />}
-                   />
-              )
-          })}
+          { proposals.map((p) =>
+              <Proposal p={p} cs={cs}/>
+          )}
         </View>}
       </Section>
       <Section>
@@ -82,24 +63,39 @@ const Dashboard = ({ db }) => {
         {(invitations.length === 0) && <P style={ setStyle(cs, 'placeholder') } cs={cs}>You don't have any invitations pending.</P>}
         {(invitations.length !== 0) && 
         <View>
-          { invitations.map((i) =>{
-              return(
-                <ImageAndText 
-                   key={ i.id }
-                   style={{marginBottom: 16}}
-                    text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
-                   cs={cs}
-                   image={<Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />}
-                   />
-              )
-          })}
+          { invitations.map((i) =>
+              <Invitation
+                i={i}
+                cs={cs}
+                />
+          )}
         </View>}
       </Section>
     </Div>
   )
 }
 
-const Club = ({ cs, name, value }) => 
+const SmallImage = ({cs}) => <Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />
+
+const Proposal = ({p,cs}) =>
+  <ImageAndText 
+    key={ p.id }
+    style={{marginBottom: 16, marginRight: 8, marginLeft: 8}}
+    text={<P cs={cs}>{proposalShortText(p)}</P>}
+    cs={cs}
+    image={<SmallImage cs={cs}/>}
+    />
+
+const Invitation = ({i, cs}) =>
+  <ImageAndText 
+    key={ i.id + i.name }
+    style={{marginBottom: 16}}
+    text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
+    cs={cs}
+    image={<SmallImage cs={cs}/>}
+    />
+
+const Club = ({ c, cs }) => 
   <View 
     alignItems='center'
     justifyContent='center'
@@ -111,7 +107,7 @@ const Club = ({ cs, name, value }) =>
       cs={ cs }
       styles={ {fontSize: 40} }
       >
-      { value }
+      { c.value }
     </Currency>
   </View>
 
