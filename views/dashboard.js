@@ -17,7 +17,7 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = (state) => {
+const Dashboard = ({ db }) => {
   const [clubs, setClubs] = useState([]),
         [invitations, setInvitations] = useState([]),
         [proposals, setProposals] = useState([]),
@@ -25,15 +25,15 @@ const Dashboard = (state) => {
 
   // Load data from database on initialisation
   useEffect(() => {
-    if(state.db.readyState === 'ready') {
-      state.db.call.get({all: 'clubs'})
+    if(db.readyState === 'ready') {
+      db.call.get({all: 'clubs'})
         .then((r)=> setClubs(r))
-      state.db.call.get({all: 'invitations'})
+      db.call.get({all: 'invitations'})
         .then((r)=> setInvitations(r))
-      state.db.call.get({all: 'proposals'})
+      db.call.get({all: 'proposals'})
         .then((r)=> setProposals(r))
     }
-  },[state.db.readyState])
+  },[db.readyState])
 
   return (
     <Div cs={cs}>

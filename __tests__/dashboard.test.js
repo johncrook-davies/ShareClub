@@ -5,8 +5,7 @@ import { syncdb, store } from '../setupTests';
 import { Provider } from 'react-redux';
 import { 
     create,
-    act,
-    findAllInRenderedTree
+    act
 } from 'react-test-renderer';
 
 import Dashboard from '../views/dashboard';
