@@ -33,7 +33,6 @@ const Stock = ({ connection, db, route, navigation, dispatch }) => {
   
   // Subscribe and handle server responses
   useEffect(() => {
-    console.log("executed")
     connection.ws.send(JSON.stringify({
       command: "subscribe",
       identifier: JSON.stringify({channel:"StocksChannel", id:symbol})
