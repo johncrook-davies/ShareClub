@@ -50,7 +50,7 @@ const Dashboard = ({ db }) => {
       </ScrollView>
       <Section>
         <H2 cs={cs}>Pending proposals</H2>
-        {(proposals.length === 0) && <P style={ setStyle(cs, 'placeholder') } cs={cs}>You don't have any proposals pending.</P>}
+        <Placeholder cs={cs} things={'proposals'} number={proposals.length}/>
         {(proposals.length !== 0) && 
         <View style={ setStyle(cs, 'proposals') }>
           { proposals.map((p) =>
@@ -60,19 +60,28 @@ const Dashboard = ({ db }) => {
       </Section>
       <Section>
         <H2 cs={cs}>Invitations</H2>
-        {(invitations.length === 0) && <P style={ setStyle(cs, 'placeholder') } cs={cs}>You don't have any invitations pending.</P>}
+        <Placeholder cs={cs} things={'invitations'} number={invitations.length}/>
         {(invitations.length !== 0) && 
         <View>
           { invitations.map((i) =>
-              <Invitation
-                i={i}
-                cs={cs}
-                />
+              <Invitation i={i} cs={cs}/>
           )}
         </View>}
       </Section>
     </Div>
   )
+}
+
+const Placeholder = ({cs, things, number}) => {
+  return (<>{
+    (number === 0) && 
+    <P 
+      style={ setStyle(cs, 'placeholder') } 
+      cs={cs}
+      >
+      {`You don't have any ${things} pending.`}
+    </P>
+  }</>)
 }
 
 const SmallImage = ({cs}) => <Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />
@@ -88,7 +97,7 @@ const Proposal = ({p,cs}) =>
 
 const Invitation = ({i, cs}) =>
   <ImageAndText 
-    key={ i.id + i.name }
+    key={ i.id }
     style={{marginBottom: 16}}
     text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
     cs={cs}
@@ -97,6 +106,7 @@ const Invitation = ({i, cs}) =>
 
 const Club = ({ c, cs }) => 
   <View 
+    key={ c.id }
     alignItems='center'
     justifyContent='center'
     style={ setStyle(cs, 'club') }
