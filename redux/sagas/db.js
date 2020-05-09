@@ -71,12 +71,20 @@ function* getAllFromDb() {
 function* getAllFromServer() {
   log('getAllFromServer')
   const db = yield select(getDatabase);
-  let indices = [];
+  let exchanges = [],
+      indices = [],
+      stocks = [];
   
   try {
+    yield getExchanges().then((e) => {return exchanges = e})
+    yield put({ type: 'EXCHANGE_CREATE', payload: exchanges })
+    yield syncOneThingWithDatabase('exchanges', db, exchanges)
     yield getIndices().then((i) => {return indices = i})
     yield put({ type: 'INDEX_CREATE', payload: indices })
     yield syncOneThingWithDatabase('indices', db, indices)
+    yield getStocks().then((s) => {return stocks = s})
+    yield put({ type: 'STOCK_CREATE', payload: stocks })
+    yield syncOneThingWithDatabase('stocks', db, stocks)
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromServer: IN PRODUCTION THIS SHOULD NOT BE AN ERROR - POOR CONNECTIVITY CAN LEAD TO FREQUENT FAILURE HERE ${e}`)
   }
@@ -100,6 +108,13 @@ export function* watchTearDownDb() {
 }
 
 // Server get methods
+const getExchanges = () => {
+  return axios.get(`${url}/exchanges`)
+    .then(result => {
+      return result.data
+    })
+}
+
 const getIndices = () => {
   return axios.get(`${url}/indices`)
     .then(result => {
@@ -112,6 +127,13 @@ const getIndices = () => {
         }
       })
       return returnVal
+    })
+}
+
+const getStocks = () => {
+  return axios.get(`${url}/stocks`)
+    .then(result => {
+      return result.data
     })
 }
 

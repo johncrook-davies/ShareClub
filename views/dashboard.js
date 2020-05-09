@@ -19,7 +19,7 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = ({ clubs, indices, invitations, proposals, db, synchroniseStateWithDb, getAllFromServer }) => {
+const Dashboard = ({ clubs, invitations, proposals, db, synchroniseStateWithDb, getAllFromServer }) => {
   const cs = useColorScheme(); //'dark';//'light';
   return (
     <Div cs={cs}>
@@ -43,13 +43,6 @@ const Dashboard = ({ clubs, indices, invitations, proposals, db, synchroniseStat
               <Proposal key={ p.id } p={p} cs={cs}/>
           )}
         </View>}
-        <Button
-          title="Test button"
-          onPress={() => console.log("pressed")}
-          />
-        <View>
-          {indices.map((i) =><P key={i.symbol}>{i.name}</P> )}
-        </View>
       </Section>
       <Section>
         <H2 cs={cs}>Invitations</H2>
