@@ -2,21 +2,21 @@ const axios = require('axios');
 const url = 'https://warm-mesa-02274.herokuapp.com';
 
 export const syncWithDatabase = async (syncdb) => {
-  syncOneThingWithDatabase(
-    'exchanges', 
-    syncdb, 
-    getExchanges
-  )
-  syncOneThingWithDatabase(
-    'indices', 
-    syncdb, 
-    getIndices
-  )
-  syncOneThingWithDatabase(
-    'stocks', 
-    syncdb, 
-    getStocks
-  )
+//  syncOneThingWithDatabase(
+//    'exchanges', 
+//    syncdb, 
+//    getExchanges
+//  )
+//  syncOneThingWithDatabase(
+//    'indices', 
+//    syncdb, 
+//    getIndices
+//  )
+//  syncOneThingWithDatabase(
+//    'stocks', 
+//    syncdb, 
+//    getStocks
+//  )
 }
 
 const syncOneThingWithDatabase = async (things, db, getFromServerMethod) => {
