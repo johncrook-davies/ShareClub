@@ -45,7 +45,7 @@ const Dashboard = ({ clubs, indices, invitations, proposals, db, synchroniseStat
         </View>}
         <Button
           title="Test button"
-          onPress={() => getAllFromServer()}
+          onPress={() => console.log("pressed")}
           />
         <View>
           {indices.map((i) =><P key={i.symbol}>{i.name}</P> )}

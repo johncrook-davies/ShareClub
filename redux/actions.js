@@ -25,7 +25,3 @@ export const initialiseDb = db => ({
 export const tearDownDb = () => ({
   type: TEAR_DOWN_DB
 })
-
-export const getAllFromServer = () => ({
-  type: GET_ALL_FROM_SERVER
-})
