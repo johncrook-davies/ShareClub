@@ -45,7 +45,10 @@ function* getAllFromDb() {
   const db = yield select(getDatabase);
   let clubs = [],
       invitations =[],
-      proposals =[];
+      proposals = [],
+      exchanges = [],
+      indices = [],
+      stocks = [];
   
   try {
     // Clubs
@@ -60,9 +63,24 @@ function* getAllFromDb() {
     yield db.call.get({all: 'invitations'}).then( (r) => 
       r.map( (thing) => invitations.push(thing) )
     )
+    // Exchanges
+    yield db.call.get({all: 'exchanges'}).then( (r) => 
+      r.map( (thing) => exchanges.push(thing) )
+    )
+    // Indices
+    yield db.call.get({all: 'indices'}).then( (r) => 
+      r.map( (thing) => indices.push(thing) )
+    )
+    // Stocks
+    yield db.call.get({all: 'stocks'}).then( (r) => 
+      r.map( (thing) => stocks.push(thing) )
+    )
     yield put({ type: 'CLUB_CREATE', payload: clubs })
     yield put({ type: 'INVITATION_CREATE', payload: invitations })
     yield put({ type: 'PROPOSAL_CREATE', payload: proposals })
+    yield put({ type: 'EXCHANGE_CREATE', payload: exchanges })
+    yield put({ type: 'INDEX_CREATE', payload: indices })
+    yield put({ type: 'STOCK_CREATE', payload: stocks })
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromDb: ${e}`)
   }
