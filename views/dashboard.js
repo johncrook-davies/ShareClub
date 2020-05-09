@@ -19,23 +19,23 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = ({ db, addClub, incrementAsync, getClubsFromDatabase }) => {
+const Dashboard = ({ db }) => {
   const [clubs, setClubs] = useState([]),
         [invitations, setInvitations] = useState([]),
         [proposals, setProposals] = useState([]),
         cs = useColorScheme(); //'dark';//'light';
 
   // Load data from database on initialisation
-  useEffect(() => {
-    if(db.readyState === 'ready') {
-      db.call.get({all: 'clubs'})
-        .then((r)=> setClubs(r))
-      db.call.get({all: 'invitations'})
-        .then((r)=> setInvitations(r))
-      db.call.get({all: 'proposals'})
-        .then((r)=> setProposals(r))
-    }
-  },[db.readyState])
+//  useEffect(() => {
+//    if(db.readyState === 'ready') {
+//      db.call.get({all: 'clubs'})
+//        .then((r)=> setClubs(r))
+//      db.call.get({all: 'invitations'})
+//        .then((r)=> setInvitations(r))
+//      db.call.get({all: 'proposals'})
+//        .then((r)=> setProposals(r))
+//    }
+//  },[db.readyState])
   
   return (
     <Div cs={cs}>
@@ -61,7 +61,7 @@ const Dashboard = ({ db, addClub, incrementAsync, getClubsFromDatabase }) => {
         </View>}
         <Button
           title="Add new club"
-          onPress={getClubsFromDatabase}
+          onPress={() => console.log('pressed')}
           />
       </Section>
       <Section>
@@ -126,5 +126,5 @@ const Club = ({ c, cs }) =>
 
 export default connect( 
   (state) => state, 
-  { addClub, incrementAsync, getClubsFromDatabase } 
+  {  } 
 )(Dashboard)

@@ -1,49 +1,53 @@
 import { put, takeEvery, all, select } from 'redux-saga/effects'
 import { getDatabase } from '../selectors'
 
-//const axios = require('axios');
-//const url = 'https://warm-mesa-02274.herokuapp.com';
+// DB
+import Synchroniser from '../../db/synchroniser';
+import { schema } from '../../db/schema';
+import seedDatabase from '../../db/seeds';
+import { syncWithDatabase } from '../../db/sync_with_server';
 
 const log = (arg) => (__DEV__ && console.log(`sagas -> ${arg}`))
 
-//const fetchStocks = () =>
-//  axios.get(`${url}/stocks`)
-//    .then(result => {
-//      log(`fetchStocks: got stocks`)
-//      return result.data
-//    })
-//    .catch(error => {
-//      log(`fetchStocks: ${error}`)
-//      return error
-//    })
-
-const delay = (ms) => new Promise(res => setTimeout(res, ms))
-
 // Worker sagas
-function* incrementAsync() {
-  console.log('EXECUTED')
-  yield delay(5000)
-  yield put({ type: 'ADD_CLUB' })
+function* initialiseDb() {
+  log('initialiseDb')
+  const db = new Synchroniser({
+        database: "offlineDatabase.db",
+        size: 200000,
+        schema: schema
+    },
+    true);
+  try {
+    yield db.initDb()
+    yield __DEV__ ? seedDatabase(db) : null;
+    yield syncWithDatabase(db)
+  } catch(e) {
+    throw new Error(`sagas -> initialiseDb: ${e}`)
+  } finally {
+    yield put({ type: 'CREATE_DB', payload: db })  
+  }
 }
 
-function* getClubsFromDatabase() {
-  console.log('EXECUTED getClubsFromDatabase')
-  const db = yield select(getDatabase)
-  yield put({ type: 'ADD_CLUB', payload: db })
+function* tearDownDb() {
+  log('Tearing down database')
+  const db = yield select(getDatabase);
+  yield db.close()
+  yield put({ type: 'DESTROY_DB' })  
 }
 
 // Watcher sagas
-function* watchIncrementAsync() {
-  yield takeEvery('INCREMENT_ASYNC', incrementAsync)
+function* watchInitialiseDb() {
+  yield takeEvery('INITIALISE_DB', initialiseDb)
 }
 
-function* watchDbAsync() {
-  yield takeEvery('GET_CLUBS_FROM_DATABASE', getClubsFromDatabase)
+function* watchTearDownDb() {
+  yield takeEvery('TEAR_DOWN_DB', tearDownDb)
 }
 
 export default function* rootSaga() {
   yield all([
-    watchIncrementAsync(),
-    watchDbAsync()
+    watchInitialiseDb(),
+    watchTearDownDb()
   ])
 }

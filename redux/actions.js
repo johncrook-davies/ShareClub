@@ -1,23 +1,14 @@
 import { 
   ADD_CLUB, 
-  UPDATE_CLUB, 
-  INCREMENT_ASYNC,
-  GET_CLUBS_FROM_DATABASE,
+  UPDATE_CLUB,
   DESTROY_CLUB,
   CREATE_CONNECTION,
   DESTROY_CONNECTION,
+  INITIALISE_DB,
+  TEAR_DOWN_DB,
   CREATE_DB_CONNECTION,
   DESTROY_DB_CONNECTION
 } from "./actionTypes";
-
-export const incrementAsync = club => ({
-  type: INCREMENT_ASYNC,
-  club
-});
-
-export const getClubsFromDatabase = () => ({
-  type: GET_CLUBS_FROM_DATABASE
-});
 
 export const addClub = club => ({
   type: ADD_CLUB,
@@ -44,15 +35,22 @@ export const destroyConnection = () => ({
   payload: {}
 });
 
-export const createDbConnection = db => ({
-  type: CREATE_DB_CONNECTION,
-  payload: {
-    db
-  }
+export const initialiseDb = db => ({
+  type: INITIALISE_DB,
+  db
 })
 
-export const destroyDbConnection = db => ({
-  type: DESTROY_DB_CONNECTION,
+export const createDb = db => ({
+  type: CREATE_DB,
+  db: { db }
+})
+
+export const tearDownDb = () => ({
+  type: TEAR_DOWN_DB
+})
+
+export const destroyDb = db => ({
+  type: DESTROY_DB,
   payload: {
     db: { db }
   }
