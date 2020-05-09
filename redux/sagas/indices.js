@@ -19,21 +19,18 @@ function* getIndicesFromServer(){
 }
 
 const getIndices = () => {
-  return new Promise(resolve => {
-    log(`getIndices`)
-    axios.get(`${url}/indices`)
-      .then(result => {
-        let returnVal = [];
-        result.data.map((d) => {
-          let ind = d.index;
-          ind['stocks'] = d.stocks.map((s) => s.symbol)
-          if(ind.symbol != 'UNK') {
-            returnVal.push(ind)
-          }
-        })
-        resolve(returnVal)
+  return axios.get(`${url}/indices`)
+    .then(result => {
+      let returnVal = [];
+      result.data.map((d) => {
+        let ind = d.index;
+        ind['stocks'] = d.stocks.map((s) => s.symbol)
+        if(ind.symbol != 'UNK') {
+          returnVal.push(ind)
+        }
       })
-  })
+      return returnVal
+    })
 }
 
 export function* watchGetIndicesFromServer() {
