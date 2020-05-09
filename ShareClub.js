@@ -40,7 +40,6 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
   */
   useEffect(() => {
     return () => {
-//            destroyDbConnection()
       tearDownDb()
       destroyConnection()
     }
