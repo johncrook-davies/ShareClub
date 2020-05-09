@@ -18,16 +18,8 @@ import {
 
 import AssetSummary from './asset_summary';
 
-const Indices = ({ db, navigation }) => {
-  const cs = useColorScheme(),
-        [indices, setIndices] = useState([]);
-  // Load data from database on initialisation
-  useEffect(() => {
-    if(db.readyState === 'ready') {
-      db.call.get({all: 'indices'})
-        .then((r)=> setIndices(r))
-    }
-  },[db.readyState])
+const Indices = ({ db, indices, navigation }) => {
+  const cs = useColorScheme();
 
   return <Div cs={cs}>
     <Section>
