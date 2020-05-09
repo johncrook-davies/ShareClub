@@ -1,28 +1,15 @@
-const initialState = {
-    all: [
-        {
-            id: 1273192,
-            user: 'Tess Yellanda',
-            club: 'Original Pirate Investors'
-        },
-        {
-            id: 4293742,
-            user: 'Rob Brown',
-            club: "Investors not haters"
-        }
-    ],
-    find: {
-        1273192: {
-            user: 'Tess Yellanda',
-            club: 'Original Pirate Investors'
-        },
-        4293742: {
-            user: 'Rob Brown',
-            club: "Investors not haters"
-        }
-    }
-};
+import { INVITATION_CREATE } from "../actionTypes";
+
+const initialState = [];
 
 export default function(state = initialState, action) {
-    return state
+  switch (action.type) {
+    case INVITATION_CREATE: {
+      const invitation = action.payload;
+      return invitation
+    }
+    default:
+      return state
+  }
+  return state
 }

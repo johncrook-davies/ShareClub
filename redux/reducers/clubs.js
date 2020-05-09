@@ -1,31 +1,15 @@
-import { ADD_CLUB, UPDATE_CLUB } from "../actionTypes";
+import { CLUB_CREATE } from "../actionTypes";
 
 const initialState = [];
 
 export default function(state = initialState, action) {
   switch (action.type) {
-        case ADD_CLUB: {
-            // ...
-//            const { 
-//              
-//            } = action.payload;
-            console.log('Added club')
-            console.log(action.payload)
-//            return {
-//                
-//            }
-        }
-        case UPDATE_CLUB: {
-            // ...
-            const { 
-                
-            } = state;
-            return {
-                
-            }
-        }
-        default:
-            return state
+    case CLUB_CREATE: {
+      const clubs = action.payload;
+      return clubs
     }
-    return state
+    default:
+      return state
+  }
+  return state
 }

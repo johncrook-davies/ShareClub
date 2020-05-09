@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { Appearance, useColorScheme } from 'react-native-appearance';
-import { addClub, incrementAsync, getClubsFromDatabase } from '../redux/actions';
+import { synchroniseStateWithDb } from '../redux/actions';
 
 import {
   View,
@@ -19,24 +19,8 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = ({ db }) => {
-  const [clubs, setClubs] = useState([]),
-        [invitations, setInvitations] = useState([]),
-        [proposals, setProposals] = useState([]),
-        cs = useColorScheme(); //'dark';//'light';
-
-  // Load data from database on initialisation
-//  useEffect(() => {
-//    if(db.readyState === 'ready') {
-//      db.call.get({all: 'clubs'})
-//        .then((r)=> setClubs(r))
-//      db.call.get({all: 'invitations'})
-//        .then((r)=> setInvitations(r))
-//      db.call.get({all: 'proposals'})
-//        .then((r)=> setProposals(r))
-//    }
-//  },[db.readyState])
-  
+const Dashboard = ({ clubs, invitations, proposals, db, synchroniseStateWithDb }) => {
+  const cs = useColorScheme(); //'dark';//'light';
   return (
     <Div cs={cs}>
       <Section><H1 cs={cs}>Welcome back</H1></Section>
@@ -60,8 +44,8 @@ const Dashboard = ({ db }) => {
           )}
         </View>}
         <Button
-          title="Add new club"
-          onPress={() => console.log('pressed')}
+          title="Test button"
+          onPress={() => console.log('Pressed')}
           />
       </Section>
       <Section>
@@ -126,5 +110,5 @@ const Club = ({ c, cs }) =>
 
 export default connect( 
   (state) => state, 
-  {  } 
+  { synchroniseStateWithDb } 
 )(Dashboard)

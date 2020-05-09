@@ -1,1 +1,1 @@
-export const getDatabase = state => state;
+export const getDatabase = state => state.db;
