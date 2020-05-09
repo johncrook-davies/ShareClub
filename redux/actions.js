@@ -4,7 +4,7 @@ import {
   INITIALISE_DB,
   TEAR_DOWN_DB,
   INDEX_CREATE,
-  GET_INDICES_FROM_SERVER
+  GET_ALL_FROM_SERVER
 } from "./actionTypes";
 
 export const createConnection = () => ({
@@ -26,6 +26,6 @@ export const tearDownDb = () => ({
   type: TEAR_DOWN_DB
 })
 
-export const getIndicesFromServer = () => ({
-  type: GET_INDICES_FROM_SERVER
+export const getAllFromServer = () => ({
+  type: GET_ALL_FROM_SERVER
 })

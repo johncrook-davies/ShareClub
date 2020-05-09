@@ -2,16 +2,17 @@ import { put, takeEvery, all, select } from 'redux-saga/effects';
 import { getDatabase } from '../selectors';
 import { 
   watchInitialiseDb, 
-  watchSynchroniseStateWithDb,
+  watchGetAllFromDb,
+  watchGetAllFromServer,
   watchTearDownDb 
 } from './db';
-import { watchGetIndicesFromServer } from './indices';
 
 export default function* rootSaga() {
   yield all([
     watchInitialiseDb(),
-    watchSynchroniseStateWithDb(),
+    watchGetAllFromDb(),
+    watchGetAllFromServer(),
     watchTearDownDb(),
-    watchGetIndicesFromServer()
+    
   ])
 }

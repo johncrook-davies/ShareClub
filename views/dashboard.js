@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { Appearance, useColorScheme } from 'react-native-appearance';
-import { synchroniseStateWithDb, getIndicesFromServer } from '../redux/actions';
+import { synchroniseStateWithDb, getAllFromServer } from '../redux/actions';
 
 import {
   View,
@@ -19,7 +19,7 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = ({ clubs, indices, invitations, proposals, db, synchroniseStateWithDb, getIndicesFromServer }) => {
+const Dashboard = ({ clubs, indices, invitations, proposals, db, synchroniseStateWithDb, getAllFromServer }) => {
   const cs = useColorScheme(); //'dark';//'light';
   return (
     <Div cs={cs}>
@@ -45,7 +45,7 @@ const Dashboard = ({ clubs, indices, invitations, proposals, db, synchroniseStat
         </View>}
         <Button
           title="Test button"
-          onPress={() => getIndicesFromServer()}
+          onPress={() => getAllFromServer()}
           />
         <View>
           {indices.map((i) =><P key={i.symbol}>{i.name}</P> )}
@@ -113,5 +113,5 @@ const Club = ({ c, cs }) =>
 
 export default connect( 
   (state) => state, 
-  { synchroniseStateWithDb, getIndicesFromServer } 
+  { synchroniseStateWithDb, getAllFromServer } 
 )(Dashboard)
