@@ -218,7 +218,6 @@ export default class Synchroniser {
         if(!v.some((el) => (typeof el === 'object'))) {
           result[i] = `json_array(${v.map((i)=> String.raw`"${i}"`)})`
         } else {
-          console.log(JSON.stringify(v))
           result[i] = `json_array(${ String.raw`${[v.map((i)=> String.raw`json('${JSON.stringify(i)}')`)]}`})`
         }
       }

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { Appearance, useColorScheme } from 'react-native-appearance';
+import { addClub, incrementAsync, getClubsFromDatabase } from '../redux/actions';
 
 import {
   View,
   ScrollView,
   Image,
+  Button,
   Section,
   P,
   H1,
@@ -17,7 +19,7 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = ({ db }) => {
+const Dashboard = ({ db, addClub, incrementAsync, getClubsFromDatabase }) => {
   const [clubs, setClubs] = useState([]),
         [invitations, setInvitations] = useState([]),
         [proposals, setProposals] = useState([]),
@@ -34,7 +36,7 @@ const Dashboard = ({ db }) => {
         .then((r)=> setProposals(r))
     }
   },[db.readyState])
-
+  
   return (
     <Div cs={cs}>
       <Section><H1 cs={cs}>Welcome back</H1></Section>
@@ -44,7 +46,7 @@ const Dashboard = ({ db }) => {
         >
         <View flexDirection='row'>
           { clubs.map((c) =>
-              <Club cs = { cs } c={ c } />
+              <Club key={ c.id } cs = { cs } c={ c } />
             )}
         </View>
       </ScrollView>
@@ -54,9 +56,13 @@ const Dashboard = ({ db }) => {
         {(proposals.length !== 0) && 
         <View style={ setStyle(cs, 'proposals') }>
           { proposals.map((p) =>
-              <Proposal p={p} cs={cs}/>
+              <Proposal key={ p.id } p={p} cs={cs}/>
           )}
         </View>}
+        <Button
+          title="Add new club"
+          onPress={getClubsFromDatabase}
+          />
       </Section>
       <Section>
         <H2 cs={cs}>Invitations</H2>
@@ -64,7 +70,7 @@ const Dashboard = ({ db }) => {
         {(invitations.length !== 0) && 
         <View>
           { invitations.map((i) =>
-              <Invitation i={i} cs={cs}/>
+              <Invitation key={ i.id } i={i} cs={cs}/>
           )}
         </View>}
       </Section>
@@ -88,7 +94,6 @@ const SmallImage = ({cs}) => <Image style={setStyle(cs,'outline',{ width: 48, he
 
 const Proposal = ({p,cs}) =>
   <ImageAndText 
-    key={ p.id }
     style={{marginBottom: 16, marginRight: 8, marginLeft: 8}}
     text={<P cs={cs}>{proposalShortText(p)}</P>}
     cs={cs}
@@ -97,7 +102,6 @@ const Proposal = ({p,cs}) =>
 
 const Invitation = ({i, cs}) =>
   <ImageAndText 
-    key={ i.id }
     style={{marginBottom: 16}}
     text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
     cs={cs}
@@ -106,7 +110,6 @@ const Invitation = ({i, cs}) =>
 
 const Club = ({ c, cs }) => 
   <View 
-    key={ c.id }
     alignItems='center'
     justifyContent='center'
     style={ setStyle(cs, 'club') }
@@ -121,4 +124,7 @@ const Club = ({ c, cs }) =>
     </Currency>
   </View>
 
-export default connect( (state) => state, null )(Dashboard)
+export default connect( 
+  (state) => state, 
+  { addClub, incrementAsync, getClubsFromDatabase } 
+)(Dashboard)

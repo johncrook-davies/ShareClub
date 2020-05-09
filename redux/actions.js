@@ -1,42 +1,59 @@
 import { 
-    ADD_CLUB, 
-    UPDATE_CLUB, 
-    CREATE_CONNECTION,
-    DESTROY_CONNECTION,
-    CREATE_DB_CONNECTION,
-    DESTROY_DB_CONNECTION
+  ADD_CLUB, 
+  UPDATE_CLUB, 
+  INCREMENT_ASYNC,
+  GET_CLUBS_FROM_DATABASE,
+  DESTROY_CLUB,
+  CREATE_CONNECTION,
+  DESTROY_CONNECTION,
+  CREATE_DB_CONNECTION,
+  DESTROY_DB_CONNECTION
 } from "./actionTypes";
 
-export const addClub = content => ({
-    type: ADD_CLUB,
-    payload: {}
+export const incrementAsync = club => ({
+  type: INCREMENT_ASYNC,
+  club
 });
 
-export const updateClub = id => ({
-    type: UPDATE_CLUB,
-    payload: {}
+export const getClubsFromDatabase = () => ({
+  type: GET_CLUBS_FROM_DATABASE
+});
+
+export const addClub = club => ({
+  type: ADD_CLUB,
+  club
+});
+
+export const destroyClub = club => ({
+  type: DESTROY_CLUB,
+  club
+});
+
+export const updateClub = club => ({
+  type: UPDATE_CLUB,
+  club
 });
 
 export const createConnection = () => ({
-    type: CREATE_CONNECTION,
-    payload: {}
+  type: CREATE_CONNECTION,
+  payload: {}
 });
 
 export const destroyConnection = () => ({
-    type: DESTROY_CONNECTION,
-    payload: {}
+  type: DESTROY_CONNECTION,
+  payload: {}
 });
 
 export const createDbConnection = db => ({
-    type: CREATE_DB_CONNECTION,
-    payload: {
-        db
-    }
+  type: CREATE_DB_CONNECTION,
+  payload: {
+    db
+  }
 })
 
 export const destroyDbConnection = db => ({
-    type: DESTROY_DB_CONNECTION,
-    payload: {
-      db: { db }
-    }
+  type: DESTROY_DB_CONNECTION,
+  payload: {
+    db: { db }
+  }
 });
