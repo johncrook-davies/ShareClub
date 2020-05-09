@@ -11,10 +11,9 @@ function* getIndicesFromServer(){
   let indices;
   try {
     yield getIndices().then((i) => {return indices = i})
+    yield put({ type: 'INDEX_CREATE', payload: indices })
   } catch(e) {
     throw new Error(`sagas -> indices -> getIndicesFromServer: ${e}`)
-  } finally {
-    yield put({ type: 'INDEX_CREATE', payload: indices })
   }
 }
 
