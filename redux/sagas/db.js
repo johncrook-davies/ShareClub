@@ -5,7 +5,6 @@ import { getDatabase } from '../selectors'
 import Synchroniser from '../../db/synchroniser';
 import { schema } from '../../db/schema';
 import seedDatabase from '../../db/seeds';
-import { syncWithDatabase } from '../../db/sync_with_server';
 
 const axios = require('axios');
 const url = 'https://warm-mesa-02274.herokuapp.com';
@@ -23,7 +22,6 @@ function* initialiseDb() {
   try {
     yield db.initDb()
     yield __DEV__ ? seedDatabase(db) : null;
-    yield syncWithDatabase(db)
   } catch(e) {
     throw new Error(`sagas -> db -> initialiseDb: ${e}`)
   } finally {
