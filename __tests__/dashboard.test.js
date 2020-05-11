@@ -36,9 +36,4 @@ describe('General behaviour', () => {
             rendered.props.children.length
         ).not.toEqual(undefined);
     });
-    it('calls get', () => {
-        expect(
-            spy
-        ).toHaveBeenCalledWith({"all": "clubs"});
-    });
 })
