@@ -3,8 +3,6 @@ import {
   DESTROY_CONNECTION,
   INITIALISE_DB,
   TEAR_DOWN_DB,
-  INDEX_CREATE,
-  GET_ALL_FROM_SERVER
 } from "./actionTypes";
 
 export const createConnection = () => ({
