@@ -1,6 +1,6 @@
 import { put, takeEvery, all, select, call } from 'redux-saga/effects';
 import { getDatabase } from '../selectors';
-import { CLUB_CREATE, CLUB_UPDATE } from "../actionTypes";
+import { CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE } from "../actionTypes";
 import { compareTwoThings } from './helpers';
 
 const log = (arg) => (__DEV__ && console.log(`sagas -> clubs -> ${arg}`))
@@ -60,12 +60,31 @@ export function* updateInDatabase(props) {
   } catch(e) {
     throw new Error(e)
   }
-  // Update record in database
-  try {
-    
-  } catch (e) {
-    throw new Error(e)
+}
+
+// Delete club in database if it exists
+export function* deleteInDatabase(props) {
+  log('deleteInDatabase')
+  let id = props.payload;
+  // Check if payload is a number
+  if(typeof id !== 'number') {
+    throw new Error('Specified id must be a number')
   }
+  // Get database
+  const db = yield select(getDatabase);
+  // Check if record exists
+  try {
+    let exists = yield call([db.call, 'exists'], {clubs: {id: id}});
+    if(!exists) {
+      // Did not find record
+      throw new Error(`Could not find record with id=${club.id}`)
+    } else {
+      // Delete record
+      yield call([db.call, 'delete'], 'clubs', id)
+    }
+  } catch(e) {
+    throw new Error(e)
+  }   
 }
 
 // Watcher sagas
@@ -73,7 +92,10 @@ export function* watchClubCreate() {
   yield takeEvery(CLUB_CREATE, createInDatabase)
 }
 
-// Watcher sagas
 export function* watchClubUpdate() {
   yield takeEvery(CLUB_UPDATE, updateInDatabase)
+}
+
+export function* watchClubDelete() {
+  yield takeEvery(CLUB_DELETE, deleteInDatabase)
 }

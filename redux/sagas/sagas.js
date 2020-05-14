@@ -4,11 +4,12 @@ import {
   watchInitialiseDb, 
   watchGetAllFromDb,
   watchGetAllFromServer,
-  watchTearDownDb 
+  watchTearDownDb, 
 } from './db';
 import { 
   watchClubCreate,
   watchClubUpdate,
+  watchClubDelete,
 } from './clubs';
 
 export default function* rootSaga() {
@@ -19,5 +20,6 @@ export default function* rootSaga() {
     watchTearDownDb(),
     watchClubCreate(),
     watchClubUpdate(),
+    watchClubDelete(),
   ])
 }

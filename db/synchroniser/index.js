@@ -314,7 +314,7 @@ export default class Synchroniser {
     // Execute the delete SQL
     return new Promise((resolve,reject) => {
       this.__executeSql__(sql).then(([results]) => {
-        this.dg && console.log(`delete: deleted ${results.rowsAffected} ${things}`);
+        this.dg && console.log(`delete: deleted ${results.rowsAffected} ${thing}`);
         resolve(results.rows.item(0))
       }).catch(error => {
         reject(error)

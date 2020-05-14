@@ -5,6 +5,7 @@ import {
   TEAR_DOWN_DB,
   CLUB_CREATE,
   CLUB_UPDATE,
+  CLUB_DELETE,
 } from "./actionTypes";
 
 export const createConnection = () => ({
@@ -34,4 +35,9 @@ export const clubCreate = club => ({
 export const clubUpdate = club => ({
   type: CLUB_UPDATE,
   payload: club
+})
+
+export const clubDelete = id => ({
+  type: CLUB_DELETE,
+  payload: id
 })

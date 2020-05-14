@@ -1,6 +1,7 @@
 import { 
   CLUB_CREATE,
-  CLUB_UPDATE
+  CLUB_UPDATE,
+  CLUB_DELETE,
 } from "../actionTypes";
 
 const initialState = [];
@@ -26,6 +27,12 @@ export default function(state = initialState, action) {
       const club = action.payload;
       return state.map(c => 
         c.id === club.id ? { ...club } : c
+      )
+    }
+    case CLUB_DELETE: {
+      const id = action.payload;
+      return state.filter(c => 
+        c.id !== id
       )
     }
     default:
