@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { Appearance, useColorScheme } from 'react-native-appearance';
-import { synchroniseStateWithDb, getAllFromServer } from '../redux/actions';
+import { clubCreate, clubUpdate } from '../redux/actions';
 
 import {
   View,
@@ -19,7 +19,7 @@ import {
   proposalShortText
 } from '../shared';
 
-const Dashboard = ({ clubs, invitations, proposals, db, synchroniseStateWithDb, getAllFromServer }) => {
+const Dashboard = ({ clubs, invitations, proposals, db, clubCreate, clubUpdate }) => {
   const cs = useColorScheme(); //'dark';//'light';
   return (
     <Div cs={cs}>
@@ -34,6 +34,10 @@ const Dashboard = ({ clubs, invitations, proposals, db, synchroniseStateWithDb, 
             )}
         </View>
       </ScrollView>
+      <Button 
+        title='Test button'
+        onPress={() => clubCreate({name: 'thing', value: 2342.0})}
+        />
       <Section>
         <H2 cs={cs}>Pending proposals</H2>
         <Placeholder cs={cs} things={'proposals'} number={proposals.length}/>
@@ -106,5 +110,5 @@ const Club = ({ c, cs }) =>
 
 export default connect( 
   (state) => state, 
-  { synchroniseStateWithDb, getAllFromServer } 
+  { clubCreate, clubUpdate } 
 )(Dashboard)

@@ -104,17 +104,41 @@ describe('synchroniser', () => {
     describe('create', () => {
         it('calls insert for single record', async () => {
             await synchdb.create({records: [{name: 'Dave', type: 'person'}]})
-            expect(spy).toHaveBeenCalledWith("INSERT INTO records(name,type) VALUES (\"Dave\",\"person\");")
+            expect(spy).toHaveBeenCalledWith(
+              expect.stringContaining(
+                "INSERT INTO records(name,type,id) VALUES (\"Dave\",\"person\","
+              )
+            );
         })
         it('calls insert for multiple records', async () => {
             await synchdb.create({records: [{name: 'Dave', type: 'person'}, {name: 'Steve', type: 'zebra'}]})
-            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO records(name,type) VALUES (\"Dave\",\"person\");")
-            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO records(name,type) VALUES (\"Steve\",\"zebra\");")
+            expect(spy).toHaveBeenNthCalledWith(
+              1,
+              expect.stringContaining(
+                "INSERT INTO records(name,type,id) VALUES (\"Dave\",\"person\","
+              )
+            )
+            expect(spy).toHaveBeenNthCalledWith(
+              2,
+              expect.stringContaining(
+                "INSERT INTO records(name,type,id) VALUES (\"Steve\",\"zebra\","
+              )
+            )
         })
         it('calls insert for multi record types', async () => {
             await synchdb.create({people: [{name: 'Dave', type: 'person'}], animals: [{name: 'Steve', type: 'zebra'}]})
-            expect(spy).toHaveBeenNthCalledWith(1,"INSERT INTO people(name,type) VALUES (\"Dave\",\"person\");")
-            expect(spy).toHaveBeenNthCalledWith(2,"INSERT INTO animals(name,type) VALUES (\"Steve\",\"zebra\");")
+            expect(spy).toHaveBeenNthCalledWith(
+              1,
+              expect.stringContaining(
+                "INSERT INTO people(name,type,id) VALUES (\"Dave\",\"person\","
+              )
+            )
+            expect(spy).toHaveBeenNthCalledWith(
+              2,
+              expect.stringContaining(
+                "INSERT INTO animals(name,type,id) VALUES (\"Steve\",\"zebra\","
+              )
+            )
         })
     })
     
@@ -141,12 +165,9 @@ describe('synchroniser', () => {
             const t = await synchdb.exists({records: {id: 'exists'}});
             expect(t).toEqual({"a": "v"});
         });
-        it('handles invalid records by rejecting input', async () => {
-            await synchdb.exists({records: {id: 'nope'}}).then((result) => {
-                throw new Error('Resolved when it should not have.')
-            }).catch((error) => {
-                expect(error).toEqual({id: 'nope'})
-            })
+        it('handles undefined id by resolving to false', async () => {
+            const t = await synchdb.exists({records: {id: undefined}})
+            expect(t).toEqual(false)
         })
     })
     

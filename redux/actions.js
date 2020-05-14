@@ -3,6 +3,8 @@ import {
   DESTROY_CONNECTION,
   INITIALISE_DB,
   TEAR_DOWN_DB,
+  CLUB_CREATE,
+  CLUB_UPDATE,
 } from "./actionTypes";
 
 export const createConnection = () => ({
@@ -22,4 +24,14 @@ export const initialiseDb = db => ({
 
 export const tearDownDb = () => ({
   type: TEAR_DOWN_DB
+})
+
+export const clubCreate = club => ({
+  type: CLUB_CREATE,
+  payload: club
+})
+
+export const clubUpdate = club => ({
+  type: CLUB_UPDATE,
+  payload: club
 })

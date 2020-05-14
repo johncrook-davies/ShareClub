@@ -6,6 +6,10 @@ import {
   watchGetAllFromServer,
   watchTearDownDb 
 } from './db';
+import { 
+  watchClubCreate,
+  watchClubUpdate,
+} from './clubs';
 
 export default function* rootSaga() {
   yield all([
@@ -13,6 +17,7 @@ export default function* rootSaga() {
     watchGetAllFromDb(),
     watchGetAllFromServer(),
     watchTearDownDb(),
-    
+    watchClubCreate(),
+    watchClubUpdate(),
   ])
 }

@@ -97,19 +97,23 @@ export default class Synchroniser {
           record = thing[table],
           id = record.id,
           sql = `SELECT * FROM ${table} WHERE id=${id};`;
-    let recordDb;
-    await this.__executeSql__(sql).then(([result]) => {
-      recordDb = result;
-    }).catch(([result]) => {
-      recordDb = result;
-    })
-    return new Promise((resolve,reject) => {
-      if(recordDb.rows.length > 0) {
-        this.log(`exists: ${table} with id=${id} exists`);
-        resolve(recordDb.rows.item(0))
-      } else {
+      
+    return new Promise(async (resolve,reject) => {
+      let recordDb;
+      if(id === undefined) {
         this.log(`exists: ${table} with id=${id} does not exist`);
-        reject(record)
+        resolve(false)
+      } else {
+        await this.__executeSql__(sql).then(([result]) => {
+          recordDb = result;
+        })
+        if(recordDb.rows.length > 0) {
+          this.log(`exists: ${table} with id=${id} exists`);
+          resolve(recordDb.rows.item(0))
+        } else {
+          this.log(`exists: ${table} with id=${id} does not exist`);
+          resolve(false)
+        }
       }
     })
   }
@@ -184,26 +188,41 @@ export default class Synchroniser {
           }
         ]
       }
-      Output: undefined
+      Output: Input with ids added
     */
-    for(const things in obj) {
+    var newObj = obj;
+    // If no id is included then add id to keys and max of id values to values
+    for(const things in newObj) {
       obj[things].map((thing) => {
-        const keys = Object.keys(thing).join(',');
-        let values = this.formatValuesForSQL(Object.values(thing)),
-            sql;
-        
-        // Create a comma delimited string of values.
-        values = values.join(',');
-        // Execute the insert SQL
-        this.__executeSql__(
-          String.raw`INSERT INTO ${things}(${keys}) VALUES (${values});`
-        ).then(([results]) => {
-          this.log(`create: created ${results.rowsAffected} new ${things}`);
-        }).catch(error => {
-          handleError(error)
-        })
-      })
+        if(thing['id'] === undefined) {
+          // Set id equal to 6 digit random intneger
+          thing['id'] = Math.floor(Math.random() * Math.floor(999999));
+        }
+      });
     }
+    // Return promise that executes SQL
+    return new Promise((resolve, reject) => {
+      for(const things in obj) {
+        obj[things].map((thing) => {
+          const keys = Object.keys(thing).join(',');
+          let values = this.formatValuesForSQL(Object.values(thing)),
+              sql;
+          // Create a comma delimited string of values.
+          values = values.join(',');
+          // Execute the insert SQL
+          return this.__executeSql__(
+            String.raw`INSERT INTO ${things}(${keys}) VALUES (${values});`
+          ).then(([results]) => {
+            this.log(`create: created ${results.rowsAffected} new ${things}`);
+          }).catch(error => {
+            reject(error)
+          })
+        })
+      }
+      // Return input with id's added
+      resolve(newObj)
+    })
+    
   };
   formatValuesForSQL(values) {
     // Check that values are submitted as an array
