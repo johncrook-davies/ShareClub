@@ -36,7 +36,7 @@ const Dashboard = ({ clubs, invitations, proposals, db, clubCreate, clubUpdate }
       </ScrollView>
       <Button 
         title='Test button'
-        onPress={() => clubCreate({name: 'thing', value: 2342.0})}
+        onPress={() => clubUpdate({id: 1, name: 'thing', value: 2342.0})}
         />
       <Section>
         <H2 cs={cs}>Pending proposals</H2>

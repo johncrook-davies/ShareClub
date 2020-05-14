@@ -1,6 +1,7 @@
 import { put, takeEvery, all, select, call } from 'redux-saga/effects';
 import { getDatabase } from '../selectors';
 import { CLUB_CREATE, CLUB_UPDATE } from "../actionTypes";
+import { compareTwoThings } from './helpers';
 
 const log = (arg) => (__DEV__ && console.log(`sagas -> clubs -> ${arg}`))
 
@@ -34,9 +35,37 @@ export function* createInDatabase(props) {
 // Update in database if it exists and isn't the same
 export function* updateInDatabase(props) {
   log('updateInDatabase')
-  const db = yield select(getDatabase);
   let club = props.payload;
-  console.log(club)
+  // Check if record has an id
+  if(club.id === undefined) {
+    throw new Error('Cannot update record without specifying id')
+  }
+  // Get database
+  const db = yield select(getDatabase);
+  // Check if record exists
+  try {
+    let exists = yield call([db.call, 'exists'], {clubs: {id: club.id}});
+    if(!exists) {
+      // Did not find record
+      throw new Error(`Could not find record with id=${club.id}`)
+    } else {
+      // Check if record is identical to database
+      if(compareTwoThings(exists,club) == {}) {
+        // Record is identical to that in database
+      } else {
+        // Record in database requires update
+        yield call([db.call, 'update'], {clubs: [club]})
+      }
+    }
+  } catch(e) {
+    throw new Error(e)
+  }
+  // Update record in database
+  try {
+    
+  } catch (e) {
+    throw new Error(e)
+  }
 }
 
 // Watcher sagas
