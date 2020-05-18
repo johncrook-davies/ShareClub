@@ -103,11 +103,24 @@ export function migrate(tx, targetSchema, dg) {
             }
         })
     }).then(() => {
-        tx.executeSql(`UPDATE version SET version=${version} WHERE id=1;`).then(([results]) => {
-            dg && console.log(`Version of database update to ${version} `)
-        }).catch((error) => {
-            handleError(error);
-        })
+      tx.executeSql(`SELECT * FROM version;`).then(([v]) => {
+        if(v.rows.length === 0) {
+          let sql = `INSERT INTO version(id,version) VALUES (1,${version});`;
+          dg && console.log(`No version record in version database`,sql)
+          tx.executeSql(sql).then(([results]) => {
+              dg && console.log(`Version of database update to ${version} `)
+          }).catch((error) => {
+              handleError(error);
+          })
+        } else {
+          tx.executeSql(`UPDATE version SET version=${version} WHERE id=1;`).then(([results]) => {
+              dg && console.log(`Version of database update to ${version} `)
+          }).catch((error) => {
+              handleError(error);
+          })
+        }
+      })
+        
     }).then(() => {
         dg && tx.executeSql("SELECT name, sql FROM sqlite_master;").then(([results]) => {console.log(`Changed schema to`, formatSchema(results))})
     }).catch((error) => {

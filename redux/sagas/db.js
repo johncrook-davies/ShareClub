@@ -1,4 +1,4 @@
-import { put, takeEvery, all, select } from 'redux-saga/effects';
+import { put, takeEvery, all, select, call } from 'redux-saga/effects';
 import { getDatabase } from '../selectors';
 import { 
   getExchanges,
@@ -25,15 +25,14 @@ function* initialiseDb() {
     },
     true);
   try {
-    yield db.initDb()
-    yield __DEV__ ? seedDatabase(db) : null;
+    yield call([db,'initDb']);
+    if(__DEV__){yield call(seedDatabase, db)};
+    yield put({ type: 'CREATE_DB', payload: db })  
+    yield call(getAllFromDb)
+    yield call(getAllFromServer)
   } catch(e) {
     throw new Error(`sagas -> db -> initialiseDb: ${e}`)
-  } finally {
-    yield put({ type: 'CREATE_DB', payload: db })  
-    yield getAllFromDb()
-    yield getAllFromServer()
-  }
+  } 
 }
 
 function* tearDownDb() {

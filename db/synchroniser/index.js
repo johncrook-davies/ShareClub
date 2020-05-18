@@ -18,10 +18,10 @@ export default class Synchroniser {
         Output: Promise => resolve({executeSql}) : reject(null)
     */
     // Echo test to check that SQLite installed
-    await SQLite.echoTest().then(() => {
+    await SQLite.echoTest().then(async () => {
       this.log(`echoTest: passed`);
       // Open database
-      this.openDb()
+      await this.openDb()
     }).catch(() => {
       this.log(`echoTest: failed`);
     });
@@ -42,11 +42,15 @@ export default class Synchroniser {
       this.version,
       "Offline database",
       size
-    ).then((DB) => {
+    ).then(async (DB) => {
       db = DB
-      // Check database version and if different migrate
-      this.exists({version: {id: 1}}).then((v) => {
-        const dbV = v.version;
+      const exists = await this.exists({version: {id: 1}});
+      if(!exists) {
+        this.log(`openDb: no version table, migrating`)
+        await migrate(db, schema, this.dg)
+      } else {
+        console.log(exists)
+        const dbV = exists.version;
         this.log(`openDb: database version is ${dbV}`)
         this.log(`openDb: schema version is ${schemaV}`)
         if(dbV !== schemaV) {
@@ -54,10 +58,7 @@ export default class Synchroniser {
         } else {
           this.log(`openDb: no migration required`);
         }
-      }).catch(() => {
-        this.log(`openDb: no database detected, migrating`)
-        migrate(db, schema, this.dg)
-      })
+      }
     }).catch(error => handleError(error));
   }
   close() {
@@ -104,13 +105,21 @@ export default class Synchroniser {
         this.log(`exists: ${table} with id=${id} does not exist`);
         resolve(false)
       } else {
-        await this.__executeSql__(sql).then(([result]) => {
-          recordDb = result;
-        })
-        if(recordDb.rows.length > 0) {
+        await this.__executeSql__(sql)
+          .then(([result]) => {
+            recordDb = result;
+          })
+          .catch((e) => {
+            // Most likely the table does not exist
+            this.log(`exists: ${e.message}`)
+            resolve(false)
+          })
+        if(/*(recordDb !== undefined) && */(recordDb.rows.length > 0)) {
+          // If database exists, table exists and record exists
           this.log(`exists: ${table} with id=${id} exists`);
           resolve(recordDb.rows.item(0))
         } else {
+          // Otherwise resolve to false
           this.log(`exists: ${table} with id=${id} does not exist`);
           resolve(false)
         }
