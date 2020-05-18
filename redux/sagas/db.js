@@ -54,6 +54,13 @@ function* getAllFromDb() {
   
   try {
     // Clubs
+    
+    /*
+      THERE IS AN ERROR HERE THE FIRST TIME THE APP IS RUN:
+      CANNOT FIND TABLE 'clubs'
+    */
+    
+    
     yield db.call.get({all: 'clubs'}).then( (r) => 
       r.map( (thing) => clubs.push(thing) )
     )
