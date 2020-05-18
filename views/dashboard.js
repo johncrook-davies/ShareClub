@@ -16,8 +16,11 @@ import {
   ImageAndText,
   Div,
   setStyle,
-  proposalShortText
+  proposalShortText,
+  Pie
 } from '../shared';
+
+const data = [1, 1, 2, 3, 5, 8, 13, 21];
 
 const Dashboard = ({ clubs, invitations, proposals, db, clubCreate, clubUpdate, clubDelete }) => {
   const cs = useColorScheme(); //'dark';//'light';
@@ -98,14 +101,20 @@ const Club = ({ c, cs }) =>
     justifyContent='center'
     style={ setStyle(cs, 'club') }
     >
+    <Pie
+      width={260}
+      height={260}
+      data={data}
+      />
     <Currency 
       adjustsFontSizeToFit
       numberOfLines={1}
       cs={ cs }
-      styles={ {fontSize: 40} }
+      styles={ {fontSize: 40, position: 'absolute'} }
       >
       { c.value }
     </Currency>
+    
   </View>
 
 export default connect( 
