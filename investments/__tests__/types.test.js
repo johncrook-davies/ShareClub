@@ -1,29 +1,26 @@
 import 'react-native';
-import { Div } from '../shared';
+import { Div } from '../../shared';
 import React from 'react';
-import { syncdb, store } from '../setupTests';
 import { Provider } from 'react-redux';
 import { 
     create,
     act,
     findAllInRenderedTree
 } from 'react-test-renderer';
+import configureMockStore from 'redux-mock-store';
 
-import Indices from '../views/investments/indices';
+import Types from '../views/types';
 
-var spy;
+const mockStore = configureMockStore([]);
 
-beforeAll(() => {
-    spy = jest.spyOn(syncdb, 'get')
-})
-beforeEach(() => spy.mockClear())  
+const store = mockStore({});
 
 describe('General behaviour', () => {
     let wrp,
         rendered;
     beforeEach(() => {
         act(() => {
-            wrp = create(<Provider store={store}><Indices/></Provider>);
+            wrp = create(<Provider store={store}><Types/></Provider>);
         })
         rendered = wrp.root.findByType(Div);
     })

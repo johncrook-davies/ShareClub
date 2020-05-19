@@ -1,10 +1,10 @@
 import sagaHelper from 'redux-saga-testing';
 import { put, select, call } from 'redux-saga/effects';
-import { getDatabase } from '../redux/selectors';
+import { getDatabase } from '../selectors';
 import {
   createInDatabase,
   updateInDatabase,
-} from '../redux/sagas/clubs';
+} from '../sagas';
 
 const club = {name: 'The jolly savers'};
 

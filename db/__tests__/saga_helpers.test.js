@@ -5,7 +5,7 @@ import {
     getStock,
     diffBetweenTwoObjects,
     diffBetweenTwoArraysOfObjects
-} from '../redux/sagas/helpers';
+} from '../sagas/helpers';
 import apiReturns from '../__mocks__/api_returns';
 jest.mock('axios'); // Uncomment to disable api calls
 //jest.unmock('axios'); // Uncomment to enable api calls

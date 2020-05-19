@@ -44,9 +44,6 @@
     "redux-saga-testing": "^2.0.0"
   },
   "jest": {
-    "preset": "react-native",
-    "setupFilesAfterEnv": [
-      "<rootDir>setupTests.js"
-    ]
+    "preset": "react-native"
   }
 }

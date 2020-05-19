@@ -5,9 +5,9 @@ import {
   act
 } from 'react-test-renderer';
 
-import { TouchableOpacity } from '../shared';
+import { TouchableOpacity } from '../../shared';
 
-import AssetSummary from '../views/investments/asset_summary';
+import AssetSummary from '../views/asset_summary';
 
 describe('General behaviour', () => {
   let wrp,
