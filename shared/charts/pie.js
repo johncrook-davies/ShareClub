@@ -22,7 +22,7 @@ export const Pie = ({width, height, data}) => {
           <Shape
             d={path(section)}
             key={section.data + '-' + section.index}
-            fill={`rgb(${50},${colours(section.index)},${colours(section.index)})`}
+            fill={`rgba(${37},${194},${204},${(section.index+1)/(data.length+1)})`}
             strokeWidth={1}
             />
         )

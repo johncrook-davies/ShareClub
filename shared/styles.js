@@ -32,9 +32,6 @@ export const dark = StyleSheet.create({
         width: 260,
         marginLeft: 8,
         marginRight: 8,
-        borderRadius: 6,
-        borderColor: colours.dark.borderColor,
-        borderWidth: 1
     },
     proposals: {
         flexDirection: 'column',
@@ -82,9 +79,6 @@ export const light = StyleSheet.create({
         width: 260,
         marginLeft: 8,
         marginRight: 8,
-        borderRadius: 6,
-        borderColor: colours.light.borderColor,
-        borderWidth: 1
     },
     proposals: {
         flexDirection: 'column',
