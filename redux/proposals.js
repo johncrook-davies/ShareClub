@@ -1,12 +1,12 @@
-import { EXCHANGE_CREATE } from "../actionTypes";
+const PROPOSAL_CREATE ='PROPOSAL_CREATE';
 
 const initialState = [];
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case EXCHANGE_CREATE: {
-      const ex = action.payload;
-      return ex
+    case PROPOSAL_CREATE: {
+      const proposal = action.payload;
+      return proposal
     }
     default:
       return state

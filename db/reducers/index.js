@@ -1,7 +1,7 @@
 import { 
   CREATE_DB, 
   DESTROY_DB 
-} from "../actionTypes";
+} from "../actions";
 
 const initialState = {
   readyState: 'initialising',

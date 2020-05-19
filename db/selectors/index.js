@@ -1,0 +1,1 @@
+export const getDatabase = state => state.db;

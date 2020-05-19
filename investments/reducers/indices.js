@@ -1,8 +1,8 @@
-import { INDEX_CREATE } from "../actionTypes";
+const INDEX_CREATE = 'INDEX_CREATE';
 
 const initialState = [];
 
-export default function(state = initialState, action) {
+export const indices = function(state = initialState, action) {
   switch (action.type) {
     case INDEX_CREATE: {
       const ind = action.payload;

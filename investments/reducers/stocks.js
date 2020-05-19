@@ -1,8 +1,8 @@
-import { STOCK_CREATE } from "../actionTypes";
+const STOCK_CREATE = 'STOCK_CREATE';
 
 const initialState = [];
 
-export default function(state = initialState, action) {
+export const stocks = function(state = initialState, action) {
   switch (action.type) {
     case STOCK_CREATE: {
       const arrayOfStocks = action.payload;

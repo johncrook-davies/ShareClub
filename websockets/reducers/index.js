@@ -1,4 +1,4 @@
-import { CREATE_CONNECTION, DESTROY_CONNECTION } from "../actionTypes";
+import { CREATE_CONNECTION, DESTROY_CONNECTION } from "../actions";
 
 const initialState = null;
 

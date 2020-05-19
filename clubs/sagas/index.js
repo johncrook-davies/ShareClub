@@ -1,6 +1,6 @@
 import { put, takeEvery, all, select, call } from 'redux-saga/effects';
 import { getDatabase } from '../selectors';
-import { CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE } from "../actionTypes";
+import { CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE } from "../actions/actionTypes";
 import { compareTwoThings } from './helpers';
 
 const log = (arg) => (__DEV__ && console.log(`sagas -> clubs -> ${arg}`))

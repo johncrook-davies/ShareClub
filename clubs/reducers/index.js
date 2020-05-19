@@ -2,7 +2,7 @@ import {
   CLUB_CREATE,
   CLUB_UPDATE,
   CLUB_DELETE,
-} from "../actionTypes";
+} from "../actions/actionTypes";
 
 const initialState = [];
 

@@ -7,15 +7,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AppearanceProvider, Appearance, useColorScheme } from 'react-native-appearance';
 
-import { 
-    createConnection,
-    initialiseDb,
-    destroyConnection,
-    tearDownDb
-} from "./redux/actions";
+import { initialiseDb, tearDownDb, } from "./db/actions";
 
-import Dashboard from './views/dashboard';
-import Investments from './views/investments.js';
+import { createConnection, destroyConnection, } from "./websockets/actions";
+
+import Dashboard from './dashboard/views/dashboard';
+import Investments from './investments/views';
 
 const Tab = createBottomTabNavigator();
 

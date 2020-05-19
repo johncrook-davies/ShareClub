@@ -1,12 +1,12 @@
-import { PROPOSAL_CREATE } from "../actionTypes";
+const INVITATION_CREATE ='INVITATION_CREATE';
 
 const initialState = [];
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case PROPOSAL_CREATE: {
-      const proposal = action.payload;
-      return proposal
+    case INVITATION_CREATE: {
+      const invitation = action.payload;
+      return invitation
     }
     default:
       return state

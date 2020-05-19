@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { Appearance, useColorScheme } from 'react-native-appearance';
-import { clubCreate, clubUpdate, clubDelete } from '../redux/actions';
 
 import {
   View,
@@ -18,11 +17,11 @@ import {
   setStyle,
   proposalShortText,
   Pie
-} from '../shared';
+} from '../../shared';
 
 const data = [1, 1, 2, 3, 5, 8, 13, 21];
 
-const Dashboard = ({ clubs, invitations, proposals, db, clubCreate, clubUpdate, clubDelete }) => {
+const Dashboard = ({ clubs, invitations, proposals, db }) => {
   const cs = useColorScheme(); //'dark';//'light';
   return (
     <Div cs={cs}>
@@ -39,7 +38,7 @@ const Dashboard = ({ clubs, invitations, proposals, db, clubCreate, clubUpdate, 
       </ScrollView>
       <Button 
         title='Test button'
-        onPress={() => clubDelete(1)}
+        onPress={() => console.log("This works")}
         />
       <Section>
         <H2 cs={cs}>Pending proposals</H2>
@@ -119,5 +118,5 @@ const Club = ({ c, cs }) =>
 
 export default connect( 
   (state) => state, 
-  { clubCreate, clubUpdate, clubDelete } 
+  {  } 
 )(Dashboard)
