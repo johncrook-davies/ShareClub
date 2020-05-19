@@ -110,7 +110,7 @@ const Club = ({ c, cs }) =>
       adjustsFontSizeToFit
       numberOfLines={1}
       cs={ cs }
-      styles={ {fontSize: 40, position: 'absolute'} }
+      styles={ {fontFamily: 'Asap-Bold', fontSize: 40, position: 'absolute'} }
       >
       { c.value }
     </Currency>
