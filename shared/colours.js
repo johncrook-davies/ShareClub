@@ -4,7 +4,8 @@ const purple = '#2A1E5C',
       yellow = '#F0A202',
       darkGrey = '#323031',
       black = '#000000',
-      white = '#FFFFFF';
+      white = '#FFFFFF',
+      darkBlue = '#1A1728';
 
 export const colours = {
     light: {
@@ -14,7 +15,7 @@ export const colours = {
         outlineColor: darkGrey
     },
     dark: {
-        background: darkGrey,
+        background: darkBlue,
         color: white,
         borderColor: white,
         outlineColor: white

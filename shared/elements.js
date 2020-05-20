@@ -8,14 +8,12 @@ import {
     Image
 } from '.';
 
-export const Div = ({ children, cs, styles, ...other }) => {
-    return <SafeAreaView
-        style={ setStyle(cs,'div', styles)}
-        { ...other }
-        >
-        { children }
-    </SafeAreaView>
-}
+export const Div = ({ children, ...other }) =>
+  <SafeAreaView
+    { ...other }
+    >
+    { children }
+  </SafeAreaView>
 
 export const Section = ({ children, ...other }) => {
     const styles = {
@@ -30,7 +28,7 @@ export const Section = ({ children, ...other }) => {
     )
 }
 
-export const ImageAndText = ({ image, text, cs, onPress, style, ...other }) => {
+export const ImageAndText = ({ image, text, onPress, style, ...other }) => {
     let Comp;
     if(onPress !== undefined) {
         Comp = TouchableOpacity

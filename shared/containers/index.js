@@ -1,22 +1,11 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { useColorScheme } from 'react-native-appearance';
 import { compose } from 'recompose';
 
-import { colours } from '..';
+import { Div, colours } from '..';
 
-const cs = StyleSheet.create({
-  dark: {
-    color: colours.dark.color,
-    borderColor: colours.dark.borderColor,
-  },
-  light: {
-    color: colours.light.color,
-    borderColor: colours.light.borderColor,
-  },
-});
 
-const makeDarkmodeable = BaseComp => ({
+const makeDarkmodeableText = BaseComp => ({
   style, 
   ...props
 }) => 
@@ -25,9 +14,40 @@ const makeDarkmodeable = BaseComp => ({
     style={
       [
         style, 
-        useColorScheme() === 'dark' ? cs.dark : cs.light
+        useColorScheme() === 'dark' ? 
+          {
+            color: colours.dark.color,
+            borderColor: colours.dark.borderColor,
+          } : 
+          {
+            color: colours.light.color,
+            borderColor: colours.light.borderColor,
+          }
       ]
     }
     />
 
-export const makeStyled = compose(makeDarkmodeable);
+const makeDarkmodeableScreen = BaseComp => ({
+  style, 
+  ...props
+}) => 
+  <Div 
+    style={[
+      {height: '100%', width: '100%'},
+      useColorScheme() === 'dark' ? 
+        { backgroundColor: colours.dark.background } : 
+        { backgroundColor: colours.light.background }
+    ]}
+    >
+  <BaseComp 
+    {...props} 
+    style={
+      [
+        style
+      ]
+    }
+    />
+  </Div>
+
+export const makeStyledScreen = compose(makeDarkmodeableScreen);
+export const makeStyledText = compose(makeDarkmodeableText);

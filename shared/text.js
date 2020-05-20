@@ -5,9 +5,9 @@ import {
   setStyle,
   colours
 } from '.';
-import { makeStyled } from './containers';
+import { makeStyledText } from './containers';
 
-export const P = makeStyled(({ children, style, ...other }) => {
+export const P = makeStyledText(({ children, style, ...other }) => {
     return <Text
               style={style}
               {...other}
@@ -15,7 +15,7 @@ export const P = makeStyled(({ children, style, ...other }) => {
         { children }
     </Text>
 })
-export const H1 = makeStyled(({ children, style, ...other }) => (
+export const H1 = makeStyledText(({ children, style, ...other }) => (
     <Text 
         style={[style, {fontSize: 35}]}
         { ...other }
@@ -23,7 +23,7 @@ export const H1 = makeStyled(({ children, style, ...other }) => (
         { children }
     </Text>
 ))
-export const H2 = makeStyled(({ children, style, ...other  }) => (
+export const H2 = makeStyledText(({ children, style, ...other  }) => (
     <Text
         style={[style, {fontSize: 19}]}
         { ...other }
@@ -32,7 +32,7 @@ export const H2 = makeStyled(({ children, style, ...other  }) => (
     </Text>
 ))
 
-export const Currency = makeStyled(({ children, style, ...other }) => {
+export const Currency = makeStyledText(({ children, style, ...other }) => {
     const roundedN = Math.round(children*100)/100;
     var stringN = String(roundedN),
         splitStringN,

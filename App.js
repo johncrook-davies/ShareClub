@@ -11,6 +11,8 @@ import { initialiseDb, tearDownDb, } from "./db/actions";
 
 import { createConnection, destroyConnection, } from "./websockets/actions";
 
+import { View } from './shared';
+
 import Dashboard from './dashboard/views/dashboard';
 import Investments from './investments/views';
 
@@ -57,10 +59,9 @@ const ConnectedShareClub = connect(
   }
 )(ShareClub)
 
-const App: () => React$Node = () => {
-    return <Provider store={store}>
-        <ConnectedShareClub/>
-    </Provider>
-};
+const App: () => React$Node = () =>
+  <Provider store={store}>
+    <ConnectedShareClub/>
+  </Provider>
 
 export default App;

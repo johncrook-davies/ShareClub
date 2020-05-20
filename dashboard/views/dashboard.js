@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { Appearance, useColorScheme } from 'react-native-appearance';
+import { useColorScheme } from 'react-native-appearance';
 
 import {
   View,
@@ -16,25 +16,25 @@ import {
   ImageAndText,
   Div,
   proposalShortText,
-  Pie
+  Pie,
+  makeStyledScreen
 } from '../../shared';
 
-const setStyle = (cs, thing, other) => {color: 'red'}
+import styles from './styles';
 
 const data = [1, 1, 2, 3, 5, 8, 13, 21];
 
 const Dashboard = ({ clubs, invitations, proposals, db }) => {
-  const cs = useColorScheme(); //'dark';//'light';
   return (
-    <Div cs={cs}>
+    <Div>
       <Section><H1>Welcome back</H1></Section>
       <ScrollView
         horizontal
-        style={ setStyle(cs, 'clubs') }
+        style={ styles.clubs }
         >
         <View flexDirection='row'>
           { clubs.map((c) =>
-              <Club key={ c.id } cs = { cs } c={ c } />
+              <Club key={ c.id } c={ c } />
             )}
         </View>
       </ScrollView>
@@ -44,21 +44,21 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
         />
       <Section>
         <H2>Pending proposals</H2>
-        <Placeholder cs={cs} things={'proposals'} number={proposals.length}/>
+        <Placeholder things={'proposals'} number={proposals.length}/>
         {(proposals.length !== 0) && 
-        <View style={ setStyle(cs, 'proposals') }>
+        <View style={ styles.proposals }>
           { proposals.map((p) =>
-              <Proposal key={ p.id } p={p} cs={cs}/>
+              <Proposal key={ p.id } p={p}/>
           )}
         </View>}
       </Section>
       <Section>
         <H2>Invitations</H2>
-        <Placeholder cs={cs} things={'invitations'} number={invitations.length}/>
+        <Placeholder things={'invitations'} number={invitations.length}/>
         {(invitations.length !== 0) && 
         <View>
           { invitations.map((i) =>
-              <Invitation key={ i.id } i={i} cs={cs}/>
+              <Invitation key={ i.id } i={i} />
           )}
         </View>}
       </Section>
@@ -66,41 +66,35 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
   )
 }
 
-const Placeholder = ({cs, things, number}) => {
-  return (<>{
+const Placeholder = ({things, number}) => 
+  <>{
     (number === 0) && 
-    <P 
-      style={ setStyle(cs, 'placeholder') } 
-     
-      >
+    <P style={ styles.placeholder }>
       {`You don't have any ${things} pending.`}
     </P>
-  }</>)
-}
+  }</>
 
-const SmallImage = ({cs}) => <Image style={setStyle(cs,'outline',{ width: 48, height: 48, borderWidth: 1, borderRadius: 99 })} />
+const SmallImage = ({}) => <Image style={ styles.outline } />
 
-const Proposal = ({p,cs}) =>
+const Proposal = ({ p }) =>
   <ImageAndText 
-    style={{marginBottom: 16, marginRight: 8, marginLeft: 8}}
+    style={ styles.proposal }
     text={<P>{proposalShortText(p)}</P>}
-    cs={cs}
-    image={<SmallImage cs={cs}/>}
+    image={<SmallImage/>}
     />
 
-const Invitation = ({i, cs}) =>
+const Invitation = ({ i }) =>
   <ImageAndText 
-    style={{marginBottom: 16}}
+    style={ styles.invitation }
     text={ <P>{`${i.name} has invited you to join the ${i.club}`}</P> }
-    cs={cs}
-    image={<SmallImage cs={cs}/>}
+    image={<SmallImage/>}
     />
 
-const Club = ({ c, cs }) => 
+const Club = ({ c }) => 
   <View 
     alignItems='center'
     justifyContent='center'
-    style={ setStyle(cs, 'club') }
+    style={ styles.club }
     >
     <Pie
       width={260}
@@ -110,8 +104,7 @@ const Club = ({ c, cs }) =>
     <Currency 
       adjustsFontSizeToFit
       numberOfLines={1}
-      cs={ cs }
-      style={ {fontFamily: 'Asap-Bold', fontSize: 40, position: 'absolute'} }
+      style={ styles.clubBigText }
       >
       { c.value }
     </Currency>
@@ -121,4 +114,4 @@ const Club = ({ c, cs }) =>
 export default connect( 
   (state) => state, 
   {  } 
-)(Dashboard)
+)(makeStyledScreen(Dashboard))
