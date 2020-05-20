@@ -1,44 +1,38 @@
 import React from 'react';
 import {
-    Text,
-    View,
-    setStyle,
-    colours
+  Text,
+  View,
+  setStyle,
+  colours
 } from '.';
+import { makeStyled } from './containers';
 
-export const P = ({ children, cs, style, ...other }) => {
+export const P = makeStyled(({ children, style, ...other }) => {
     return <Text
-               style={setStyle(cs,'p', style)}
-               {...other}
-               >
+              style={style}
+              {...other}
+              >
         { children }
     </Text>
-}
-
-export const H1 = ({ children, cs, style, ...other }) => (
+})
+export const H1 = makeStyled(({ children, style, ...other }) => (
     <Text 
-        style={setStyle(cs,'h1', {
-            fontSize: 35,
-            ...style
-        })}
+        style={[style, {fontSize: 35}]}
         { ...other }
         >
         { children }
     </Text>
-)
-export const H2 = ({ children, cs, style, ...other  }) => (
+))
+export const H2 = makeStyled(({ children, style, ...other  }) => (
     <Text
-        style={setStyle(cs,'h2', {
-            fontSize: 19,
-            ...style
-        })}
+        style={[style, {fontSize: 19}]}
         { ...other }
         >
         { children }
     </Text>
-)
+))
 
-export const Currency = ({ children, cs, styles, ...other }) => {
+export const Currency = makeStyled(({ children, style, ...other }) => {
     const roundedN = Math.round(children*100)/100;
     var stringN = String(roundedN),
         splitStringN,
@@ -61,9 +55,9 @@ export const Currency = ({ children, cs, styles, ...other }) => {
         i ++;
     })
     return <Text 
-               style={setStyle(cs,'currency', styles)}
-               { ...other }
+              style={style}
+              { ...other }
                >
         {`£${stringN.split('').reverse().join('')}`}
     </Text>
-}
+})

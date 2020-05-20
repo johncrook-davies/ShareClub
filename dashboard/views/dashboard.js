@@ -9,15 +9,17 @@ import {
   Button,
   Section,
   P,
+  Text,
   H1,
   H2,
   Currency,
   ImageAndText,
   Div,
-  setStyle,
   proposalShortText,
   Pie
 } from '../../shared';
+
+const setStyle = (cs, thing, other) => {color: 'red'}
 
 const data = [1, 1, 2, 3, 5, 8, 13, 21];
 
@@ -25,7 +27,7 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
   const cs = useColorScheme(); //'dark';//'light';
   return (
     <Div cs={cs}>
-      <Section><H1 cs={cs}>Welcome back</H1></Section>
+      <Section><H1>Welcome back</H1></Section>
       <ScrollView
         horizontal
         style={ setStyle(cs, 'clubs') }
@@ -41,7 +43,7 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
         onPress={() => console.log("This works")}
         />
       <Section>
-        <H2 cs={cs}>Pending proposals</H2>
+        <H2>Pending proposals</H2>
         <Placeholder cs={cs} things={'proposals'} number={proposals.length}/>
         {(proposals.length !== 0) && 
         <View style={ setStyle(cs, 'proposals') }>
@@ -51,7 +53,7 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
         </View>}
       </Section>
       <Section>
-        <H2 cs={cs}>Invitations</H2>
+        <H2>Invitations</H2>
         <Placeholder cs={cs} things={'invitations'} number={invitations.length}/>
         {(invitations.length !== 0) && 
         <View>
@@ -69,7 +71,7 @@ const Placeholder = ({cs, things, number}) => {
     (number === 0) && 
     <P 
       style={ setStyle(cs, 'placeholder') } 
-      cs={cs}
+     
       >
       {`You don't have any ${things} pending.`}
     </P>
@@ -81,7 +83,7 @@ const SmallImage = ({cs}) => <Image style={setStyle(cs,'outline',{ width: 48, he
 const Proposal = ({p,cs}) =>
   <ImageAndText 
     style={{marginBottom: 16, marginRight: 8, marginLeft: 8}}
-    text={<P cs={cs}>{proposalShortText(p)}</P>}
+    text={<P>{proposalShortText(p)}</P>}
     cs={cs}
     image={<SmallImage cs={cs}/>}
     />
@@ -89,7 +91,7 @@ const Proposal = ({p,cs}) =>
 const Invitation = ({i, cs}) =>
   <ImageAndText 
     style={{marginBottom: 16}}
-    text={ <P cs={cs}>{`${i.name} has invited you to join the ${i.club}`}</P> }
+    text={ <P>{`${i.name} has invited you to join the ${i.club}`}</P> }
     cs={cs}
     image={<SmallImage cs={cs}/>}
     />
@@ -109,7 +111,7 @@ const Club = ({ c, cs }) =>
       adjustsFontSizeToFit
       numberOfLines={1}
       cs={ cs }
-      styles={ {fontFamily: 'Asap-Bold', fontSize: 40, position: 'absolute'} }
+      style={ {fontFamily: 'Asap-Bold', fontSize: 40, position: 'absolute'} }
       >
       { c.value }
     </Currency>

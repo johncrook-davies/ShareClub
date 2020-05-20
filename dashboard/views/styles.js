@@ -1,4 +1,4 @@
-import { colours } from './colours';
+import { colours } from '../../shared';
 import { StyleSheet } from 'react-native';
 
 export const dark = StyleSheet.create({

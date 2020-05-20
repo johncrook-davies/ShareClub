@@ -1,4 +1,4 @@
-import { dark, light } from './styles';
+import { dark, light } from '../dashboard/views/styles';
 
 export 
 const setStyle = (cs, element, other) => {
