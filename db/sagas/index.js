@@ -18,7 +18,7 @@ const log = (arg) => (__DEV__ && console.log(`sagas -> db -> ${arg}`))
 
 function* initialiseDb() {
   log('initialiseDb')
-  const db = new Synchroniser({
+  const db = yield new Synchroniser({
         database: "offlineDatabase.db",
         size: 200000,
         schema: schema
@@ -26,8 +26,10 @@ function* initialiseDb() {
     true);
   try {
     yield call([db,'initDb']);
-    if(__DEV__){yield call(seedDatabase, db)};
+    yield call([db,'openDb']);
     yield put({ type: 'CREATE_DB', payload: db })  
+    // REMOVE IN PRODUCTION VERSION
+    yield call(seedDatabase, db);
     yield call(getAllFromDb)
     yield call(getAllFromServer)
   } catch(e) {
@@ -120,10 +122,6 @@ function* getAllFromServer() {
 // Watcher sagas
 export function* watchInitialiseDb() {
   yield takeEvery('INITIALISE_DB', initialiseDb)
-}
-
-export function* watchGetAllFromDb() {
-  yield takeEvery('GET_ALL_FROM_DB', getAllFromDb)
 }
 
 export function* watchGetAllFromServer() {

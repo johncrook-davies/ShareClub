@@ -20,24 +20,19 @@ export default class Synchroniser {
     // Echo test to check that SQLite installed
     await SQLite.echoTest().then(async () => {
       this.log(`echoTest: passed`);
-      // Open database
-      await this.openDb()
     }).catch(() => {
       this.log(`echoTest: failed`);
     });
-    return new Promise((resolve,reject) => {
-      resolve(db);
-      reject(null);
-    })
+    return db
   }
-  openDb() {
+  async openDb() {
     /*
       Opens database
       Output: undefined
     */
     const { database, size, schema } = this.props,
           schemaV = schema.version;
-    SQLite.openDatabase(
+    await SQLite.openDatabase(
       database,
       this.version,
       "Offline database",
@@ -49,7 +44,6 @@ export default class Synchroniser {
         this.log(`openDb: no version table, migrating`)
         await migrate(db, schema, this.dg)
       } else {
-        console.log(exists)
         const dbV = exists.version;
         this.log(`openDb: database version is ${dbV}`)
         this.log(`openDb: schema version is ${schemaV}`)
@@ -60,6 +54,7 @@ export default class Synchroniser {
         }
       }
     }).catch(error => handleError(error));
+    return db
   }
   close() {
     /*
@@ -108,21 +103,22 @@ export default class Synchroniser {
         await this.__executeSql__(sql)
           .then(([result]) => {
             recordDb = result;
+            if(recordDb.rows.length > 0) {
+              // If database exists, table exists and record exists
+              this.log(`exists: ${table} with id=${id} exists`);
+              resolve(recordDb.rows.item(0))
+            } else {
+              // Otherwise resolve to false
+              this.log(`exists: ${table} with id=${id} does not exist`);
+              resolve(false)
+            }
           })
           .catch((e) => {
             // Most likely the table does not exist
             this.log(`exists: ${e.message}`)
             resolve(false)
           })
-        if(/*(recordDb !== undefined) && */(recordDb.rows.length > 0)) {
-          // If database exists, table exists and record exists
-          this.log(`exists: ${table} with id=${id} exists`);
-          resolve(recordDb.rows.item(0))
-        } else {
-          // Otherwise resolve to false
-          this.log(`exists: ${table} with id=${id} does not exist`);
-          resolve(false)
-        }
+            
       }
     })
   }

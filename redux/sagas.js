@@ -1,7 +1,6 @@
 import { put, takeEvery, all, select } from 'redux-saga/effects';
 import { 
   watchInitialiseDb, 
-  watchGetAllFromDb,
   watchGetAllFromServer,
   watchTearDownDb, 
 } from '../db/sagas';
@@ -14,7 +13,6 @@ import {
 export default function* rootSaga() {
   yield all([
     watchInitialiseDb(),
-    watchGetAllFromDb(),
     watchGetAllFromServer(),
     watchTearDownDb(),
     watchClubCreate(),

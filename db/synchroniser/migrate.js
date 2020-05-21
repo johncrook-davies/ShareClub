@@ -1,8 +1,8 @@
 import { handleError } from '../errors';
 
-function createTable(tx, tableName, attributes, dg) {
+async function createTable(tx, tableName, attributes, dg) {
     dg && console.log(`Creating table ${tableName}`)
-    tx.executeSql(`
+    await tx.executeSql(`
         CREATE TABLE IF NOT EXISTS ${tableName}(
             ${attributes.join(',')}
         );
@@ -60,7 +60,7 @@ function formatSchema(thing) {
     return schema_db
 }
 
-export function migrate(tx, targetSchema, dg) {
+export async function migrate(tx, targetSchema, dg) {
     const version = targetSchema.version,
           targetSchemaWithVersion = targetSchema;
     targetSchemaWithVersion['version'] = ['id INTEGER PRIMARY KEY NOT NULL', `version INTEGER`];
@@ -71,7 +71,7 @@ export function migrate(tx, targetSchema, dg) {
         })
     }
     dg && console.log(`Migrating ${tx.dbname}`)
-    tx.executeSql("SELECT name, sql FROM sqlite_master;").then(([thing]) => {
+    await tx.executeSql("SELECT name, sql FROM sqlite_master;").then(async ([thing]) => {
         const schema_db = {};
         for(t=0; t<thing.rows.length; t++) {
             const table = thing.rows.item(t),
@@ -90,30 +90,30 @@ export function migrate(tx, targetSchema, dg) {
         }
         dg && console.log(`The schema in the current database is:`,schema_db);
         dg && console.log(`The target schema is:`,targetSchemaWithVersion);
-        Object.keys(targetSchemaWithVersion).map((t) => {
+        await Object.keys(targetSchemaWithVersion).map(async (t) => {
             if(schema_db[t] === undefined){
-                createTable(tx, t, targetSchemaWithVersion[t], dg)
+                await createTable(tx, t, targetSchemaWithVersion[t], dg)
             } else {
-                updateTable(tx, t, targetSchemaWithVersion[t], schema_db[t], dg)
+                await updateTable(tx, t, targetSchemaWithVersion[t], schema_db[t], dg)
             }
         })
-        Object.keys(schema_db).map((t) => {
+        await Object.keys(schema_db).map(async (t) => {
             if(targetSchemaWithVersion[t] === undefined){
                 deleteTable(tx, t, dg)
             }
         })
-    }).then(() => {
-      tx.executeSql(`SELECT * FROM version;`).then(([v]) => {
+    }).then(async () => {
+      await tx.executeSql(`SELECT * FROM version;`).then(async ([v]) => {
         if(v.rows.length === 0) {
           let sql = `INSERT INTO version(id,version) VALUES (1,${version});`;
           dg && console.log(`No version record in version database`,sql)
-          tx.executeSql(sql).then(([results]) => {
+          await tx.executeSql(sql).then(async ([results]) => {
               dg && console.log(`Version of database update to ${version} `)
           }).catch((error) => {
               handleError(error);
           })
         } else {
-          tx.executeSql(`UPDATE version SET version=${version} WHERE id=1;`).then(([results]) => {
+          await tx.executeSql(`UPDATE version SET version=${version} WHERE id=1;`).then(async ([results]) => {
               dg && console.log(`Version of database update to ${version} `)
           }).catch((error) => {
               handleError(error);
