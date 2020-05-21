@@ -4,7 +4,6 @@ import {
     Text,
     SafeAreaView,
     TouchableOpacity,
-    setStyle,
     Image
 } from '.';
 
@@ -15,14 +14,14 @@ export const Div = ({ children, ...other }) =>
     { children }
   </SafeAreaView>
 
-export const Section = ({ children, ...other }) => {
+export const Section = ({ children, style, ...other }) => {
     const styles = {
               marginLeft: 16,
               marginRight: 16,
               marginBottom: 32
           };
     return(
-        <View style={ styles } { ...other }>
+        <View style={ [style, styles] } { ...other }>
             { children }
         </View>
     )
@@ -37,10 +36,10 @@ export const ImageAndText = ({ image, text, onPress, style, ...other }) => {
     }
     return <>
         <Comp
-            style={{
-                flexDirection: 'row',
-                ...style
-            }}
+            style={[
+                style,
+                {flexDirection: 'row'}
+            ]}
             onPress={onPress}
             { ...other }
             >

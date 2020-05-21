@@ -17,7 +17,7 @@ export const colours = {
     dark: {
         background: darkBlue,
         color: white,
-        borderColor: white,
+        borderColor: purple,
         outlineColor: white
     }
 }

@@ -1,7 +1,16 @@
 import { colours } from '../../shared';
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export const any = StyleSheet.create({
+  topButtons: {
+    height: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  topButton: {
+    width: 16,
+    height: 16,
+  },
   club: {
     height: 260,
     width: 260,
@@ -30,20 +39,33 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     paddingTop: 16,
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: 'red'
   },
   invitation: {
     marginBottom: 16
   },
   outline : {
     width: 48, 
-    height: 48, 
-    borderWidth: 1, 
-    borderColor: 'red',
-    borderRadius: 99
+    height: 48,
   },
 })
 
-export default styles;
+export const light = StyleSheet.create({
+  proposals: {
+    backgroundColor: colours.light.background,
+    borderRadius: 4,
+    shadowOffset: {
+      width: 1,
+      height: 1
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+})
+
+export const dark = StyleSheet.create({
+  proposals: {
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: colours.dark.borderColor,
+  },
+})

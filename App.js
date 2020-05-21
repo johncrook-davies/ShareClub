@@ -11,8 +11,6 @@ import { initialiseDb, tearDownDb, } from "./db/actions";
 
 import { createConnection, destroyConnection, } from "./websockets/actions";
 
-import { View } from './shared';
-
 import Dashboard from './dashboard/views/dashboard';
 import Investments from './investments/views';
 
