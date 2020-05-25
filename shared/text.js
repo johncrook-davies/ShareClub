@@ -46,7 +46,9 @@ export const Currency = makeStyledText(({ children, style, ...other }) => {
         stringLength,
         i = 0;
     // Add decimal points for integers
-    Number.isInteger(children) ? stringN += '.00' : null;
+    stringN.indexOf('.') === -1 ? stringN += '.00' : null;
+    // Add zerowhen only 1dp
+    stringN.indexOf('.') === stringN.length - 2 ? stringN += '0' : null;
     splitStringN = stringN.split('');
     stringLength = splitStringN.length - 1;
     // Add commas for thousand separators
