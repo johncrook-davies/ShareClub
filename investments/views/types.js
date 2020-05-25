@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from "react-redux";
-import { Appearance, useColorScheme } from 'react-native-appearance';
+import React from 'react';
+import { useColorScheme } from 'react-native-appearance';
 
 import {
   View,
@@ -12,28 +11,26 @@ import {
   Div,
   Image,
   ImageAndText,
-  setStyle
+  makeStyledScreen
 } from '../../shared';
 
 const Types = ({ navigation }) => {
-  const cs = useColorScheme();
-  return <Div cs={cs}>
+  return <Div>
     <ImageAndText
-      cs={cs}
       text={
         <>
-          <H2 cs={cs}>Stock markets</H2>
-          <P cs={cs}>
+          <H2>Stock markets</H2>
+          <P>
               Stock markets are where public companies raise capital.
           </P>
         </>
       }
       image={
-        <Image style={setStyle(cs,'outline',{ width: 136, height: 136, borderWidth: 1, borderRadius: 3 })} />
+        <Image style={{ width: 136, height: 136, borderWidth: 1, borderRadius: 3 }} />
       }
       onPress={() => navigation.navigate('Indices')}
       />
   </Div>
 }
 
-export default Types
+export default makeStyledScreen(Types)
