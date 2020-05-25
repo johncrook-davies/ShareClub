@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Provider, connect  } from 'react-redux';
+import { StyleSheet } from 'react-native';
 import store from './redux/store';
 import 'react-native-gesture-handler';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
@@ -14,13 +15,68 @@ import { createConnection, destroyConnection, } from "./websockets/actions";
 import Dashboard from './dashboard/views/dashboard';
 import Investments from './investments/views';
 
+import { 
+  colours,
+  browse,
+  new_trade,
+  clubs,
+} from './shared';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const Tab = createBottomTabNavigator();
 
 // Get the current color scheme
 Appearance.getColorScheme();
 
+const styles = StyleSheet.create({
+  light: {
+    shadowOffset: {
+      width: 2,
+      height: 2
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+  },
+  dark: {
+    shadowOffset: {
+      width: 2,
+      height: 2
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+  }
+})
+
+const theme = (appearance) => {
+  if(appearance === 'dark') {
+    return {
+      dark: true,
+      colors: {
+        primary: colours.dark.navBarText,
+        background: colours.dark.navBarBackground,
+        card: colours.dark.navBarBackground,
+        text: colours.light.navBarText,
+        border: 'transparent',
+      }
+    }
+  } else {
+    return {
+      dark: false,
+      colors: {
+        primary: colours.light.navBarText,
+        background: colours.light.navBarBackground,
+        card: colours.light.navBarBackground,
+        text: colours.light.navBarText,
+        border: 'transparent',
+      }
+    }
+  }
+}
+        
+
 const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDownDb  }) => {
-  const cs = useColorScheme(); //'dark';//'light';
+  const appearance = useColorScheme() === 'dark' ? styles.dark : styles.light;
   useEffect(() => {
     createConnection()
     initialiseDb()
@@ -31,15 +87,37 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
       destroyConnection()
     }
   },[])
-  return <NavigationContainer theme={cs === 'dark' ? DarkTheme : DefaultTheme}>{
+  return <NavigationContainer theme={ theme(useColorScheme()) }>{
     <AppearanceProvider>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === 'Dashboard') {
+              iconName = focused
+                ? 'ios-information-circle'
+                : 'ios-information-circle-outline';
+            } else if (route.name === 'Clubs') {
+              iconName = focused ? 'ios-list-box' : 'ios-list';
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+        >
         <Tab.Screen
           name="Dashboard"
           component={Dashboard}
           />
         <Tab.Screen
           name="Investments"
+          component={Investments}
+          />
+        <Tab.Screen
+          name="Clubs"
           component={Investments}
           />
       </Tab.Navigator>

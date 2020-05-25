@@ -8,16 +8,20 @@ const purple = '#2A1E5C',
       darkBlue = '#1A1728';
 
 export const colours = {
-    light: {
-        background: white,
-        color: darkGrey,
-        borderColor: darkGrey,
-        outlineColor: darkGrey
-    },
-    dark: {
-        background: darkBlue,
-        color: white,
-        borderColor: purple,
-        outlineColor: white
-    }
+  light: {
+    navBarBackground: purple,
+    navBarText: white,
+    background: white,
+    color: darkGrey,
+    borderColor: darkGrey,
+    outlineColor: darkGrey
+  },
+  dark: {
+    navBarBackground: purple,
+    navBarText: white,
+    background: darkBlue,
+    color: white,
+    borderColor: purple,
+    outlineColor: white
+  }
 }
