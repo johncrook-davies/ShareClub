@@ -36,6 +36,6 @@ export const colours = {
     color: white,
     borderColor: purple,
     outlineColor: white,
-    borderBottomColor: white,
+    borderBottomColor: purple,
   }
 }

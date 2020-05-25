@@ -10,9 +10,10 @@ import {
   ImageAndText
 } from '../../shared';
 
-const AssetSummary = ({type, name, symbol, latest_price, navigation, ...other}) => 
+const AssetSummary = ({type, name, symbol, latest_price, navigation, style, ...other}) => 
   <TouchableOpacity
     onPress={() => navigation.navigate(type,{symbol: symbol})}
+    style={style}
     >
     <View 
       style={{flexDirection: 'row'}}
@@ -56,7 +57,7 @@ const AssetSummary = ({type, name, symbol, latest_price, navigation, ...other}) 
     </View>
   </TouchableOpacity>
 
-const Icon = ({cs}) =>
+const Icon = () =>
   <Image 
     style={{ 
       width: 48, 
@@ -66,7 +67,7 @@ const Icon = ({cs}) =>
     }} 
     />
 
-const Stat = ({children, style, cs}) => 
+const Stat = ({children, style}) => 
   <P
     style={{marginBottom: 8, ...style}}
     >

@@ -3,17 +3,10 @@ import { connect } from "react-redux";
 import { useColorScheme } from 'react-native-appearance';
 
 import {
-  View,
-  TouchableOpacity,
   Section,
-  P,
-  H1,
-  H2,
   Div,
-  Image,
-  Currency,
-  ImageAndText,
-  makeStyledScreen
+  makeStyledScreen,
+  colours,
 } from '../../shared';
 
 import AssetSummary from './asset_summary';
@@ -30,8 +23,9 @@ const Indices = ({ indices, navigation }) => {
   </Div>
 }
 
-const ListOfIndices = ({indices, navigation}) => 
-  indices.map((i) => {
+const ListOfIndices = ({indices, navigation}) => {
+  const isDark = useColorScheme() === 'dark';
+  return indices.map((i) => {
     return(
       <AssetSummary
         type={ 'Index' }
@@ -40,8 +34,15 @@ const ListOfIndices = ({indices, navigation}) =>
         symbol={ i.symbol }
         latest_price={ i.latest_price }
         navigation={ navigation }
+        style={{
+          borderBottomWidth: 1,
+          borderBottomColor: isDark ? colours.dark.borderBottomColor : colours.light.borderBottomColor,
+          paddingBottom: 8,
+          marginBottom: 8
+        }}
         />
     )
   })
+}
 
 export default connect( (state) => state, null )(makeStyledScreen(Indices))
