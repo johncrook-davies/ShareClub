@@ -10,7 +10,10 @@ const purple = '#2A1E5C',
 export const colours = {
   light: {
     navBarBackground: purple,
+    navBarBorder: 'transparent',
     navBarText: white,
+    navBarActive: white,
+    navBarInactive: white,
     background: white,
     color: darkGrey,
     borderColor: darkGrey,
@@ -18,7 +21,10 @@ export const colours = {
   },
   dark: {
     navBarBackground: purple,
+    navBarBorder: white,
     navBarText: white,
+    navBarActive: yellow,
+    navBarInactive: white,
     background: darkBlue,
     color: white,
     borderColor: purple,

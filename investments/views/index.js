@@ -12,17 +12,29 @@ import {
   Text,
   Image,
   Button,
-  SafeAreaView
+  SafeAreaView,
+  H1,
 } from 'react-native';
 
 const Stack = createStackNavigator();
 
+function StackScreen({title, component}) => 
+  <Stack.Screen 
+    name={title}
+    component={component} 
+    options={{
+      headerTitleStyle: {
+        fontFamily: 'Asap-Bold',
+      },
+    }}
+    />
+
 const Investments = () => {
   return <Stack.Navigator>
-    <Stack.Screen name="Browse" component={Types} />
-    <Stack.Screen name="Indices" component={Indices} />
-    <Stack.Screen name="Index" component={Index} />
-    <Stack.Screen name="Stock" component={Stock} />
+    <StackScreen title={"Browse"} component={Types}/>
+    <StackScreen title={"Indices"} component={Indices}/>
+    <StackScreen title={"Index"} component={Index} />
+    <StackScreen title={"Stock"} component={Stock} />
   </Stack.Navigator>
 }
 

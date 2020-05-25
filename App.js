@@ -20,9 +20,10 @@ import {
   browse,
   new_trade,
   clubs,
+  H1,
 } from './shared';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ const theme = (appearance) => {
         background: colours.dark.navBarBackground,
         card: colours.dark.navBarBackground,
         text: colours.light.navBarText,
-        border: 'transparent',
+        border: colours.dark.navBarBorder,
       }
     }
   } else {
@@ -68,7 +69,7 @@ const theme = (appearance) => {
         background: colours.light.navBarBackground,
         card: colours.light.navBarBackground,
         text: colours.light.navBarText,
-        border: 'transparent',
+        border: colours.light.navBarBorder,
       }
     }
   }
@@ -95,17 +96,20 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
             let iconName;
             if (route.name === 'Dashboard') {
               iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
+                ? 'home'
+                : 'home-outline';
             } else if (route.name === 'Clubs') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
+              iconName = focused ? 'account-group' : 'account-group-outline';
+            } else if (route.name === 'Investments') {
+              iconName = focused ? 'chart-areaspline' : 'chart-line';
             }
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Icon name={iconName} size={size} color={color} />;
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
+          activeTintColor: colours.light.navBarActive,
+          inactiveTintColor: colours.light.navBarInactive,
+          style: {}
         }}
         >
         <Tab.Screen

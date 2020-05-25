@@ -60,7 +60,7 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
         >
         <View flexDirection='row'>
           { clubs.map((c) =>
-              <Club key={ c.id + 'club' } c={ c } appearance={ appearance } />
+              <Club key={ 'club' + clubs.indexOf(c) } c={ c } appearance={ appearance } />
             )}
         </View>
       </ScrollView>
