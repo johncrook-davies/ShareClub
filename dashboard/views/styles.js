@@ -54,10 +54,10 @@ export const light = StyleSheet.create({
     backgroundColor: colours.light.background,
     borderRadius: 4,
     shadowOffset: {
-      width: 1,
-      height: 1
+      width: 2,
+      height: 2
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.15,
     shadowRadius: 4,
   },
 })
