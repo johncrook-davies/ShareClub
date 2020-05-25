@@ -128,7 +128,13 @@ export function diffBetweenTwoArraysOfObjects(a,b) {
   return result;
 }
 
-const allArrayElementsAreSame = (a,b) => (!a.every((v) => b.includes(v)) || !a.every((v) => b.includes(v)))
+const allArrayElementsAreSame = (a,b) => {
+  if(Array.isArray(a) && Array.isArray(b)) {
+    return !a.every((v) => b.includes(v)) || !a.every((v) => b.includes(v))
+  } else {
+    return false
+  }
+}
 
 export function diffBetweenTwoObjects(a,b) {
   /*
