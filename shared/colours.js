@@ -14,20 +14,28 @@ export const colours = {
     navBarText: white,
     navBarActive: white,
     navBarInactive: white,
+    
+    iconFill: yellow,
+    
     background: white,
     color: darkGrey,
     borderColor: darkGrey,
-    outlineColor: darkGrey
+    outlineColor: darkGrey,
+    borderBottomColor: purple,
   },
   dark: {
-    navBarBackground: purple,
+    navBarBackground: darkBlue,
     navBarBorder: white,
     navBarText: white,
     navBarActive: yellow,
     navBarInactive: white,
+    
+    iconFill: purple,
+    
     background: darkBlue,
     color: white,
     borderColor: purple,
-    outlineColor: white
+    outlineColor: white,
+    borderBottomColor: white,
   }
 }

@@ -13,18 +13,16 @@ import {
   Image,
   Currency,
   ImageAndText,
-  setStyle
+  makeStyledScreen
 } from '../../shared';
 
 import AssetSummary from './asset_summary';
 
-const Indices = ({ db, indices, navigation }) => {
-  const cs = useColorScheme();
+const Indices = ({ indices, navigation }) => {
 
-  return <Div cs={cs}>
+  return <Div>
     <Section>
       <ListOfIndices 
-        cs={ cs }
         indices={ indices }
         navigation={ navigation }
         />
@@ -32,12 +30,11 @@ const Indices = ({ db, indices, navigation }) => {
   </Div>
 }
 
-const ListOfIndices = ({cs, indices, navigation}) => 
+const ListOfIndices = ({indices, navigation}) => 
   indices.map((i) => {
     return(
       <AssetSummary
         type={ 'Index' }
-        cs={ cs }
         key={ i.name }
         name={ i.name }
         symbol={ i.symbol }
@@ -47,4 +44,4 @@ const ListOfIndices = ({cs, indices, navigation}) =>
     )
   })
 
-export default connect( (state) => state, null )(Indices)
+export default connect( (state) => state, null )(makeStyledScreen(Indices))

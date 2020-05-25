@@ -96,11 +96,11 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
             let iconName;
             if (route.name === 'Dashboard') {
               iconName = focused
-                ? 'home'
-                : 'home-outline';
+                ? 'view-dashboard'
+                : 'view-dashboard-outline';
             } else if (route.name === 'Clubs') {
               iconName = focused ? 'account-group' : 'account-group-outline';
-            } else if (route.name === 'Investments') {
+            } else if (route.name === 'Trade') {
               iconName = focused ? 'chart-areaspline' : 'chart-line';
             }
             return <Icon name={iconName} size={size} color={color} />;
@@ -117,7 +117,7 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
           component={Dashboard}
           />
         <Tab.Screen
-          name="Investments"
+          name="Trade"
           component={Investments}
           />
         <Tab.Screen

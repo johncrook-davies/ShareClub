@@ -18,7 +18,8 @@ export const Section = ({ children, style, ...other }) => {
     const styles = {
               marginLeft: 16,
               marginRight: 16,
-              marginBottom: 32
+              marginTop: 16,
+              marginBottom: 16
           };
     return(
         <View style={ [style, styles] } { ...other }>

@@ -3,33 +3,47 @@ import { useColorScheme } from 'react-native-appearance';
 
 import {
   View,
-  ScrollView,
   Section,
   P,
-  H1,
   H2,
   Div,
   Image,
   ImageAndText,
-  makeStyledScreen
+  makeStyledScreen,
+  colours as c,
 } from '../../shared';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const Types = ({ navigation }) => {
+  const isDark = useColorScheme() === 'dark';
   return <Div>
-    <ImageAndText
-      text={
-        <>
-          <H2>Stock markets</H2>
-          <P>
-              Stock markets are where public companies raise capital.
-          </P>
-        </>
-      }
-      image={
-        <Image style={{ width: 136, height: 136, borderWidth: 1, borderRadius: 3 }} />
-      }
-      onPress={() => navigation.navigate('Indices')}
-      />
+    <Section>
+      <ImageAndText
+        text={
+          <>
+            <H2>Stock markets</H2>
+            <P>
+                Stock markets are where public companies raise capital.
+            </P>
+          </>
+        }
+        image={
+          <Icon 
+            name={"bank"} 
+            size={136}
+            color={ 
+              isDark ? c.dark.iconFill : c.light.iconFill
+            }
+            />
+        }
+        onPress={() => navigation.navigate('Indices')}
+        style={{
+          borderBottomColor: isDark ? c.dark.borderBottomColor : c.light.borderBottomColor,
+          borderBottomWidth: 1
+        }}
+        />
+    </Section>
   </Div>
 }
 

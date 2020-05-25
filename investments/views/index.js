@@ -18,23 +18,29 @@ import {
 
 const Stack = createStackNavigator();
 
-function StackScreen({title, component}) => 
-  <Stack.Screen 
-    name={title}
-    component={component} 
-    options={{
-      headerTitleStyle: {
-        fontFamily: 'Asap-Bold',
-      },
-    }}
-    />
+const screens = [
+  { title: 'Browse', component: Types },
+  { title: 'Indices', component: Indices },
+  { title: 'Index', component: Index },
+  { title: 'Stock', component: Stock }
+];
 
 const Investments = () => {
   return <Stack.Navigator>
-    <StackScreen title={"Browse"} component={Types}/>
-    <StackScreen title={"Indices"} component={Indices}/>
-    <StackScreen title={"Index"} component={Index} />
-    <StackScreen title={"Stock"} component={Stock} />
+    {
+    screens.map((s) => (
+      <Stack.Screen 
+        name={s.title}
+        key={s.title}
+        component={s.component} 
+        options={{
+          headerTitleStyle: {
+            fontFamily: 'Asap-Bold',
+          },
+        }}
+        />
+    ))
+    }
   </Stack.Navigator>
 }
 

@@ -7,11 +7,10 @@ import {
   Div,
   Image,
   Currency,
-  ImageAndText,
-  setStyle
+  ImageAndText
 } from '../../shared';
 
-const AssetSummary = ({type, cs, name, symbol, latest_price, navigation, ...other}) => 
+const AssetSummary = ({type, name, symbol, latest_price, navigation, ...other}) => 
   <TouchableOpacity
     onPress={() => navigation.navigate(type,{symbol: symbol})}
     >
@@ -21,9 +20,8 @@ const AssetSummary = ({type, cs, name, symbol, latest_price, navigation, ...othe
       >
       <View style={{flex: 1}}>
         <ImageAndText
-          cs={cs}
-          text={<H2 cs={cs}>{name}</H2>}
-          image={ <Icon cs={cs}/> }
+          text={<H2>{name}</H2>}
+          image={ <Icon/> }
           />
       </View>
       <View
@@ -33,8 +31,8 @@ const AssetSummary = ({type, cs, name, symbol, latest_price, navigation, ...othe
           justifyContent: 'center'
         }}
         >
-        <H2 cs={cs}>
-          <Currency cs={cs}>{latest_price}</Currency>
+        <H2>
+          <Currency>{latest_price}</Currency>
         </H2>
       </View>
     </View>
@@ -51,27 +49,26 @@ const AssetSummary = ({type, cs, name, symbol, latest_price, navigation, ...othe
             justifyContent: 'center'
           }}
           >
-          <Stat cs={cs}>{'0.86x'}</Stat>
-          <Stat cs={cs}>{'5%'}</Stat>
-          <Stat cs={cs}>{'1.054'}</Stat>
+          <Stat>{'0.86x'}</Stat>
+          <Stat>{'5%'}</Stat>
+          <Stat>{'1.054'}</Stat>
         </View>
     </View>
   </TouchableOpacity>
 
 const Icon = ({cs}) =>
   <Image 
-    style={setStyle(cs,'outline',{ 
+    style={{ 
       width: 48, 
       height: 48, 
       borderWidth: 1, 
       borderRadius: 48 
-    })} 
+    }} 
     />
 
 const Stat = ({children, style, cs}) => 
   <P
     style={{marginBottom: 8, ...style}}
-    cs={cs}
     >
     { children }
   </P>
