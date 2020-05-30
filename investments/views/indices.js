@@ -12,11 +12,11 @@ import {
 import AssetSummary from './asset_summary';
 
 const Indices = ({ indices, navigation }) => {
-
+  console.log(indices.all)
   return <Div>
     <Section>
       <ListOfIndices 
-        indices={ indices }
+        indices={ indices.all }
         navigation={ navigation }
         />
     </Section>

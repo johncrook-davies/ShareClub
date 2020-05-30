@@ -90,7 +90,7 @@ function* getAllFromDb() {
     yield put({ type: 'INVITATION_CREATE', payload: invitations })
     yield put({ type: 'PROPOSAL_CREATE', payload: proposals })
     yield put({ type: 'EXCHANGE_CREATE', payload: exchanges })
-    yield put({ type: 'INDEX_CREATE', payload: indices })
+    yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
     yield put({ type: 'STOCK_CREATE', payload: stocks })
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromDb: ${e}`)
@@ -100,16 +100,16 @@ function* getAllFromDb() {
 function* getAllFromServer() {
   log('getAllFromServer')
   const db = yield select(getDatabase);
-  let exchanges = [],
-      indices = [],
-      stocks = [];
+  let exchanges,
+      indices,
+      stocks;
   
   try {
     yield getExchanges().then((e) => {return exchanges = e})
     yield put({ type: 'EXCHANGE_CREATE', payload: exchanges })
     yield syncOneThingWithDatabase('exchanges', db, exchanges)
     yield getIndices().then((i) => {return indices = i})
-    yield put({ type: 'INDEX_CREATE', payload: indices })
+    yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
     yield syncOneThingWithDatabase('indices', db, indices)
     yield getStocks().then((s) => {return stocks = s})
     yield put({ type: 'STOCK_CREATE', payload: stocks })

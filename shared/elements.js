@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-    View,
-    Text,
-    SafeAreaView,
-    TouchableOpacity,
-    Image
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Image
 } from '.';
 
 export const Div = ({ children, ...other }) =>
@@ -15,17 +16,31 @@ export const Div = ({ children, ...other }) =>
   </SafeAreaView>
 
 export const Section = ({ children, style, ...other }) => {
-    const styles = {
-              marginLeft: 16,
-              marginRight: 16,
-              marginTop: 16,
-              marginBottom: 16
-          };
-    return(
-        <View style={ [style, styles] } { ...other }>
-            { children }
-        </View>
-    )
+  const styles = {
+          marginLeft: 16,
+          marginRight: 16,
+          marginTop: 16,
+          marginBottom: 16
+        };
+  return(
+    <View style={ [style, styles] } { ...other }>
+      { children }
+    </View>
+  )
+}
+
+export const ScrollableSection = ({ children, style, ...other }) => {
+  const styles = {
+          marginLeft: 16,
+          marginRight: 16,
+          marginTop: 16,
+          marginBottom: 16
+        };
+  return(
+    <ScrollView style={ [style, styles] } { ...other }>
+      { children }
+    </ScrollView>
+  )
 }
 
 export const ImageAndText = ({ image, text, onPress, style, ...other }) => {
