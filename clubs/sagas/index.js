@@ -24,7 +24,7 @@ export function* createInDatabase(props) {
         yield put({ type: CLUB_UPDATE, payload: record })
       } else {
         // Found record
-        throw new Error('syncWithDatabase: record already exists in database')
+        console.log('syncWithDatabase: record already exists in database')
       }
     } catch(e) {
       throw new Error(e)

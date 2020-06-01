@@ -4,34 +4,31 @@ import {
   CLUB_DELETE,
 } from "../actions/actionTypes";
 
-const initialState = [];
+const initialState = { all: [], byId: {} };;
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case CLUB_CREATE: {
-      const clubs = action.payload;
-      if(Array.isArray(clubs)) {
-        return [
-          ...state,
-          ...clubs
-        ]
-      } else {
-        let club = clubs;
-        return [
-          ...state,
-          club
-        ]
+      const club = action.payload;
+      return {
+        all: [...state.all, club],
+        bySymbol: {
+          ...state.byId,
+          [club.id]: {
+            ...club
+          }
+        }
       }
     }
     case CLUB_UPDATE: {
       const club = action.payload;
-      return state.map(c => 
+      return state.all.map(c => 
         c.id === club.id ? { ...club } : c
       )
     }
     case CLUB_DELETE: {
       const id = action.payload;
-      return state.filter(c => 
+      return state.all.filter(c => 
         c.id !== id
       )
     }

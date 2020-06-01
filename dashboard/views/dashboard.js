@@ -59,8 +59,8 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
         style={ [any.clubs, appearance.clubs] }
         >
         <View flexDirection='row'>
-          { clubs.map((c) =>
-              <Club key={ 'club' + clubs.indexOf(c) } c={ c } appearance={ appearance } />
+          { clubs.all.map((c) =>
+              <Club key={ 'club' + clubs.all.indexOf(c) } c={ c } appearance={ appearance } />
             )}
         </View>
       </ScrollView>
