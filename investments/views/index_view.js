@@ -6,46 +6,24 @@ import {
   Div,
   ScrollableSection,
   H1,
+  colours,
   makeStyledScreen,
 } from '../../shared';
 
+import { getStocksForIndex } from '../selectors';
+
 import AssetSummary from './asset_summary';
 
-const Index = ({ db, route, navigation }) => {
-  const { symbol } = route.params,
-        isDark = useColorScheme() === 'dark',
-        [stocks, setStocks] = useState([]);
-  // Load data from database on initialisation
-//  useEffect(() => {
-//    var stockList = [];
-//    if(db.readyState === 'ready') {
-//      db.call.get({all: 'indices', where: {symbol: {isEqualTo: route.params.symbol}}})
-//        .then(([r])=> {
-//          setInd(r)
-//          return r
-//        })
-//        .then((r) => {
-//          let arr = JSON.parse(r.stocks);
-//          arr.map((s)=> {
-//            db.call.get({all: 'stocks', where: {symbol: {isEqualTo: s}}})
-//              .then(([r])=> {
-//                stockList.push(r)
-//                if(arr.indexOf(s) === arr.length -1) {
-//                  setStocks(stockList)
-//                }
-//              })
-//              .catch((e)=> {
-//                console.log(`Index-> ${e}`)
-//              })
-//          })
-//        })
-//        .catch((e)=> {console.log(`Index -> ${e}`)})
-//    }
-//  },[db.readyState])
-  
+const mapStateToProps = ( state, ownProps) => {
+  const { route, navigation } = ownProps;
+  const stocks = getStocksForIndex(state, route.params.symbol);
+  return { stocks }
+}
+
+const Index = ({ stocks, navigation }) => {
+  const isDark = useColorScheme() === 'dark';
   return <Div>
     <ScrollableSection>
-      <H1>{ symbol }</H1>
       {stocks.map((s) => 
         <AssetSummary
           type={ 'Stock' }
@@ -67,6 +45,6 @@ const Index = ({ db, route, navigation }) => {
 }
 
 export default connect( 
-  (state) => state, 
+  mapStateToProps, 
   null 
 )(makeStyledScreen(Index))
