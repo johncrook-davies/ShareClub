@@ -83,7 +83,7 @@ function* getAllFromDb() {
     yield all(proposals.map((i) => put({ type: 'PROPOSAL_CREATE', payload: i })))
     yield all(exchanges.map((i) => put({ type: 'EXCHANGE_CREATE', payload: i })))
     yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
-    yield all(stocks.map((i) => put({ type: 'STOCK_CREATE', payload: i })))
+    yield put({ type: 'STOCKS_CREATE_ALL', payload: stocks });
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromDb: ${e}`)
   }
@@ -104,7 +104,7 @@ function* getAllFromServer() {
     yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
     yield syncOneThingWithDatabase('indices', db, indices)
     yield getStocks().then((s) => {return stocks = s})
-    yield all(stocks.map((i) => put({ type: 'STOCK_CREATE', payload: i })))
+    yield put({ type: 'STOCKS_CREATE_ALL', payload: stocks });
     yield syncOneThingWithDatabase('stocks', db, stocks)
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromServer: IN PRODUCTION THIS SHOULD NOT BE AN ERROR - POOR CONNECTIVITY CAN LEAD TO FREQUENT FAILURE HERE ${e}`)
