@@ -55,14 +55,6 @@ function* getAllFromDb() {
       stocks = [];
   
   try {
-    // Clubs
-    
-    /*
-      THERE IS AN ERROR HERE THE FIRST TIME THE APP IS RUN:
-      CANNOT FIND TABLE 'clubs'
-    */
-    
-    
     yield db.call.get({all: 'clubs'}).then( (r) => 
       r.map( (thing) => clubs.push(thing) )
     )
@@ -89,9 +81,9 @@ function* getAllFromDb() {
     yield all(clubs.map((i) => put({ type: 'CLUB_CREATE', payload: i })))
     yield all(invitations.map((i) => put({ type: 'INVITATION_CREATE', payload: i })))
     yield all(proposals.map((i) => put({ type: 'PROPOSAL_CREATE', payload: i })))
-    yield put({ type: 'EXCHANGE_CREATE', payload: exchanges })
+    yield all(exchanges.map((i) => put({ type: 'EXCHANGE_CREATE', payload: i })))
     yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
-    yield put({ type: 'STOCK_CREATE', payload: stocks })
+    yield all(stocks.map((i) => put({ type: 'STOCK_CREATE', payload: i })))
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromDb: ${e}`)
   }
@@ -112,7 +104,7 @@ function* getAllFromServer() {
     yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
     yield syncOneThingWithDatabase('indices', db, indices)
     yield getStocks().then((s) => {return stocks = s})
-    yield put({ type: 'STOCK_CREATE', payload: stocks })
+    yield all(stocks.map((i) => put({ type: 'STOCK_CREATE', payload: i })))
     yield syncOneThingWithDatabase('stocks', db, stocks)
   } catch(e) {
     throw new Error(`sagas -> db -> getAllFromServer: IN PRODUCTION THIS SHOULD NOT BE AN ERROR - POOR CONNECTIVITY CAN LEAD TO FREQUENT FAILURE HERE ${e}`)
