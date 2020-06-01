@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import clubs from '../clubs/reducers';
-import proposals from './proposals';
+import proposals from '../proposals/reducers';
 import invitations from './invitations';
 import connection from '../websockets/reducers';
 import db from '../db/reducers';

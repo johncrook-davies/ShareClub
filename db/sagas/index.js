@@ -88,7 +88,7 @@ function* getAllFromDb() {
     )
     yield all(clubs.map((i) => put({ type: 'CLUB_CREATE', payload: i })))
     yield put({ type: 'INVITATION_CREATE', payload: invitations })
-    yield put({ type: 'PROPOSAL_CREATE', payload: proposals })
+    yield all(proposals.map((i) => put({ type: 'PROPOSAL_CREATE', payload: i })))
     yield put({ type: 'EXCHANGE_CREATE', payload: exchanges })
     yield all(indices.map((i) => put({ type: 'INDEX_CREATE', payload: i })))
     yield put({ type: 'STOCK_CREATE', payload: stocks })

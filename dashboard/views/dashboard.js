@@ -68,12 +68,12 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
         <H2>Pending proposals</H2>
         <Placeholder 
           things={'proposals'} 
-          number={proposals.length}
+          number={proposals.all.length}
           appearance={ appearance }
           />
-        {(proposals.length !== 0) && 
+        {(proposals.all.length !== 0) && 
         <View style={ [any.proposals, appearance.proposals] }>
-          { proposals.map((p) =>
+          { proposals.all.map((p) =>
               <Proposal key={ p.id + 'proposal' } p={p} appearance={ appearance }/>
           )}
         </View>}

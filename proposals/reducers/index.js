@@ -1,42 +1,41 @@
-import { 
-  CLUB_CREATE,
-  CLUB_UPDATE,
-  CLUB_DELETE,
-} from "../actions/actionTypes";
+const PROPOSAL_CREATE ='PROPOSAL_CREATE';
+const PROPOSAL_UPDATE ='PROPOSAL_UPDATE';
+const PROPOSAL_DELETE ='PROPOSAL_DELETE';
 
 const initialState = { all: [], byId: {} };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case CLUB_CREATE: {
-      const club = action.payload;
+    case PROPOSAL_CREATE: {
+      const proposal = action.payload;
       return {
-        all: [...state.all, club],
+        all: [...state.all, proposal],
         byId: {
           ...state.byId,
-          [club.id]: {
-            ...club
+          [proposal.id]: {
+            ...proposal
           }
         }
       }
     }
-    case CLUB_UPDATE: {
-      const club = action.payload;
-      delete state.byId[club.id]
+    case PROPOSAL_UPDATE: {
+      const proposal = action.payload;
+      delete state.byId[proposal.id]
       return {
         all: state.all.map(c => 
-          c.id === club.id ? { ...club } : c
+          c.id === proposal.id ? { ...proposal } : c
         ),
         byId: {
           ...state.byId,
-          [club.id]: {
-            ...club
+          [proposal.id]: {
+            ...proposal
           }
         }
       }
     }
-    case CLUB_DELETE: {
+    case PROPOSAL_DELETE: {
       const id = action.payload;
+      delete state.byId[id]
       return {
         all: state.all.filter(c => 
           c.id !== id
