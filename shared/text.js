@@ -70,3 +70,22 @@ export const Currency = makeStyledText(({ children, style, ...other }) => {
         {`£${stringN.split('').reverse().join('')}`}
     </Text>
 })
+
+export const BigPrice = makeStyledText(({ children, style, ...other }) => (
+  <Currency 
+    adjustsFontSizeToFit
+    numberOfLines={1}
+    style={ [
+      style,
+      {
+        fontFamily: 'Asap-Bold', 
+        fontSize: 40, 
+        position: 'absolute',
+        color: 'red'
+      },
+    ] }
+    { ...other }
+    >
+    { children }
+  </Currency>
+))

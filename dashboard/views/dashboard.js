@@ -11,6 +11,7 @@ import {
   H1,
   H2,
   Currency,
+  BigPrice,
   ImageAndText,
   Div,
   TouchableOpacity,
@@ -139,13 +140,11 @@ const Club = ({ c, appearance }) =>
       height={260}
       data={data}
       />
-    <Currency 
-      adjustsFontSizeToFit
-      numberOfLines={1}
-      style={ [any.clubBigText, appearance.clubBigText] }
+    <BigPrice
+      style={ appearance.clubBigText }
       >
       { c.value }
-    </Currency>
+    </BigPrice>
     
   </View>
 
