@@ -37,7 +37,7 @@ const Types = ({ navigation }) => {
             }
             />
         }
-        onPress={() => navigation.navigate('Indices')}
+        onPress={() => navigation.navigate('Indices',{title: 'Stock markets'})}
         style={{
           borderBottomColor: isDark ? c.dark.borderBottomColor : c.light.borderBottomColor,
           borderBottomWidth: 1

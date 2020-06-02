@@ -10,9 +10,9 @@ import {
   ImageAndText
 } from '../../shared';
 
-const AssetSummary = ({type, name, symbol, latest_price, navigation, style, ...other}) => 
+const AssetSummary = ({type, name, symbol, latest_price, navigation, navigation_options, style, ...other}) => 
   <TouchableOpacity
-    onPress={() => navigation.navigate(type,{symbol: symbol})}
+    onPress={() => navigation.navigate(type,{symbol: symbol, ...navigation_options})}
     style={style}
     >
     <View 

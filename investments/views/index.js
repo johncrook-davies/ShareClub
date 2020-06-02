@@ -25,7 +25,7 @@ const screens = [
   { title: 'Stock', component: Stock }
 ];
 
-const Investments = () => {
+const Investments = ({ route }) => {
   return <Stack.Navigator>
     {
     screens.map((s) => (
@@ -33,11 +33,14 @@ const Investments = () => {
         name={s.title}
         key={s.title}
         component={s.component} 
-        options={{
-          headerTitleStyle: {
-            fontFamily: 'Asap-Bold',
-          },
-        }}
+        options={
+          ({ route }) => ({ 
+            title: route.params ? route.params.title : 'Investments',
+            headerTitleStyle: {
+              fontFamily: 'Asap-Bold',
+            },
+          })
+        }
         />
     ))
     }

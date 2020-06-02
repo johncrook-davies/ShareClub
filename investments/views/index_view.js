@@ -32,6 +32,7 @@ const Index = ({ stocks, navigation }) => {
           symbol={ s.symbol }
           latest_price={ s.latest_price }
           navigation={ navigation }
+          navigation_options={ { title: s.symbol } }
           style={{
             borderBottomWidth: 1,
             borderBottomColor: isDark ? colours.dark.borderBottomColor : colours.light.borderBottomColor,

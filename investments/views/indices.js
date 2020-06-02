@@ -33,6 +33,7 @@ const ListOfIndices = ({indices, navigation}) => {
         symbol={ i.symbol }
         latest_price={ i.latest_price }
         navigation={ navigation }
+        navigation_options={ { title: i.name } }
         style={{
           borderBottomWidth: 1,
           borderBottomColor: isDark ? colours.dark.borderBottomColor : colours.light.borderBottomColor,
