@@ -7,29 +7,13 @@ import {
   Button,
   ScrollView,
   StyleSheet,
-  SafeAreaView
-} from 'react-native';
+  SafeAreaView,
+  makeStyledScreen,
+} from '../../shared';
 
-const Stock = ({ connection, db, route, navigation, dispatch }) => {
-  // Initialise state of stocks
+const Stock = ({ connection, stocks, route, navigation, dispatch }) => {
   const { symbol } = route.params,
-        [stock, setStock] = useState({
-    symbol: symbol, 
-    id: 0, 
-    name: '', 
-    latest_price: "0", 
-    "exchange_id": 1, 
-    "created_at": '', 
-    "updated_at": ''
-  });
-
-  // Get object from database on load
-  useEffect(() => {
-    db.call.get({all: 'stocks', where: {symbol: {isEqualTo: symbol}}})
-      .then(([r])=> {
-        setStock(r)
-      })
-  },[db.readyState])
+        [stock, setStock] = useState(stocks.bySymbol[symbol]);
   
   // Subscribe and handle server responses
   useEffect(() => {
@@ -64,4 +48,4 @@ const Stock = ({ connection, db, route, navigation, dispatch }) => {
   </SafeAreaView>
 }
 
-export default connect( (state) => state, null )(Stock)
+export default connect( (state) => state, null )(makeStyledScreen(Stock))
