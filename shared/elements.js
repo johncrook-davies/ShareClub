@@ -156,6 +156,7 @@ const TabBar = ({ state, descriptors, navigation, position, aboveTabs }) => {
                 testID={options.tabBarTestID}
                 onPress={onPress}
                 onLongPress={onLongPress}
+                key={label}
                 style={{ 
                   flex: 1,
                   alignItems: 'center',
