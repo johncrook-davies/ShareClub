@@ -1,11 +1,15 @@
 import React from 'react';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useColorScheme } from 'react-native-appearance';
 import {
   View,
   Text,
+  P,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  Image
+  Image,
+  colours
 } from '.';
 
 export const Div = ({ children, ...other }) =>
@@ -79,4 +83,99 @@ export const ImageAndText = ({ image, text, onPress, style, ...other }) => {
             </View>
         </Comp>
     </>
+}
+
+const Tab = createMaterialTopTabNavigator();
+
+export const Tabs = ({screens, aboveTabs, stock}) => (
+  <Tab.Navigator 
+    tabBar={
+      props => <TabBar aboveTabs={ aboveTabs } {...props} />
+    }
+    >
+    {
+      screens.map((s) => (
+        <Tab.Screen name={s.name} key={s.name}>
+          {() => s.component}
+        </Tab.Screen> 
+      ))
+    }
+  </Tab.Navigator>
+)
+
+const TabBar = ({ state, descriptors, navigation, position, aboveTabs }) => {
+  const isDark = useColorScheme() === 'dark';
+  return (
+    <>
+      { aboveTabs }
+      <Section>
+        <View 
+          style={{ 
+            flexDirection: 'row',
+            marginTop: 16
+          }}
+          >
+          {state.routes.map((route, index) => {
+            const { options } = descriptors[route.key];
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.name;
+
+            const isFocused = state.index === index;
+
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
+
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
+
+            const onLongPress = () => {
+              navigation.emit({
+                type: 'tabLongPress',
+                target: route.key,
+              });
+            };
+
+            const inputRange = state.routes.map((_, i) => i);
+
+            return (
+              <>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityStates={isFocused ? ['selected'] : []}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={{ 
+                  flex: 1,
+                  alignItems: 'center',
+                  borderBottomWidth: isFocused ? 1.5 : 0,
+                  borderColor: isDark ? colours.dark.borderBottomColor : colours.light.borderBottomColor
+                }}
+              >
+                <P
+                  style={{
+                    marginBottom: 8
+                  }}
+                  >
+                  {label}
+                </P>
+              </TouchableOpacity>
+              </>
+            );
+          })}
+        </View>
+      </Section>
+    </>
+  );
 }

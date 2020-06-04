@@ -17,12 +17,6 @@ export const any = StyleSheet.create({
     marginLeft: 8,
     marginRight: 8,
   },
-  clubBigText: {
-    fontFamily: 'Asap-Bold', 
-    fontSize: 40, 
-    position: 'absolute',
-    color: 'red'
-  },
   clubs: {
     marginBottom: 32
   },
