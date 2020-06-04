@@ -48,7 +48,7 @@ export default function(state = initialState, action) {
     }
     case CLUB_DELETE: {
       const id = action.payload;
-      if(!exists(club,state)){return state}
+      if(!exists({id: id},state)){return state}
       return {
         all: state.all.filter(c => 
           c.id !== id

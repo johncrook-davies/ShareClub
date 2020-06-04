@@ -4,10 +4,20 @@ const PROPOSAL_DELETE ='PROPOSAL_DELETE';
 
 const initialState = { all: [], byId: {} };
 
+const exists = (record, state) => {
+  if(typeof record !== 'object' || record === null){
+    throw new Error("reducers -> exists -> record is not an object")
+  }
+  if(record.id === undefined){ return false }
+  if(state.byId[record.id] === undefined){ return false }
+  return true
+}
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case PROPOSAL_CREATE: {
       const proposal = action.payload;
+      if(exists(proposal,state)){return state}
       return {
         all: [...state.all, proposal],
         byId: {
@@ -20,6 +30,7 @@ export default function(state = initialState, action) {
     }
     case PROPOSAL_UPDATE: {
       const proposal = action.payload;
+      if(!exists(proposal,state)){return state}
       delete state.byId[proposal.id]
       return {
         all: state.all.map(c => 
@@ -35,6 +46,7 @@ export default function(state = initialState, action) {
     }
     case PROPOSAL_DELETE: {
       const id = action.payload;
+      if(!exists({id: id},state)){return state}
       delete state.byId[id]
       return {
         all: state.all.filter(c => 
