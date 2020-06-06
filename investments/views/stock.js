@@ -10,7 +10,8 @@ import {
   Section,
   Tabs,
   makeStyledScreen,
-  colours
+  colours,
+  Line,
 } from '../../shared';
 
 import { stockStyles as s } from './styles';
@@ -20,9 +21,25 @@ const Stats = makeStyledScreen(
     <P>Stats here</P>
   </Section>
 );
+
+const data = [
+  {date: new Date(2007, 3, 24), value: 93.24},
+  {date: new Date(2007, 3, 25), value: 95.35},
+  {date: new Date(2007, 3, 26), value: 98.84},
+  {date: new Date(2007, 3, 27), value: 99.92},
+  {date: new Date(2007, 3, 30), value: 99.80},
+  {date: new Date(2007, 4,  1), value: 99.47},
+];
+
 const Graph = makeStyledScreen(
   () => <Section>
     <P>Graph here</P>
+    <Line
+      width={300}
+      height={400}
+      data={data}
+      style={{borderColor: 'red', borderWidth:1}}
+      />
   </Section>
 );
 

@@ -37,9 +37,9 @@ target 'ShareClub' do
   pod 'react-native-appearance', :path => '../node_modules/react-native-appearance'
 
   pod 'ReactNativeART', :path => '../node_modules/@react-native-community/art'
-
-
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+
 
   target 'ShareClubTests' do
     inherit! :search_paths
