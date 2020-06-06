@@ -22,49 +22,102 @@ import Svg, {
   Mask,
 } from 'react-native-svg';
 
+const YAxis = ({yAxis, padding}) => <>
+  {
+    yAxis.map(
+      (d) => 
+        <Text
+          key={ d.pos }
+          fill='#000'
+          stroke='#000'
+          fontSize='12'
+          fontFamily='Asap-bold'
+          textAnchor='end'
+          x={ padding / 2 }
+          y={ d.pos }>
+          { d.value }
+        </Text>
+    )
+  }
+</>
+      
+const XAxis = ({xAxis, outterHeight, padding}) => <>
+  {
+    xAxis.map(
+      (d) => 
+        <Text
+          key={ d.pos }
+          fill='#000'
+          stroke='#000'
+          fontSize='12'
+          fontFamily='Asap-bold'
+          textAnchor='middle'
+          transform="translate(0,0)"
+          x={ d.pos }
+          y={ outterHeight }>
+          { d.value.toISOString().split('T')[0] }
+        </Text>
+    )
+  }
+</>
+
 export const Line = ({width, height, data, style}) => {
+  const padding = 50,
+        innerHeight = height - padding,
+        innerWidth = width - padding;
   const scaleX = d3.scaleTime()
     .domain([new Date(2007, 3, 24), new Date(2007, 4,  1)])
-    .range([0,width]);
+    .range([0,innerWidth]);
   const scaleY = d3.scaleLinear()
-    .domain([93, 100])
-    .range([0,height]);
+    .domain([100, 93])
+    .range([0,innerHeight]);
+  const xAxis = scaleX.ticks(2).reduce((acc, x, i) => {
+    return acc.concat({
+      pos: i/3 * innerWidth + padding/2,
+      value: x
+    })
+  },[]);
+  const yAxis = scaleY.ticks(10).reduce((acc, x, i) => {
+    return acc.concat({
+      pos: i/11 * innerHeight + padding/2,
+      value: x
+    })
+  },[])
   const path = d3.line()
     .x((d) => scaleX(d.date))
     .y((d) => scaleY(d.value))(data);
   return (
     <>
-      <Surface 
-         width={width} 
-         height={height}
-         style={style}>
-        <Group x={0} y={0}>
-          <Shape
-            d={path}
-            stroke={`rgba(${37},${66},${204},${1}`}
-            strokeWidth={2}
+      <Svg 
+        width={width} 
+        height={height}
+        >
+        <Surface 
+          width={width} 
+          height={height}
+          style={style}
+          >
+          <Group x={padding/2} y={padding/2}>
+            <Shape
+              d={path}
+              stroke={`rgba(${37},${66},${204},${1}`}
+              strokeWidth={2}
+              />
+          </Group>
+        </Surface>
+        <G>
+          <YAxis 
+            yAxis={ yAxis } 
+            padding={ padding }
             />
-
-        </Group>
-      </Surface>
-      <G fill='none'>
-        {
-          data.map(
-            (d) => 
-              <Text
-                key={'thing'}
-                fill='#000'
-                stroke='#000'
-                fontSize='30'
-                textAnchor='middle'
-                x={4}
-                y={2 * 4}>
-                >
-                53
-              </Text>
-          )
-        }
-      </G>
+          <XAxis 
+            xAxis={ xAxis } 
+            outterHeight={ height }
+            padding={ padding }
+            />
+        </G>
+      </Svg>
+      
     </>
   )
 }

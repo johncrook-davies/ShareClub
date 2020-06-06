@@ -33,12 +33,10 @@ const data = [
 
 const Graph = makeStyledScreen(
   () => <Section>
-    <P>Graph here</P>
     <Line
-      width={300}
+      width={350}
       height={400}
       data={data}
-      style={{borderColor: 'red', borderWidth:1}}
       />
   </Section>
 );
