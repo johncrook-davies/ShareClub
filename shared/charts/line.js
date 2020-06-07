@@ -1,91 +1,139 @@
 import React, { useEffect, useState } from 'react';
+import { useColorScheme } from 'react-native-appearance';
 import {Surface, Group, Shape} from '@react-native-community/art';
 import * as d3 from 'd3';
 import Svg, {
   G,
   Text,
-  TSpan,
-  TextPath,
-  Path,
-  Polygon,
-  Polyline,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
+  Line,
 } from 'react-native-svg';
+import { colours as c } from '../../shared';
 
-const YAxis = ({yAxis, padding}) => <>
+const formatNumber = (num) => {
+  let strNum = `${num}`;
+  if(strNum.indexOf('.') === -1) {
+    return strNum += '.0'
+  } else {
+    return strNum
+  }
+}
+
+const formatDate = (date) => {
+  let arr = date.toISOString().split('T')[0].split('-');
+  return `${arr[2]}/${arr[1]}/${arr[0].slice(2)}`
+}
+
+const YAxis = ({ 
+  yAxis, 
+  outterWidth, 
+  fontSize, 
+  fontFamily,
+  color,
+}) => <>
   {
     yAxis.map(
       (d) => 
-        <Text
-          key={ d.pos }
-          fill='#000'
-          stroke='#000'
-          fontSize='12'
-          fontFamily='Asap-bold'
-          textAnchor='end'
-          x={ padding / 2 }
-          y={ d.pos }>
-          { d.value }
-        </Text>
+        <>
+          <Line 
+            x1={ 0 } 
+            y1={ d.pos } 
+            x2={ 6 } 
+            y2={ d.pos } 
+            stroke={ color }
+            strokeWidth={ 2 }
+            />
+          <Text
+            key={ d.pos }
+            fill={ color }
+            stroke={ color }
+            strokeWidth={ 0.5 }
+            fontSize={`${fontSize}`}
+            fontFamily={ fontFamily }
+            textAnchor='end'
+            transform={`translate(${-fontSize},${fontSize/3})`}
+            x={ 0 }
+            y={ d.pos }>
+            { formatNumber(d.value) }
+          </Text>
+        </>
     )
   }
 </>
       
-const XAxis = ({xAxis, outterHeight, padding}) => <>
+const XAxis = ({ 
+      xAxis, 
+      height, 
+      fontSize, 
+      fontFamily,
+      color,
+}) => <>
   {
     xAxis.map(
       (d) => 
-        <Text
-          key={ d.pos }
-          fill='#000'
-          stroke='#000'
-          fontSize='12'
-          fontFamily='Asap-bold'
-          textAnchor='middle'
-          transform="translate(0,0)"
-          x={ d.pos }
-          y={ outterHeight }>
-          { d.value.toISOString().split('T')[0] }
-        </Text>
+        <>
+          <Line 
+            x1={ d.pos } 
+            y1={ height } 
+            x2={ d.pos }
+            y2={ height - 6 } 
+            stroke={ color }
+            strokeWidth={ 2 }
+            />
+          <Text
+            key={ d.pos }
+            fill={ color }
+            stroke={ color }
+            strokeWidth={ 0.5 }
+            fontSize={`${fontSize}`}
+            fontFamily={ fontFamily }
+            textAnchor='middle'
+            transform={`translate(0,${2*fontSize})`}
+            x={ d.pos }
+            y={ height }
+            >
+            { formatDate(d.value) }
+          </Text>
+      </>
     )
   }
 </>
 
-export const Line = ({width, height, data, style}) => {
-  const padding = 50,
+export const LineGraph = ({width, height, data, style}) => {
+  const isDark = useColorScheme() === 'dark',
+        fontSize = 10,
+        fontFamily = 'Asap-Regular',
+        fontColor = isDark? c.dark.graphTextColor : c.light.graphTextColor,
+        lineColor = isDark? c.dark.graphLineColor : c.light.graphLineColor,
+        padding = 90+fontSize,
         innerHeight = height - padding,
         innerWidth = width - padding;
+  const yExtents = d3.extent(d3.merge(data), (d) => d.value),
+        xExtents = d3.extent(d3.merge(data), (d) => d.date);
   const scaleX = d3.scaleTime()
-    .domain([new Date(2007, 3, 24), new Date(2007, 4,  1)])
+    .domain([xExtents[0], xExtents[1]])
     .range([0,innerWidth]);
+  const xAxis = scaleX.ticks(7).reduce((acc, x, i) =>(
+    acc.concat({
+      pos: i/(scaleX.ticks(7).length-1) * innerWidth,
+      value: x
+    })
+  ),[]);
+  const yAxisArr = d3.scaleLinear()
+    .domain([yExtents[1]+1, yExtents[0]-1])
+    .ticks(10);
+  const yAxis = yAxisArr.reduce((acc, x, i) => (
+      acc.concat({
+        pos: i/(yAxisArr.length-1) * innerHeight,
+        value: x
+      })
+    ),[])
   const scaleY = d3.scaleLinear()
-    .domain([100, 93])
+    .domain([yAxisArr[0], yAxisArr[10]])
     .range([0,innerHeight]);
-  const xAxis = scaleX.ticks(2).reduce((acc, x, i) => {
-    return acc.concat({
-      pos: i/3 * innerWidth + padding/2,
-      value: x
-    })
-  },[]);
-  const yAxis = scaleY.ticks(10).reduce((acc, x, i) => {
-    return acc.concat({
-      pos: i/11 * innerHeight + padding/2,
-      value: x
-    })
-  },[])
   const path = d3.line()
+    .curve(d3.curveStepAfter)
     .x((d) => scaleX(d.date))
-    .y((d) => scaleY(d.value))(data);
+    .y((d) => scaleY(d.value))(data[0]);
   return (
     <>
       <Svg 
@@ -100,24 +148,30 @@ export const Line = ({width, height, data, style}) => {
           <Group x={padding/2} y={padding/2}>
             <Shape
               d={path}
-              stroke={`rgba(${37},${66},${204},${1}`}
-              strokeWidth={2}
+              stroke={lineColor}
+              strokeWidth={1.5}
               />
           </Group>
         </Surface>
-        <G>
+        <G
+          transform={`translate(${padding/2},${padding/2})`}
+          >
           <YAxis 
             yAxis={ yAxis } 
-            padding={ padding }
+            outterWidth={ width }
+            fontSize={ fontSize }
+            fontFamily={ fontFamily }
+            color={ fontColor }
             />
           <XAxis 
             xAxis={ xAxis } 
-            outterHeight={ height }
-            padding={ padding }
+            height={ innerHeight }
+            fontSize={ fontSize }
+            fontFamily={ fontFamily }
+            color={ fontColor }
             />
         </G>
       </Svg>
-      
     </>
   )
 }

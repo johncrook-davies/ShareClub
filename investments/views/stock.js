@@ -11,31 +11,43 @@ import {
   Tabs,
   makeStyledScreen,
   colours,
-  Line,
+  LineGraph,
 } from '../../shared';
 
 import { stockStyles as s } from './styles';
 
 const Stats = makeStyledScreen(
-  ({ stock }) => <Section>
-    <P>Stats here</P>
-  </Section>
+  ({ stock }) => 
+    <Section
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      >
+      <Section>
+        <P style={{marginBottom:16}}>Range of stats and performance indicators to be included</P>
+        <P>Ambition is for these to be customiseable to reflect different metrics valued by different investors eg. Sustainability, equality measures</P>
+      </Section>
+    </Section>
 );
 
 const data = [
-  {date: new Date(2007, 3, 24), value: 93.24},
-  {date: new Date(2007, 3, 25), value: 95.35},
-  {date: new Date(2007, 3, 26), value: 98.84},
-  {date: new Date(2007, 3, 27), value: 99.92},
-  {date: new Date(2007, 3, 30), value: 99.80},
-  {date: new Date(2007, 4,  1), value: 99.47},
+  [
+    {date: new Date(2007, 3, 24), value: 90.50},
+    {date: new Date(2007, 3, 25), value: 95.35},
+    {date: new Date(2007, 3, 26), value: 98.84},
+    {date: new Date(2007, 3, 27), value: 99.92},
+    {date: new Date(2007, 3, 28), value: 99.80},
+    {date: new Date(2007, 3, 29), value: 99.47},
+  ]
 ];
 
 const Graph = makeStyledScreen(
   () => <Section>
-    <Line
-      width={350}
-      height={400}
+    <LineGraph
+      width={390}
+      height={500}
       data={data}
       />
   </Section>

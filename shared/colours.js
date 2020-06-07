@@ -22,6 +22,8 @@ export const colours = {
     borderColor: darkGrey,
     outlineColor: darkGrey,
     borderBottomColor: purple,
+    graphLineColor: green,
+    graphTextColor: purple,
   },
   dark: {
     navBarBackground: darkBlue,
@@ -37,5 +39,7 @@ export const colours = {
     borderColor: purple,
     outlineColor: white,
     borderBottomColor: purple,
+    graphLineColor: red,
+    graphTextColor: white,
   }
 }
