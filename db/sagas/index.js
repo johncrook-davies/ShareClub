@@ -12,7 +12,6 @@ import {
 // DB
 import Synchroniser from '../../db/synchroniser';
 import { schema } from '../../db/schema';
-import seedDatabase from '../../db/seeds';
 
 const log = (arg) => (__DEV__ && console.log(`sagas -> db -> ${arg}`))
 
@@ -27,9 +26,7 @@ function* initialiseDb() {
   try {
     yield call([db,'initDb']);
     yield call([db,'openDb']);
-    yield put({ type: 'CREATE_DB', payload: db })  
-    // REMOVE IN PRODUCTION VERSION
-    yield call(seedDatabase, db);
+    yield put({ type: 'CREATE_DB', payload: db })
     yield call(getAllFromDb)
     yield call(getAllFromServer)
   } catch(e) {
