@@ -17,8 +17,12 @@ import {
   TouchableOpacity,
   proposalShortText,
   Pie,
-  makeStyledScreen
+  makeStyledScreen,
+  InformationCallout,
+  colours as c,
 } from '../../shared';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { any, light, dark } from './styles';
 import { user_light, user_dark } from '../../shared/assets/images';
@@ -29,8 +33,45 @@ import settings_light from '../assets/images/settings_light.png';
 
 const data = [1, 1, 2, 3, 5, 8, 13, 21];
 
-const Dashboard = ({ clubs, invitations, proposals, db }) => {
+const EmptyClubs = ({ isDark }) => {
+  return <Section>
+    <H1>Welcome to your dashboard</H1>
+    <InformationCallout isDark={ isDark }>
+      <P>
+        Here you can see a summary of clubs that you're  a member of, any pending investment proposals and any invites you've been sent.
+      </P>
+    </InformationCallout>
+    <H2>You're not currently a member of any clubs</H2>
+    <InformationCallout isDark={ isDark }>
+      <P>
+        Find your friends on Shareclub
+      </P>
+    </InformationCallout>
+  </Section>
+}
+
+const SomeClubs = ({ clubs, appearance }) => (
+  <ScrollView
+    horizontal
+    style={ [any.clubs, appearance.clubs] }
+    >
+    <View flexDirection='row'>
+      { 
+        clubs.all.map((c) =>
+          <Club 
+            key={ 'club' + clubs.all.indexOf(c) } 
+            c={ c } 
+            appearance={ appearance } 
+            />
+        )
+      }
+    </View>
+  </ScrollView>
+)
+
+const Dashboard = ({ clubs, invitations, proposals }) => {
   const appearance = useColorScheme() === 'dark' ? dark : light;
+  const isDark = useColorScheme() === 'dark';
   return (
     <Div>
       <Section style={ any.topButtons } >
@@ -55,16 +96,14 @@ const Dashboard = ({ clubs, invitations, proposals, db }) => {
             />
         </TouchableOpacity>
       </Section>
-      <ScrollView
-        horizontal
-        style={ [any.clubs, appearance.clubs] }
-        >
-        <View flexDirection='row'>
-          { clubs.all.map((c) =>
-              <Club key={ 'club' + clubs.all.indexOf(c) } c={ c } appearance={ appearance } />
-            )}
-        </View>
-      </ScrollView>
+      {
+        clubs.all.length === 0 && 
+        <EmptyClubs isDark={ isDark }/>
+      }
+      {
+        clubs.all.length !== 0 &&
+        <SomeClubs clubs={ clubs } appearance={ appearance }/>
+      }
       <Section>
         <H2>Pending proposals</H2>
         <Placeholder 

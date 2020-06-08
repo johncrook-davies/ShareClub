@@ -1,6 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useColorScheme } from 'react-native-appearance';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   Text,
@@ -9,7 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  colours
+  colours as c
 } from '.';
 
 export const Div = ({ children, ...other }) =>
@@ -33,6 +34,39 @@ export const Section = ({ children, style, ...other }) => {
   )
 }
 
+export const InformationCallout = ({ children }) => {
+  const isDark  = useColorScheme() === 'dark';
+  return <Section
+    style={{
+      backgroundColor: isDark ? 
+        c.dark.infoCalloutBackground : 
+        c.light.infoCalloutBackground,
+      borderColor: isDark ? 
+        c.dark.infoCalloutBorder: 
+        c.light.infoCalloutBorder,
+      borderWidth: 1,
+      borderRadius: 4,
+      padding: 8
+    }}
+    >
+    <ImageAndText 
+      text={ children }
+      imagePosition="flex-start"
+      image={
+        <Icon
+          name={"information"} 
+          size={38}
+          color={
+            isDark ? 
+              c.dark.iconFill : 
+              c.light.iconFill
+          }
+          />
+      }
+      />
+  </Section>
+}
+
 export const ScrollableSection = ({ children, style, ...other }) => {
   const styles = {
           marginLeft: 16,
@@ -47,42 +81,50 @@ export const ScrollableSection = ({ children, style, ...other }) => {
   )
 }
 
-export const ImageAndText = ({ image, text, onPress, style, ...other }) => {
-    let Comp;
-    if(onPress !== undefined) {
-        Comp = TouchableOpacity
-    } else {
-        Comp = View
-    }
-    return <>
-        <Comp
-            style={[
-                style,
-                {flexDirection: 'row'}
-            ]}
-            onPress={onPress}
-            { ...other }
-            >
-            <View
-                style={{
-                    flexDirection: 'column',
-                    justifyContent: 'center'
-                }}
-                >
-                { image }
-            </View>
-            <View 
-                style={{
-                    paddingLeft: 16,
-                    flexDirection: 'column',
-                    flexShrink: 1,
-                    justifyContent: 'center'
-                }}
-                >
-                { text }
-            </View>
-        </Comp>
-    </>
+export const ImageAndText = ({ 
+  image, 
+  text, 
+  onPress,
+  imagePosition,
+  style, 
+  ...other 
+}) => {
+  let Comp,
+      pos = imagePosition === undefined ? 'center' : imagePosition;
+  if(onPress !== undefined) {
+    Comp = TouchableOpacity
+  } else {
+    Comp = View
+  }
+  return <>
+    <Comp
+      style={[
+        style,
+        {flexDirection: 'row'}
+      ]}
+      onPress={onPress}
+      { ...other }
+      >
+      <View
+        style={{
+          flexDirection: 'column',
+          justifyContent: pos
+        }}
+        >
+        { image }
+      </View>
+      <View 
+        style={{
+          paddingLeft: 16,
+          flexDirection: 'column',
+          flexShrink: 1,
+          justifyContent: 'center'
+        }}
+        >
+        { text }
+      </View>
+    </Comp>
+  </>
 }
 
 const Tab = createMaterialTopTabNavigator();
@@ -161,7 +203,7 @@ const TabBar = ({ state, descriptors, navigation, position, aboveTabs }) => {
                   flex: 1,
                   alignItems: 'center',
                   borderBottomWidth: isFocused ? 1.5 : 0,
-                  borderColor: isDark ? colours.dark.borderBottomColor : colours.light.borderBottomColor
+                  borderColor: isDark ? c.dark.borderBottomColor : c.light.borderBottomColor
                 }}
               >
                 <P

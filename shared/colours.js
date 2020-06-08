@@ -1,4 +1,5 @@
 const purple = '#2A1E5C',
+      lightPurple = '#F0EDFF',
       red = '#FE5F55',
       green = '#5EB1BF',
       yellow = '#F0A202',
@@ -15,7 +16,7 @@ export const colours = {
     navBarActive: white,
     navBarInactive: white,
     
-    iconFill: yellow,
+    iconFill: purple,
     
     background: white,
     color: darkGrey,
@@ -24,6 +25,9 @@ export const colours = {
     borderBottomColor: purple,
     graphLineColor: green,
     graphTextColor: purple,
+    
+    infoCalloutBackground: lightPurple,
+    infoCalloutBorder: 'transparent',
   },
   dark: {
     navBarBackground: darkBlue,
@@ -41,5 +45,8 @@ export const colours = {
     borderBottomColor: purple,
     graphLineColor: red,
     graphTextColor: white,
+    
+    infoCalloutBackground: 'transparent',
+    infoCalloutBorder: purple,
   }
 }
