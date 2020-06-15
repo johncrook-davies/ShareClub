@@ -5,5 +5,6 @@ export * from './formatters';
 export * from './charts';
 export * from './containers';
 export * from './buttons';
+export * from './modals';
 
 export * from 'react-native';

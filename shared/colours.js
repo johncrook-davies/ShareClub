@@ -32,6 +32,10 @@ export const colours = {
     buttonBackground: purple,
     buttonBorder: 'transparent',
     buttonText: white,
+    
+    modalBackground: white,
+    modalShadow: black,
+    modalShadowOpacity: 0.2,
   },
   dark: {
     navBarBackground: darkBlue,
@@ -56,5 +60,9 @@ export const colours = {
     buttonBackground: 'transparent',
     buttonBorder: purple,
     buttonText: white,
+    
+    modalBackground: darkBlue,
+    modalShadow: black,
+    modalShadowOpacity: 0.75,
   }
 }
