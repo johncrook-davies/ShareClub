@@ -28,6 +28,10 @@ export const colours = {
     
     infoCalloutBackground: lightPurple,
     infoCalloutBorder: 'transparent',
+    
+    buttonBackground: purple,
+    buttonBorder: 'transparent',
+    buttonText: white,
   },
   dark: {
     navBarBackground: darkBlue,
@@ -48,5 +52,9 @@ export const colours = {
     
     infoCalloutBackground: 'transparent',
     infoCalloutBorder: purple,
+    
+    buttonBackground: 'transparent',
+    buttonBorder: purple,
+    buttonText: white,
   }
 }

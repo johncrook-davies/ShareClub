@@ -20,6 +20,7 @@ import {
   makeStyledScreen,
   InformationCallout,
   colours as c,
+  GenericButton
 } from '../../shared';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -36,16 +37,24 @@ const data = [1, 1, 2, 3, 5, 8, 13, 21];
 const EmptyClubs = ({ isDark }) => {
   return <Section>
     <H1>Welcome to your dashboard</H1>
-    <InformationCallout isDark={ isDark }>
+    <InformationCallout>
       <P>
         Here you can see a summary of clubs that you're  a member of, any pending investment proposals and any invites you've been sent.
       </P>
     </InformationCallout>
     <H2>You're not currently a member of any clubs</H2>
-    <InformationCallout isDark={ isDark }>
-      <P>
-        Find your friends on Shareclub
+    <InformationCallout>
+      <P style={{ marginBottom: 16 }}>
+        Find your friends on Shareclub or create your own club to get started.
       </P>
+      <GenericButton
+        style={{ marginBottom: 16 }}
+        text="Find friends"
+        />
+      <GenericButton
+        style={{ marginBottom: 16 }}
+        text="Start a new club"
+        />
     </InformationCallout>
   </Section>
 }
@@ -104,20 +113,24 @@ const Dashboard = ({ clubs, invitations, proposals }) => {
         clubs.all.length !== 0 &&
         <SomeClubs clubs={ clubs } appearance={ appearance }/>
       }
-      <Section>
-        <H2>Pending proposals</H2>
-        <Placeholder 
-          things={'proposals'} 
-          number={proposals.all.length}
-          appearance={ appearance }
-          />
-        {(proposals.all.length !== 0) && 
-        <View style={ [any.proposals, appearance.proposals] }>
-          { proposals.all.map((p) =>
-              <Proposal key={ p.id + 'proposal' } p={p} appearance={ appearance }/>
-          )}
-        </View>}
-      </Section>
+      {
+        (clubs.all.length !== 0) 
+        && 
+        <Section>
+          <H2>Pending proposals</H2>
+          <Placeholder 
+            things={'proposals'} 
+            number={proposals.all.length}
+            appearance={ appearance }
+            />
+          {(proposals.all.length !== 0) && 
+          <View style={ [any.proposals, appearance.proposals] }>
+            { proposals.all.map((p) =>
+                <Proposal key={ p.id + 'proposal' } p={p} appearance={ appearance }/>
+            )}
+          </View>}
+        </Section>
+      }
       <Section>
         <H2>Invitations</H2>
         <Placeholder 
