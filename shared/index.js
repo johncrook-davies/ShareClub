@@ -6,5 +6,6 @@ export * from './charts';
 export * from './containers';
 export * from './buttons';
 export * from './modals';
+export * from './forms';
 
 export * from 'react-native';

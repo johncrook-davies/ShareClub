@@ -36,6 +36,9 @@ export const colours = {
     modalBackground: white,
     modalShadow: black,
     modalShadowOpacity: 0.2,
+    
+    inputBorder: purple,
+    placeholderColour: darkGrey,
   },
   dark: {
     navBarBackground: darkBlue,
@@ -64,5 +67,8 @@ export const colours = {
     modalBackground: darkBlue,
     modalShadow: black,
     modalShadowOpacity: 0.75,
+    
+    inputBorder: white,
+    placeholderColour: darkGrey,
   }
 }

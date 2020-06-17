@@ -27,6 +27,22 @@ const makeDarkmodeableText = BaseComp => ({
     }
     />
 
+const makeStandardisedText = BaseComp => ({
+  style, 
+  ...props
+}) => 
+  <BaseComp 
+    {...props} 
+    style={
+      [
+        style, 
+        {
+          fontSize: 14
+        }
+      ]
+    }
+    />
+
 const makeDarkmodeableScreen = BaseComp => ({
   style, 
   ...props
@@ -50,4 +66,7 @@ const makeDarkmodeableScreen = BaseComp => ({
   </Div>
 
 export const makeStyledScreen = compose(makeDarkmodeableScreen);
-export const makeStyledText = compose(makeDarkmodeableText);
+export const makeStyledText = compose(
+  makeDarkmodeableText, 
+  makeStandardisedText
+);

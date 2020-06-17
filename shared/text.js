@@ -17,7 +17,13 @@ export const P = makeStyledText(({ children, style, ...other }) => {
 })
 export const H1 = makeStyledText(({ children, style, ...other }) => (
     <Text 
-        style={[style, {fontSize: 35}]}
+        style={[
+          style, 
+          {
+            fontSize: 35,
+            fontFamily: 'Asap-Bold',
+          }
+        ]}
         { ...other }
         >
         { children }

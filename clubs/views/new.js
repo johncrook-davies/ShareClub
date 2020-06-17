@@ -1,19 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from "react-redux";
 import { useColorScheme } from 'react-native-appearance';
 
 import {
-  H1,
+  Section,
   makeStyledScreen,
   colours as c,
   GenericButton,
+  HeadingInput,
+  GenericInput,
+} from '../../shared';
+
+import {
+  TextInput,
+  makeStyledText,
 } from '../../shared';
 
 const NewClub = ({}) => {
   const cs = useColorScheme() === 'dark' ? 'dark' : 'light';
-  return <H1>
-    Create a new club
-  </H1>
+  return <Section>
+    <HeadingInput
+      keyboardType='default'
+      />
+  </Section>
 }
 
 export default makeStyledScreen(NewClub)

@@ -6,7 +6,7 @@ import NewClub from './new';
 const Stack = createStackNavigator();
 
 const screens = [
-  { title: 'New', component: NewClub },
+  { title: 'New club', component: NewClub },
 ];
 
 const Clubs = ({ route }) => {
