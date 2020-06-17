@@ -1,21 +1,15 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Stock from './stock';
-import Types from './types';
-import Indices from './indices';
-import Index from './index_view';
+import NewClub from './new';
 
 const Stack = createStackNavigator();
 
 const screens = [
-  { title: 'Browse', component: Types },
-  { title: 'Indices', component: Indices },
-  { title: 'Index', component: Index },
-  { title: 'Stock', component: Stock }
+  { title: 'New', component: NewClub },
 ];
 
-const Investments = ({ route }) => {
+const Clubs = ({ route }) => {
   return <Stack.Navigator>
     {
     screens.map((s) => (
@@ -25,7 +19,7 @@ const Investments = ({ route }) => {
         component={s.component} 
         options={
           ({ route }) => ({ 
-            title: route.params ? route.params.title : 'Investments',
+            title: route.params ? route.params.title : 'Clubs',
             headerTitleStyle: {
               fontFamily: 'Asap-Bold',
             },
@@ -37,4 +31,4 @@ const Investments = ({ route }) => {
   </Stack.Navigator>
 }
 
-export default Investments
+export default Clubs

@@ -14,6 +14,7 @@ import { createConnection, destroyConnection, } from "./websockets/actions";
 
 import Dashboard from './dashboard/views/dashboard';
 import Investments from './investments/views';
+import Clubs from './clubs/views';
 
 import { 
   colours,
@@ -122,7 +123,7 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
           />
         <Tab.Screen
           name="Clubs"
-          component={Investments}
+          component={Clubs}
           />
       </Tab.Navigator>
     </AppearanceProvider>

@@ -34,7 +34,7 @@ import settings_light from '../assets/images/settings_light.png';
 
 const data = [1, 1, 2, 3, 5, 8, 13, 21];
 
-const EmptyClubs = ({ isDark }) => {
+const EmptyClubs = ({ isDark, navigation }) => {
   return <Section>
     <H1>Welcome to your dashboard</H1>
     <InformationCallout>
@@ -54,6 +54,8 @@ const EmptyClubs = ({ isDark }) => {
       <GenericButton
         style={{ marginBottom: 16 }}
         text="Start a new club"
+        working={ true }
+        onPress={() => navigation.navigate('Clubs', { screen: 'New'})}
         />
     </InformationCallout>
   </Section>
@@ -78,7 +80,12 @@ const SomeClubs = ({ clubs, appearance }) => (
   </ScrollView>
 )
 
-const Dashboard = ({ clubs, invitations, proposals }) => {
+const Dashboard = ({ 
+  clubs, 
+  invitations, 
+  proposals,
+  navigation
+}) => {
   const appearance = useColorScheme() === 'dark' ? dark : light;
   const isDark = useColorScheme() === 'dark';
   return (
@@ -107,7 +114,10 @@ const Dashboard = ({ clubs, invitations, proposals }) => {
       </Section>
       {
         clubs.all.length === 0 && 
-        <EmptyClubs isDark={ isDark }/>
+        <EmptyClubs 
+          isDark={ isDark }
+          navigation={ navigation }
+          />
       }
       {
         clubs.all.length !== 0 &&
