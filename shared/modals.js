@@ -57,5 +57,8 @@ GenericModal.defaultProps = {
 };
 
 GenericModal.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.array,
+  ]),
 };
