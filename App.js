@@ -11,18 +11,13 @@ import { AppearanceProvider, Appearance, useColorScheme } from 'react-native-app
 import { initialiseDb, tearDownDb, } from "./db/actions";
 
 import { createConnection, destroyConnection, } from "./websockets/actions";
+import { settingsUpdate } from './settings/actions';
 
 import Dashboard from './dashboard/views/dashboard';
 import Investments from './investments/views';
 import Clubs from './clubs/views';
 
-import { 
-  colours,
-  browse,
-  new_trade,
-  clubs,
-  H1,
-} from './shared';
+import { colours, } from './shared';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -30,25 +25,6 @@ const Tab = createBottomTabNavigator();
 
 // Get the current color scheme
 Appearance.getColorScheme();
-
-const styles = StyleSheet.create({
-  light: {
-    shadowOffset: {
-      width: 2,
-      height: 2
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-  },
-  dark: {
-    shadowOffset: {
-      width: 2,
-      height: 2
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-  }
-})
 
 const theme = (appearance) => {
   if(appearance === 'dark') {
@@ -77,11 +53,12 @@ const theme = (appearance) => {
 }
         
 
-const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDownDb  }) => {
-  const appearance = useColorScheme() === 'dark' ? styles.dark : styles.light;
+const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDownDb, settingsUpdate, settings  }) => {
+  const appearance = useColorScheme() === 'dark' ? 'dark' : 'light';
   useEffect(() => {
     createConnection()
     initialiseDb()
+    settingsUpdate({colourScheme: appearance })
   },[])
   useEffect(() => {
     return () => {
@@ -89,7 +66,7 @@ const ShareClub = ({ createConnection, initialiseDb, destroyConnection, tearDown
       destroyConnection()
     }
   },[])
-  return <NavigationContainer theme={ theme(useColorScheme()) }>{
+  return <NavigationContainer theme={ theme(settings.colourScheme) }>{
     <AppearanceProvider>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -136,7 +113,8 @@ const ConnectedShareClub = connect(
     createConnection,
     initialiseDb,
     destroyConnection,
-    tearDownDb
+    tearDownDb,
+    settingsUpdate 
   }
 )(ShareClub)
 
